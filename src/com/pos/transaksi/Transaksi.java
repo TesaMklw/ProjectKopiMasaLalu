@@ -1,13 +1,11 @@
 package com.pos.transaksi;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import com.pos.gerai.Gerai;
 import com.pos.pelanggan.Pelanggan;
 import com.pos.pembayaran.Pembayaran;
-
-//import com.pos.transaksi.Produk;
+import com.pos.produk.Produk;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Transaksi {
     private String idTransaksi;
@@ -24,7 +22,7 @@ public class Transaksi {
 
     // Constructor 1
     public Transaksi(String idTransaksi, Gerai gerai, String subtotalTransaksi, String totalTransaksi,
-                     float uangKembali, Pelanggan pelanggan, String tanggalTransaksi, Pembayaran pembayaran) {
+                    float uangKembali, Pelanggan pelanggan, String tanggalTransaksi, Pembayaran pembayaran) {
         this.idTransaksi = idTransaksi;
         this.gerai = gerai;
         this.listProduk = new ArrayList<>();
