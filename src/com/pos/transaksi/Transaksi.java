@@ -110,4 +110,17 @@ public class Transaksi {
     public Pembayaran getPembayaran() {
         return pembayaran;
     }
+
+    public void addProduk (Produk produk){
+        listProduk.add(produk);
+    }
+
+    public void calcUangKembali(float uangDibayar){
+        try {
+            float total = Float.parseFloat(totalTransaksi);
+            this.uangKembali = uangDibayar - total;
+        } catch (NumberFormatException e) {
+            System.out.println("Format totalTransaksi tidak valid");
+        }
+    }
 }
