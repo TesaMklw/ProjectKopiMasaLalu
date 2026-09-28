@@ -1,0 +1,19 @@
+# Data Produk Kopi Kenangan
+# Format: Tipe|NamaProduk|Harga|VarianUkuran|InfoTambahan(JenisKopi/JenisRasa/Variasi)|ContohCatatan
+Kopi|Kopi Kenangan Mantan|18000|Regular|Arabika + Gula Aren|Less Sugar
+Kopi|Kopi Kenangan Mantan|22000|Large|Arabika + Gula Aren|Less Sugar
+Kopi|Kopi Hitam|20000|Medium|Arabika|Tanpa gula
+Kopi|Cappuccino|23000|Regular|Arabika + Susu|Extra foam
+Kopi|Mochaccino|25000|Large|Arabika + Coklat|Less ice
+Kopi|Macchiato|24000|Regular|Arabika + Susu Foam|Less sugar
+Kopi|Creamy Caramel Latte|26000|Large|Arabika + Caramel + Susu|Less ice
+Kopi|Caramel Macchiato|25000|Regular|Arabika + Caramel + Susu Foam|Less sugar
+Kopi|Caramel Macchiato|28000|Large|Arabika + Caramel + Susu Foam|Less sugar
+Kopi|Caramel Latte|27000|Large|Arabika + Caramel + Susu|Less sugar
+BukanKopi|Matcha Latte|22000|Regular|Matcha|Less sugar
+BukanKopi|Chocolate|22000|Regular|Coklat|Extra coklat
+BukanKopi|Susu Boba Gula Aren|19000|Regular|Brown Sugar|Es sedikit
+BukanKopi|Teh Leci|18000|Regular|Leci|Less ice
+MakananPenutup|Cheesecake Slice|15000|-|Cheesecake|Extra cream
+MakananPenutup|Roti Abon Ayam|13000|-|Abon Ayam|Hangat
+MakananPenutup|Croissant Coklat|17000|-|Coklat|Hangat

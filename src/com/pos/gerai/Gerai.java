@@ -16,10 +16,10 @@ public class Gerai {
         }       
         
         // setter,getter
-        public void setGerai(String namaGerai) {
+        public void setNamaGerai(String namaGerai) {
             this.namaGerai = namaGerai;
         }
-        public String getGerai() {
+        public String getNamaGerai() {
             return namaGerai;
         }
 
@@ -28,6 +28,11 @@ public class Gerai {
         }
         public String getAlamatGerai() {
             return alamatGerai;
+        }
+
+        @Override
+        public String toString() {
+            return namaGerai;
         }
     }
    

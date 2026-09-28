@@ -1,0 +1,6 @@
+# Data Pelanggan
+# Format: NamaPelanggan|NoHP|Password
+Vionanda|082272293292|viona123
+Riza|085266066497|riza123
+Tesalonika|085216641663|tesa123
+Miracle|082164555543|bapakvioadmin

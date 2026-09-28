@@ -1,0 +1,9 @@
+# Data Metode Pembayaran
+# Format: Kode|NamaMetode
+CASH|Cash
+QRIS|QRIS
+GPY|GoPay
+OVO|OVO
+DANA|DANA
+BCA|Debit BCA
+BRI|Debit BRI

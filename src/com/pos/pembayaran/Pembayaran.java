@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Pembayaran {
     private String metodePembayaran;
 
-    Scanner inputUser = new Scanner(System.in);
+    private static final Scanner inputUser = new Scanner(System.in);
 
     public Pembayaran(String metodePembayaran){
         this.metodePembayaran = metodePembayaran;
@@ -13,7 +13,7 @@ public class Pembayaran {
 
     public Pembayaran(){
         System.out.print("Metode Pembayaran = ");
-        String metodePembayaran = inputUser.nextLine(); 
+        this.metodePembayaran = inputUser.nextLine();
     }
 
     // setters dan getters
@@ -22,6 +22,11 @@ public class Pembayaran {
     }
 
     public String getMetodePembayaran(){
+        return metodePembayaran;
+    }
+
+    @Override
+    public String toString() {
         return metodePembayaran;
     }
 }

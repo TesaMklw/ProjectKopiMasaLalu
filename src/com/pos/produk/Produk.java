@@ -23,23 +23,65 @@ public abstract class Produk {
     public Produk() {
         System.out.print("Nama Produk = ");
         this.namaProduk = inputUser.nextLine();
-        System.out.print("Harga Produk = ");
-        this.hargaProduk = Float.parseFloat(inputUser.nextLine());
+        this.hargaProduk = readHarga();
         System.out.print("Catatan = ");
         this.catatanProduk = inputUser.nextLine();
-        System.out.print("Jumlah = ");
-        this.jumlahProduk = Integer.parseInt(inputUser.nextLine());
+        this.jumlahProduk = readJumlah();
+    }
+
+    // Input angka aman: ulangi sampai valid, tidak crash kalau user ketik huruf
+    protected static float readHarga() {
+        while (true) {
+            System.out.print("Harga Produk = ");
+            try {
+                float h = Float.parseFloat(inputUser.nextLine().trim());
+                if (h < 0) {
+                    System.out.println("Harga tidak boleh negatif. Coba lagi.");
+                    continue;
+                }
+                return h;
+            } catch (NumberFormatException e) {
+                System.out.println("Harga harus angka. Coba lagi.");
+            }
+        }
+    }
+
+    protected static int readJumlah() {
+        while (true) {
+            System.out.print("Jumlah = ");
+            try {
+                int j = Integer.parseInt(inputUser.nextLine().trim());
+                if (j <= 0) {
+                    System.out.println("Jumlah harus > 0. Coba lagi.");
+                    continue;
+                }
+                return j;
+            } catch (NumberFormatException e) {
+                System.out.println("Jumlah harus angka bulat. Coba lagi.");
+            }
+        }
     }
 
     public void setNamaProduk(String namaProduk) { this.namaProduk = namaProduk; }
-    public void setHargaProduk(float hargaProduk) { this.hargaProduk = hargaProduk; }
+    public void setHargaProduk(float hargaProduk) {
+        if (hargaProduk < 0) return;
+        this.hargaProduk = hargaProduk;
+    }
     public void setCatatanProduk(String catatanProduk) { this.catatanProduk = catatanProduk; }
-    public void setJumlahProduk(int jumlahProduk) { this.jumlahProduk = jumlahProduk; }
+    public void setJumlahProduk(int jumlahProduk) {
+        if (jumlahProduk <= 0) return;
+        this.jumlahProduk = jumlahProduk;
+    }
 
     public String getNamaProduk() { return namaProduk; }
     public float getHargaProduk() { return hargaProduk; }
     public String getCatatanProduk() { return catatanProduk; }
     public int getJumlahProduk() { return jumlahProduk; }
+
+    @Override
+    public String toString() {
+        return namaProduk + " - Rp" + hargaProduk;
+    }
 
     // Abstrak: wajib di-override subclass (seperti hitungLuas() di Bentuk)
     public abstract void calcDiscount(float persen);
