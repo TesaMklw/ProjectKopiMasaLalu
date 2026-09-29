@@ -1,10 +1,6 @@
 package com.pos;
 
-<<<<<<< HEAD
-=======
 // panggil class dari package lain yang digunakan
-import com.pos.data.DataLoader;
->>>>>>> e7bbed8d30f1eb033e20a68f50e8b23650539b48
 import com.pos.gerai.Gerai;
 import com.pos.interfaces.Cetak;
 import com.pos.interfaces.Login;

@@ -1,9 +1,5 @@
-<<<<<<< HEAD:src/com/pos/loader/DataLoader.java
 package com.pos.loader;
-=======
 // TESALONIKA
-package com.pos.data;
->>>>>>> e7bbed8d30f1eb033e20a68f50e8b23650539b48:src/com/pos/data/DataLoader.java
 
 import com.pos.gerai.Gerai;
 import com.pos.pelanggan.Pelanggan;
