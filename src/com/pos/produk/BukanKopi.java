@@ -1,7 +1,8 @@
+// AUTOR TESALONIKA
 package com.pos.produk;
 
-public class BukanKopi extends Minuman {
-    private String jenisRasa;
+public class BukanKopi extends Minuman {// struktur hierarki, inheritence
+    private String jenisRasa;// encapsulation
 
     public BukanKopi(String jenisRasa, String ukuranMinuman, String namaProduk, float hargaProduk,
                     String catatanProduk, int jumlahProduk) {
