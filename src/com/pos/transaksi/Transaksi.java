@@ -183,13 +183,8 @@ public class Transaksi implements Cetak {
     // Simpan struk ke 1 file txt (src/com/pos/struk/struk.txt);
     // tiap struk baru ditambah di bawahnya.
     public String simpanStruk() throws IOException {
-<<<<<<< HEAD
-        Path path = Paths.get("struk.txt");
-        // cek apakah file sudah ada untuk menambahkan baris baru (append)
-=======
         Files.createDirectories(Paths.get("src/com/pos/struk"));
         Path path = Paths.get("src/com/pos/struk/struk.txt");
->>>>>>> 38a0a8dda5491ff9c014ccd57c94677dd5cf128a
         String pemisah = (Files.exists(path) && Files.size(path) > 0)
                 ? System.lineSeparator() : "";
 
