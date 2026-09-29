@@ -1,5 +1,11 @@
+/*
+author : Vionanda Ginting
+
+*/
+
 package com.pos.transaksi;
 
+// Import class-class dari package lain
 import com.pos.gerai.Gerai;
 import com.pos.interfaces.Cetak;
 import com.pos.pelanggan.Pelanggan;
@@ -16,7 +22,7 @@ import java.util.ArrayList;
 public class Transaksi implements Cetak {
     private String idTransaksi;
     private Gerai gerai;
-    private ArrayList<Produk> listProduk;
+    private ArrayList<Produk> listProduk; // Menyimpan daftar objek Produk secara dinamis ke dalam arraylist nya
     private float subtotalTransaksi;
     private float totalTransaksi;
     private float uangKembali;
@@ -24,7 +30,7 @@ public class Transaksi implements Cetak {
     private String tanggalTransaksi;
     private Pembayaran pembayaran;
 
-    // Constructor 1
+    // Constructor 1 (Parameterized Constructor)
     public Transaksi(String idTransaksi, Gerai gerai, float subtotalTransaksi, float totalTransaksi,
                     float uangKembali, Pelanggan pelanggan, String tanggalTransaksi, Pembayaran pembayaran) {
         this.idTransaksi = idTransaksi;
@@ -38,12 +44,12 @@ public class Transaksi implements Cetak {
         this.pembayaran = pembayaran;
     }
 
-    // Constructor 2
+    // Constructor 2 (Default/No-Arg Constructor)
     public Transaksi() {
         this.listProduk = new ArrayList<>();
     }
 
-    // setters
+    // setters untuk mengatur/mengubah nilai variabel private
     public void setIdTransaksi(String idTransaksi) {
         this.idTransaksi = idTransaksi;
     }
@@ -76,7 +82,7 @@ public class Transaksi implements Cetak {
         this.pembayaran = pembayaran;
     }
 
-    // getters
+    // getters untuk mengambil/membaca nilai variabel private
     public String getIdTransaksi() {
         return idTransaksi;
     }
@@ -85,6 +91,7 @@ public class Transaksi implements Cetak {
         return gerai;
     }
 
+    // Mengembalikan salinan (copy) ArrayList
     public ArrayList<Produk> getListProduk() {
         return new ArrayList<>(listProduk);
     }
@@ -113,11 +120,13 @@ public class Transaksi implements Cetak {
         return pembayaran;
     }
 
+    // method operasional yang untuk menambahkan item Produk ke dalam ArrayList listProduk
     public void addProduk (Produk produk){
         if (produk == null) return;
         listProduk.add(produk);
     }
 
+    // menghitung kembalian/ sisa uang 
     public void calcUangKembali(float uangDibayar){
         this.uangKembali = uangDibayar - totalTransaksi;
         if (this.uangKembali < 0) {
@@ -125,7 +134,7 @@ public class Transaksi implements Cetak {
         }
     }
 
-    // Hitung subtotal & total otomatis dari listProduk (harga * jumlah)
+    // Hitung subtotal & total otomatis dari listProduk (harga * jumlah) - (for-each loop)
     public void calcSubtotal() {
         float sum = 0;
         for (Produk p : listProduk) {
@@ -135,6 +144,7 @@ public class Transaksi implements Cetak {
         this.totalTransaksi = sum;
     }
 
+    // memenuhi kontrak interface Cetak untuk menampilkan isi struk di konsol (Polymorphism - Method Overriding)
     @Override
     public void struk() {
         System.out.print(getStrukText());
@@ -145,12 +155,16 @@ public class Transaksi implements Cetak {
         StringBuilder sb = new StringBuilder();
         sb.append("=== STRUK TRANSAKSI ===\n");
         sb.append("ID Transaksi : ").append(idTransaksi).append("\n");
+
+        // ternary operator (? :) untuk mencegah NullPointerException
         sb.append("Gerai        : ").append(gerai != null ? gerai.getNamaGerai() : "-").append("\n");
         sb.append("Alamat Gerai : ").append(gerai != null ? gerai.getAlamatGerai() : "-").append("\n");
         sb.append("Pelanggan    : ").append(pelanggan != null ? pelanggan.getNamaPelanggan() : "-").append("\n");
         sb.append("Tanggal      : ").append(tanggalTransaksi).append("\n");
         sb.append("Metode Bayar : ").append(pembayaran != null ? pembayaran.getMetodePembayaran() : "-").append("\n");
         sb.append("Produk       : \n");
+
+        // for untuk baca seluruh produk dalam transaksi
         for (Produk p : listProduk) {
             sb.append(" - ").append(p.getNamaProduk()).append(" x").append(p.getJumlahProduk())
             .append(" Rp").append(p.getHargaProduk());
@@ -169,10 +183,17 @@ public class Transaksi implements Cetak {
     // Simpan struk ke 1 file txt (src/com/pos/struk/struk.txt);
     // tiap struk baru ditambah di bawahnya.
     public String simpanStruk() throws IOException {
+<<<<<<< HEAD
+        Path path = Paths.get("struk.txt");
+        // cek apakah file sudah ada untuk menambahkan baris baru (append)
+=======
         Files.createDirectories(Paths.get("src/com/pos/struk"));
         Path path = Paths.get("src/com/pos/struk/struk.txt");
+>>>>>>> 38a0a8dda5491ff9c014ccd57c94677dd5cf128a
         String pemisah = (Files.exists(path) && Files.size(path) > 0)
                 ? System.lineSeparator() : "";
+
+        // penulisan byte teks ke file lokal
         Files.write(path,
                 (pemisah + getStrukText()).getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);

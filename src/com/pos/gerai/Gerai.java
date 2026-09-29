@@ -1,6 +1,8 @@
+// AUTOR = RIZA ROSMERI
 package com.pos.gerai;
 
-public class Gerai {
+public class Gerai {// inheritance
+    //encapsulation
     private String namaGerai;
     private String alamatGerai;
 
@@ -29,7 +31,7 @@ public class Gerai {
         public String getAlamatGerai() {
             return alamatGerai;
         }
-
+        // polymorphism
         @Override
         public String toString() {
             return namaGerai;

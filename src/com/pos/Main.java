@@ -1,5 +1,10 @@
 package com.pos;
 
+<<<<<<< HEAD
+=======
+// panggil class dari package lain yang digunakan
+import com.pos.data.DataLoader;
+>>>>>>> e7bbed8d30f1eb033e20a68f50e8b23650539b48
 import com.pos.gerai.Gerai;
 import com.pos.interfaces.Cetak;
 import com.pos.interfaces.Login;
@@ -20,10 +25,13 @@ public class Main {
     private static final Scanner IN = new Scanner(System.in);
 
     public static void main(String[] args) {
+        // Daftar file, penampung data awal
         List<Gerai> daftarGerai;
         List<Pelanggan> daftarPelanggan;
         List<Pembayaran> daftarBayar;
         List<Produk> daftarProduk;
+
+        // Baca data awal dari dalam file
         try {
             daftarGerai = DataLoader.loadGerai("data/gerai.txt");
             daftarPelanggan = DataLoader.loadPelanggan("data/pelanggan.txt");
@@ -33,12 +41,14 @@ public class Main {
             System.out.println("Gagal memuat data txt: " + e.getMessage());
             return;
         }
+
+        // menampilkan info jumlah data yang berhasil dimuat di file.txt
         System.out.println("Data dimuat: " + daftarProduk.size() + " produk, "
                 + daftarGerai.size() + " gerai, "
                 + daftarPelanggan.size() + " pelanggan, "
                 + daftarBayar.size() + " metode bayar.");
 
-        // 1. Login lewat interface Login
+        // Login lewat interface Login
         Pelanggan.setDatabase(daftarPelanggan);
         Pelanggan.setScanner(IN);
         Login akun = new Pelanggan();
@@ -48,27 +58,29 @@ public class Main {
             return;
         }
 
-        // 2. Pilih gerai & pembayaran dari data txt
+        // Pilih gerai & metode pembayaran dari data txt
         Gerai gerai = pilihGerai(daftarGerai);
         Pembayaran bayar = pilihBayar(daftarBayar);
 
-        // 3. Pilih produk satu per satu masuk keranjang
+        // Pilih produk satu per satu masuk keranjang
         List<Produk> keranjang = pilihProduk(daftarProduk);
         if (keranjang.isEmpty()) {
             System.out.println("Keranjang kosong. Keluar dari program.");
             return;
         }
 
-        // 4. Bayar lalu cetak struk lewat interface Cetak
+        // Buat objek transaksi baru lalu bayar lalu cetak struk lewat interface Cetak
         Transaksi t = new Transaksi("TRX" + (System.currentTimeMillis() % 100000),
                 gerai, 0, 0, 0, pelanggan, LocalDate.now().toString(), bayar);
         for (Produk p : keranjang) {
             t.addProduk(p);
         }
+        // hitung total dan kambalian uang
         t.calcSubtotal();
         System.out.println("Total belanja: Rp" + t.getTotalTransaksi());
         t.calcUangKembali(bacaUang(t.getTotalTransaksi()));
 
+        // cetak da simpan struk
         Cetak cetakan = t;
         cetakan.struk();
         try {
@@ -78,6 +90,7 @@ public class Main {
         }
     }
 
+    // menu iteraktif untuk Signin / Signup pelanggan
     private static Pelanggan menuAkun(Login akun) {
         while (true) {
             System.out.println("=== SELAMAT DATANG DI KOPI KENANGAN ===");
@@ -98,6 +111,7 @@ public class Main {
                 Pelanggan p = (Pelanggan) akun;
                 if (p.isLoggedIn()) {
                     try {
+                        // simpan akun baru ke dalam file pelanggan.txt
                         DataLoader.appendPelanggan("data/pelanggan.txt", p);
                     } catch (Exception e) {
                         System.out.println("Gagal menyimpan akun: " + e.getMessage());
@@ -113,6 +127,7 @@ public class Main {
         }
     }
 
+    // menampilkan daftar gerai dan meminta user untuk pilih salah satu
     private static Gerai pilihGerai(List<Gerai> daftar) {
         System.out.println("=== PILIH GERAI ===");
         for (int i = 0; i < daftar.size(); i++) {
@@ -121,6 +136,7 @@ public class Main {
         return daftar.get(bacaAngka("Pilih gerai", 1, daftar.size()) - 1);
     }
 
+    // menampilkan daftar metode pembayaran dan meminta user memilih salah satu
     private static Pembayaran pilihBayar(List<Pembayaran> daftar) {
         System.out.println("=== PILIH PEMBAYARAN ===");
         for (int i = 0; i < daftar.size(); i++) {
@@ -129,6 +145,7 @@ public class Main {
         return daftar.get(bacaAngka("Pilih pembayaran", 1, daftar.size()) - 1);
     }
 
+    // menampilkan menu produk dan memasukkannya ke keranjang belanja
     private static List<Produk> pilihProduk(List<Produk> daftar) {
         List<Produk> keranjang = new ArrayList<>();
         System.out.println("=== DAFTAR PRODUK ===");
@@ -140,15 +157,17 @@ public class Main {
         while (true) {
             int no = bacaAngka("Pilih produk", -1, daftar.size());
             if (no == 0) {
-                return keranjang;
+                return keranjang; // 0 = selesai memilih produk
             }
             if (no == -1) {
                 hapusItem(keranjang);
-                continue;
+                continue; // -1 = hapus barang dari keranjang
             }
             int jumlah = bacaAngka("Jumlah", 1, 20);
             System.out.print("Catatan (Enter = pakai bawaan) = ");
             String catatan = IN.nextLine().trim();
+
+            // Duplikasi objek produk agar jumlah & catatan tiap transaksi terpisah
             Produk p = copyProduk(daftar.get(no - 1), jumlah);
             if (!catatan.isEmpty()) {
                 p.setCatatanProduk(catatan);
@@ -159,6 +178,7 @@ public class Main {
         }
     }
 
+    // hapus item dari keranjang berdasarkan nomor pilihan user
     private static void hapusItem(List<Produk> keranjang) {
         if (keranjang.isEmpty()) {
             System.out.println("Keranjang masih kosong.");
@@ -171,6 +191,7 @@ public class Main {
         tampilKeranjang(keranjang);
     }
 
+    // tampilkan isi keranjang belanjaan saat ini beserta total sementara
     private static void tampilKeranjang(List<Produk> keranjang) {
         System.out.println("--- Keranjang ---");
         float sum = 0;
@@ -185,6 +206,7 @@ public class Main {
         System.out.println("Sementara total: Rp" + sum);
     }
 
+    // tampilkan teks catatan tambahan jika ada
     private static String labelCatatan(Produk p) {
         if (p.getCatatanProduk() == null || p.getCatatanProduk().trim().isEmpty()) {
             return "";
@@ -192,6 +214,7 @@ public class Main {
         return " [" + p.getCatatanProduk().trim() + "]";
     }
 
+    // baca nominal uang yang dibayarkan dan memastikan nilainya cukup
     private static float bacaUang(float total) {
         while (true) {
             System.out.print("Uang dibayar = ");
@@ -208,6 +231,7 @@ public class Main {
         }
     }
 
+    // Fungsi pembantu untuk membaca angka pilihan menu agar tidak error saat diinput huruf
     private static int bacaAngka(String label, int min, int maks) {
         while (true) {
             System.out.print(label + " (" + min + ".." + maks + ") = ");
@@ -224,7 +248,7 @@ public class Main {
         }
     }
 
-    // Salin produk dari daftar supaya jumlah tiap transaksi tidak saling timpa
+    // Salin produk dari daftar sesuai jenis nya supaya jumlah tiap transaksi tidak saling timpa
     private static Produk copyProduk(Produk p, int jumlah) {
         if (p instanceof Kopi) {
             Kopi k = (Kopi) p;

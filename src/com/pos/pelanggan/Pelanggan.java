@@ -1,3 +1,4 @@
+// AUTOR RIZA ROSMERI
 package com.pos.pelanggan;
 
 import com.pos.interfaces.Login;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Pelanggan implements Login {
+public class Pelanggan implements Login {// hierarki
     private static Scanner IN = new Scanner(System.in);
 
     // Dipanggil Main supaya semua input lewat satu Scanner yang sama
@@ -107,7 +108,7 @@ public class Pelanggan implements Login {
             }
             return baru;
         }
-
+        // polymorphism
         @Override
         public void signup() {
             System.out.println("=== SIGNUP PELANGGAN ===");
@@ -128,7 +129,7 @@ public class Pelanggan implements Login {
             database.add(this);
             System.out.println("Signup berhasil. Selamat datang, " + this.namaPelanggan + "!");
         }
-
+         // polymorphism
         @Override
         public void signin() {
             System.out.println("=== SIGNIN PELANGGAN ===");

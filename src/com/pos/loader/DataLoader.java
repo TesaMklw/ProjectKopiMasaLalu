@@ -1,4 +1,9 @@
+<<<<<<< HEAD:src/com/pos/loader/DataLoader.java
 package com.pos.loader;
+=======
+// TESALONIKA
+package com.pos.data;
+>>>>>>> e7bbed8d30f1eb033e20a68f50e8b23650539b48:src/com/pos/data/DataLoader.java
 
 import com.pos.gerai.Gerai;
 import com.pos.pelanggan.Pelanggan;
@@ -15,10 +20,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataLoader {
+public class DataLoader {// inheritance
 
     private static List<String> readLines(String path) throws IOException {
-        List<String> out = new ArrayList<>();
+        List<String> out = new ArrayList<>();// polymorphism
         for (String line : Files.readAllLines(Paths.get(path))) {
             line = line.trim();
             if (line.isEmpty() || line.startsWith("#")) continue;
@@ -89,6 +94,7 @@ public class DataLoader {
     // Simpan akun hasil signup ke akhir file txt
     public static void appendPelanggan(String path, Pelanggan p) throws IOException {
         String line = System.lineSeparator()
+                //encapsulation
                 + p.getNamaPelanggan() + "|" + p.getNoHp() + "|" + p.getPasswordPelanggan();
         Files.write(Paths.get(path), line.getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.APPEND);
