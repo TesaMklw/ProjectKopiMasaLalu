@@ -12,9 +12,9 @@ public class Gerai {// inheritance
             this.alamatGerai = alamatGerai;
         }
 
-        //constructur 2
+        //constructur 2: default biar tidak null
         public Gerai() {
-
+            this("Gerai Baru", "-");
         }       
         
         // setter,getter

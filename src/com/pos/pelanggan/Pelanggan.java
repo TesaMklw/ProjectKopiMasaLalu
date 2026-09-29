@@ -2,8 +2,6 @@
 package com.pos.pelanggan;
 
 import com.pos.interfaces.Login;
-import com.pos.loader.DataLoader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,9 +33,11 @@ public class Pelanggan implements Login {// hierarki
             this.namaPelanggan = namaPelanggan;
         }
 
-        //constructor 2
+        //constructor 2: default biar tidak null (password kosong = belum login)
         public Pelanggan() {
-
+            this("Tanpa Nama");
+            this.noHp = "-";
+            this.passwordPelanggan = "";
         }
 
         // setter, getter
@@ -62,52 +62,12 @@ public class Pelanggan implements Login {// hierarki
             return noHp;
         }
 
-        // True kalau objek ini sudah memegang akun yang valid (hasil signin/signup)
+        // True kalau objek ini sudah memegang akun yang valid (hasil signin/signup).
+        // Akun default password-nya "" sehingga tetap terbaca belum login.
         public boolean isLoggedIn() {
-            return namaPelanggan != null && passwordPelanggan != null;
+            return passwordPelanggan != null && !passwordPelanggan.isEmpty();
         }
 
-        // Dipakai GUI: cari akun di database, null kalau tidak cocok
-        public static Pelanggan authenticate(String nama, String pass) {
-            if (nama == null || pass == null) return null;
-            for (Pelanggan p : database) {
-                // cek membandingkan nama dan password yang ada di trim dan data base (equals)
-                if (Objects.equals(p.getNamaPelanggan(), nama.trim())
-                        && Objects.equals(p.getPasswordPelanggan(), pass)) {
-                    return p;
-                }
-            }
-            return null;
-        }
-
-        // Dipakai GUI: daftar akun baru + simpan ke txt, null kalau gagal/duplikat
-        public static Pelanggan register(String nama, String noHp, String pass) {
-            if (nama == null || nama.trim().isEmpty() || pass == null || pass.isEmpty()) {
-                return null;
-            }
-            // mastiin blum ada nama yang sam di database
-            for (Pelanggan p : database) {
-                if (p.getNamaPelanggan() != null && p.getNamaPelanggan().equalsIgnoreCase(nama.trim())) {
-                    return null;
-                }
-            }
-            // mengisi data
-            Pelanggan baru = new Pelanggan(nama.trim());
-            baru.setNoHp(noHp == null ? "" : noHp.trim());
-            baru.setPasswordPelanggan(pass);
-            database.add(baru);
-            // coba masukin data ke file
-            try {
-                DataLoader.appendPelanggan("data/pelanggan.txt", baru);
-            } 
-            //  error
-            catch (IOException e) {
-            // hapus data
-                database.remove(baru);
-                return null;
-            }
-            return baru;
-        }
         // polymorphism
         @Override
         public void signup() {
