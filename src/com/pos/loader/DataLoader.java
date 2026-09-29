@@ -1,4 +1,4 @@
-package com.pos.data;
+package com.pos.loader;
 
 import com.pos.gerai.Gerai;
 import com.pos.pelanggan.Pelanggan;

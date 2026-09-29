@@ -1,7 +1,7 @@
 package com.pos.pelanggan;
 
-import com.pos.data.DataLoader;
 import com.pos.interfaces.Login;
+import com.pos.loader.DataLoader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

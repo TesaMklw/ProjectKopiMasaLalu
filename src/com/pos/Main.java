@@ -1,9 +1,9 @@
 package com.pos;
 
-import com.pos.data.DataLoader;
 import com.pos.gerai.Gerai;
 import com.pos.interfaces.Cetak;
 import com.pos.interfaces.Login;
+import com.pos.loader.DataLoader;
 import com.pos.pelanggan.Pelanggan;
 import com.pos.pembayaran.Pembayaran;
 import com.pos.produk.BukanKopi;
