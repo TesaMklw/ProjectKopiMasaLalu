@@ -24,7 +24,7 @@ public class MakananPenutup extends Produk {
         return variasiMakananPenutup;
     }
 
-    // Makanan penutup: diskon dibatasi maksimal 20% (contoh aturan, silakan ubah)
+    // Makanan penutup: diskon dibatasi maksimal 20% 
     @Override
     public void calcDiscount(float persen) {
         if (persen < 0) persen = 0;

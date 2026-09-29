@@ -65,6 +65,10 @@ public class Main {
             return;
         }
 
+        // Promo (opsional): tiap item didiskon sesuai aturannya sendiri
+        float subtotalAwal = hitungSubtotal(keranjang);
+        String kodePromo = terapkanPromo(keranjang);
+
         // Buat objek transaksi baru lalu bayar lalu cetak struk lewat interface Cetak
         Transaksi t = new Transaksi("TRX" + (System.currentTimeMillis() % 100000),
                 gerai, 0, 0, 0, pelanggan, LocalDate.now().toString(), bayar);
@@ -73,6 +77,9 @@ public class Main {
         }
         // hitung total dan kambalian uang
         t.calcSubtotal();
+        t.setSubtotalTransaksi(subtotalAwal);
+        t.setKodePromo(kodePromo);
+        t.setTotalDiskon(subtotalAwal - t.getTotalTransaksi());
         System.out.println("Total belanja: Rp" + t.getTotalTransaksi());
         t.calcUangKembali(bacaUang(t.getTotalTransaksi()));
 
@@ -202,12 +209,47 @@ public class Main {
         System.out.println("Sementara total: Rp" + sum);
     }
 
+    // Kode promo -> persen diskon; diterapkan per item (polimorfisme:
+    // dessert otomatis dibatasi 20% oleh override-nya sendiri).
+    // Kembalikan kode yang dipakai, "" kalau tanpa promo.
+    private static String terapkanPromo(List<Produk> keranjang) {
+        System.out.print("Kode promo (Enter = lewati) = ");
+        String kode = IN.nextLine().trim().toUpperCase();
+        if (kode.isEmpty()) {
+            return "";
+        }
+        float persen;
+        switch (kode) {
+            case "HEMAT10": persen = 10; break;
+            case "HEMAT20": persen = 20; break;
+            case "HEMAT50": persen = 50; break;
+            default:
+                System.out.println("Kode tidak dikenal. Lanjut tanpa diskon.");
+                return "";
+        }
+        for (Produk p : keranjang) {
+            p.calcDiscount(persen);
+        }
+        System.out.println("Promo " + kode + " (" + persen + "%) diterapkan!");
+        tampilKeranjang(keranjang);
+        return kode;
+    }
+
     // tampilkan teks catatan tambahan jika ada
     private static String labelCatatan(Produk p) {
         if (p.getCatatanProduk() == null || p.getCatatanProduk().trim().isEmpty()) {
             return "";
         }
         return " [" + p.getCatatanProduk().trim() + "]";
+    }
+
+    // Jumlahkan harga x jumlah semua item (untuk subtotal sebelum diskon)
+    private static float hitungSubtotal(List<Produk> keranjang) {
+        float sum = 0;
+        for (Produk p : keranjang) {
+            sum += p.getHargaProduk() * p.getJumlahProduk();
+        }
+        return sum;
     }
 
     // baca nominal uang yang dibayarkan dan memastikan nilainya cukup

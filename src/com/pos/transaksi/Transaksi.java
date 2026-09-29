@@ -26,6 +26,8 @@ public class Transaksi implements Cetak {
     private float subtotalTransaksi;
     private float totalTransaksi;
     private float uangKembali;
+    private String kodePromo = "";
+    private float totalDiskon = 0;
     private Pelanggan pelanggan;
     private String tanggalTransaksi;
     private Pembayaran pembayaran;
@@ -70,6 +72,14 @@ public class Transaksi implements Cetak {
         this.uangKembali = uangKembali;
     }
 
+    public void setKodePromo(String kodePromo) {
+        this.kodePromo = kodePromo;
+    }
+
+    public void setTotalDiskon(float totalDiskon) {
+        this.totalDiskon = totalDiskon;
+    }
+
     public void setPelanggan(Pelanggan pelanggan) {
         this.pelanggan = pelanggan;
     }
@@ -106,6 +116,14 @@ public class Transaksi implements Cetak {
 
     public float getUangKembali() {
         return uangKembali;
+    }
+
+    public String getKodePromo() {
+        return kodePromo;
+    }
+
+    public float getTotalDiskon() {
+        return totalDiskon;
     }
 
     public Pelanggan getPelanggan() {
@@ -174,6 +192,10 @@ public class Transaksi implements Cetak {
             sb.append("\n");
         }
         sb.append("Subtotal     : ").append(subtotalTransaksi).append("\n");
+        if (kodePromo != null && !kodePromo.isEmpty()) {
+            sb.append("Promo        : ").append(kodePromo).append("\n");
+            sb.append("Potongan     : Rp").append(totalDiskon).append("\n");
+        }
         sb.append("Total        : ").append(totalTransaksi).append("\n");
         sb.append("Uang Kembali : ").append(uangKembali).append("\n");
         sb.append("========================\n");

@@ -1,0 +1,47 @@
+=== STRUK TRANSAKSI ===
+ID Transaksi : TRX28486
+Gerai        : Kopi Kenangan Tanjung Duren
+Alamat Gerai : Jl. Tanjung Duren Raya No. 359, RT.5/RW.3, Tanjung Duren Utara, Kec. Grogol Petamburan, Jakarta Barat
+Pelanggan    : Tesalonika
+Tanggal      : 2026-09-29
+Metode Bayar : Cash
+Produk       : 
+ - Croissant Coklat x2 Rp13600.0 [Hangat]
+Subtotal     : 34000.0
+Promo        : HEMAT50
+Potongan     : Rp6800.0
+Total        : 27200.0
+Uang Kembali : 2800.0
+========================
+
+=== STRUK TRANSAKSI ===
+ID Transaksi : TRX29670
+Gerai        : Central Park Mall
+Alamat Gerai : Central Park Mall, Lantai LG, Jl. Letjen S. Parman No.28, Tanjung Duren Selatan, Jakarta Barat
+Pelanggan    : Vionanda
+Tanggal      : 2026-09-29
+Metode Bayar : QRIS
+Produk       : 
+ - Caramel Macchiato x2 Rp12500.0 [Less Ice]
+Subtotal     : 50000.0
+Promo        : HEMAT50
+Potongan     : Rp25000.0
+Total        : 25000.0
+Uang Kembali : 0.0
+========================
+
+=== STRUK TRANSAKSI ===
+ID Transaksi : TRX55042
+Gerai        : Central Park Mall
+Alamat Gerai : Central Park Mall, Lantai LG, Jl. Letjen S. Parman No.28, Tanjung Duren Selatan, Jakarta Barat
+Pelanggan    : Teresa
+Tanggal      : 2026-09-29
+Metode Bayar : QRIS
+Produk       : 
+ - Matcha Latte x1 Rp11000.0 [less sugar]
+Subtotal     : 22000.0
+Promo        : HEMAT50
+Potongan     : Rp11000.0
+Total        : 11000.0
+Uang Kembali : 0.0
+========================

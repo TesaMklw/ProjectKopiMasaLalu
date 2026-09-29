@@ -19,7 +19,7 @@ public class Minuman extends Produk {// inheritance
     public void setUkuranMinuman(String ukuranMinuman) { this.ukuranMinuman = ukuranMinuman; }
     public String getUkuranMinuman() { return ukuranMinuman; }
 
-    // Minuman: diskon sesuai persen yang diberikan (10 = diskon 10%)
+    // Minuman: diskon sesuai persen yang diberikan
     @Override// polymorphism
     public void calcDiscount(float persen) {
         if (persen < 0) persen = 0;
