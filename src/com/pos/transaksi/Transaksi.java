@@ -166,9 +166,11 @@ public class Transaksi implements Cetak {
         return sb.toString();
     }
 
-    // Simpan struk ke 1 file txt (struk.txt); tiap struk baru ditambah di bawahnya.
+    // Simpan struk ke 1 file txt (src/com/pos/struk/struk.txt);
+    // tiap struk baru ditambah di bawahnya.
     public String simpanStruk() throws IOException {
-        Path path = Paths.get("struk.txt");
+        Files.createDirectories(Paths.get("src/com/pos/struk"));
+        Path path = Paths.get("src/com/pos/struk/struk.txt");
         String pemisah = (Files.exists(path) && Files.size(path) > 0)
                 ? System.lineSeparator() : "";
         Files.write(path,
