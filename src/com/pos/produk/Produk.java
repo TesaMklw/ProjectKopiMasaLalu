@@ -1,11 +1,12 @@
+// TESALONIKA
 package com.pos.produk;
 
 import java.util.Scanner;
 
-public abstract class Produk {
+public abstract class Produk {// abstrak
     // Satu Scanner dipakai bersama oleh Produk dan semua subclass-nya
     public static Scanner inputUser = new Scanner(System.in);
-
+    //encapsualtion
     private String namaProduk;
     private float hargaProduk;
     private String catatanProduk;
@@ -78,11 +79,11 @@ public abstract class Produk {
     public String getCatatanProduk() { return catatanProduk; }
     public int getJumlahProduk() { return jumlahProduk; }
 
-    @Override
+    @Override//polymorphism
     public String toString() {
         return namaProduk + " - Rp" + hargaProduk;
     }
 
     // Abstrak: wajib di-override subclass (seperti hitungLuas() di Bentuk)
-    public abstract void calcDiscount(float persen);
+    public abstract void calcDiscount(float persen);// method abstrak
 }

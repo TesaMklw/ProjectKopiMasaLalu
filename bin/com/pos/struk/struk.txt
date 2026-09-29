@@ -1,0 +1,13 @@
+=== STRUK TRANSAKSI ===
+ID Transaksi : TRX63876
+Gerai        : Kopi Kenangan Tanjung Duren
+Alamat Gerai : Jl. Tanjung Duren Raya No. 359, RT.5/RW.3, Tanjung Duren Utara, Kec. Grogol Petamburan, Jakarta Barat
+Pelanggan    : Tesalonika
+Tanggal      : 2026-09-29
+Metode Bayar : Cash
+Produk       : 
+ - Kopi Kenangan Mantan x1 Rp18000.0 [Less Sugar]
+Subtotal     : 18000.0
+Total        : 18000.0
+Uang Kembali : 0.0
+========================

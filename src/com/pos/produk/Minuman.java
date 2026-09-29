@@ -1,7 +1,8 @@
+// TESALONIKA
 package com.pos.produk;
 
-public class Minuman extends Produk {
-    private String ukuranMinuman;
+public class Minuman extends Produk {// inheritance
+    private String ukuranMinuman;// escapsulation
 
     public Minuman(String ukuranMinuman, String namaProduk, float hargaProduk,
                     String catatanProduk, int jumlahProduk) {
@@ -19,7 +20,7 @@ public class Minuman extends Produk {
     public String getUkuranMinuman() { return ukuranMinuman; }
 
     // Minuman: diskon sesuai persen yang diberikan (10 = diskon 10%)
-    @Override
+    @Override// polymorphism
     public void calcDiscount(float persen) {
         if (persen < 0) persen = 0;
         if (persen > 100) persen = 100;

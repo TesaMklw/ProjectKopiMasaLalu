@@ -13,7 +13,7 @@ import com.pos.produk.MakananPenutup;
 import com.pos.produk.Produk;
 import com.pos.transaksi.Transaksi;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.Scanner;
 

@@ -1,15 +1,16 @@
+// TESALONIKA
 package com.pos.produk;
 
 public class MakananPenutup extends Produk {
     private String variasiMakananPenutup;
-
+    // constructor overloading
     public MakananPenutup(String variasiMakananPenutup, String namaProduk, float hargaProduk,
                             String catatanProduk, int jumlahProduk) {
         super(namaProduk, hargaProduk, catatanProduk, jumlahProduk);
         this.variasiMakananPenutup = variasiMakananPenutup;
     }
 
-    public MakananPenutup() {
+    public MakananPenutup() {// constructor overloading
         super();   // menanyakan nama, harga, catatan, jumlah
         System.out.print("Variasi Makanan Penutup = ");
         this.variasiMakananPenutup = inputUser.nextLine();

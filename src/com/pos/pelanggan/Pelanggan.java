@@ -1,3 +1,4 @@
+// AUTOR RIZA ROSMERI
 package com.pos.pelanggan;
 
 import com.pos.data.DataLoader;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Pelanggan implements Login {
+public class Pelanggan implements Login {// hierarki
     private static Scanner IN = new Scanner(System.in);
 
     // Dipanggil Main supaya semua input lewat satu Scanner yang sama
@@ -70,6 +71,7 @@ public class Pelanggan implements Login {
         public static Pelanggan authenticate(String nama, String pass) {
             if (nama == null || pass == null) return null;
             for (Pelanggan p : database) {
+                // cek membandingkan nama dan password yang ada di trim dan data base (equals)
                 if (Objects.equals(p.getNamaPelanggan(), nama.trim())
                         && Objects.equals(p.getPasswordPelanggan(), pass)) {
                     return p;
@@ -83,30 +85,37 @@ public class Pelanggan implements Login {
             if (nama == null || nama.trim().isEmpty() || pass == null || pass.isEmpty()) {
                 return null;
             }
+            // mastiin blum ada nama yang sam di database
             for (Pelanggan p : database) {
                 if (p.getNamaPelanggan() != null && p.getNamaPelanggan().equalsIgnoreCase(nama.trim())) {
                     return null;
                 }
             }
+            // mengisi data
             Pelanggan baru = new Pelanggan(nama.trim());
             baru.setNoHp(noHp == null ? "" : noHp.trim());
             baru.setPasswordPelanggan(pass);
             database.add(baru);
+            // coba masukin data ke file
             try {
                 DataLoader.appendPelanggan("data/pelanggan.txt", baru);
-            } catch (IOException e) {
+            } 
+            //  error
+            catch (IOException e) {
+            // hapus data
                 database.remove(baru);
                 return null;
             }
             return baru;
         }
-
+        // polymorphism
         @Override
         public void signup() {
             System.out.println("=== SIGNUP PELANGGAN ===");
             System.out.print("Nama Pelanggan = ");
             String nama = IN.nextLine().trim();
             for (Pelanggan p : database) {
+                // cek kesamaan data
                 if (p.getNamaPelanggan() != null && p.getNamaPelanggan().equalsIgnoreCase(nama)) {
                     System.out.println("Nama sudah terdaftar. Silakan signin.");
                     return;
@@ -120,7 +129,7 @@ public class Pelanggan implements Login {
             database.add(this);
             System.out.println("Signup berhasil. Selamat datang, " + this.namaPelanggan + "!");
         }
-
+         // polymorphism
         @Override
         public void signin() {
             System.out.println("=== SIGNIN PELANGGAN ===");
@@ -129,6 +138,7 @@ public class Pelanggan implements Login {
             System.out.print("Password = ");
             String pass = IN.nextLine();
             for (Pelanggan p : database) {
+                // cek data
                 if (Objects.equals(p.getNamaPelanggan(), nama)
                         && Objects.equals(p.getPasswordPelanggan(), pass)) {
                     this.namaPelanggan = p.getNamaPelanggan();
