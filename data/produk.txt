@@ -1,4 +1,4 @@
-# Data Produk Kopi Kenangan
+# Data Produk Kopi Masa Lalu
 # Format: Tipe|NamaProduk|Harga|VarianUkuran|InfoTambahan(JenisKopi/JenisRasa/Variasi)|ContohCatatan
 Kopi|Kopi Kenangan Mantan|18000|Regular|Arabika + Gula Aren|Less Sugar
 Kopi|Kopi Kenangan Mantan|22000|Large|Arabika + Gula Aren|Less Sugar

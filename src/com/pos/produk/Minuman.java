@@ -13,7 +13,7 @@ public class Minuman extends Produk {// inheritance
     public Minuman() {
         super();   // menanyakan nama, harga, catatan, jumlah
         System.out.print("Ukuran Minuman = ");
-        this.ukuranMinuman = inputUser.nextLine();
+        this.ukuranMinuman = INPUT_USER.nextLine();
     }
 
     public void setUkuranMinuman(String ukuranMinuman) { this.ukuranMinuman = ukuranMinuman; }

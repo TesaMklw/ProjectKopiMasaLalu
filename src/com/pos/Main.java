@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final Scanner IN = new Scanner(System.in);
+    private static final Scanner INPUT_USER = new Scanner(System.in);
 
     public static void main(String[] args) {
         // Daftar file, penampung data awal
@@ -46,7 +46,7 @@ public class Main {
 
         // Login lewat interface Login
         Pelanggan.setDatabase(daftarPelanggan);
-        Pelanggan.setScanner(IN);
+        Pelanggan.setScanner(INPUT_USER);
         Login akun = new Pelanggan();
         Pelanggan pelanggan = menuAkun(akun);
         if (pelanggan == null) {
@@ -101,7 +101,7 @@ public class Main {
             System.out.println("2. Signup");
             System.out.println("0. Keluar");
             System.out.print("Pilih = ");
-            String pilih = IN.nextLine().trim();
+            String pilih = INPUT_USER.nextLine().trim();
             if (pilih.equals("1")) {
                 akun.signin();
                 Pelanggan p = (Pelanggan) akun;
@@ -168,7 +168,7 @@ public class Main {
             }
             int jumlah = bacaAngka("Jumlah", 1, 20);
             System.out.print("Catatan (Enter = pakai bawaan) = ");
-            String catatan = IN.nextLine().trim();
+            String catatan = INPUT_USER.nextLine().trim();
 
             // Duplikasi objek produk agar jumlah & catatan tiap transaksi terpisah
             Produk p = copyProduk(daftar.get(no - 1), jumlah);
@@ -214,7 +214,7 @@ public class Main {
     // Kembalikan kode yang dipakai, "" kalau tanpa promo.
     private static String terapkanPromo(List<Produk> keranjang) {
         System.out.print("Kode promo (Enter = lewati) = ");
-        String kode = IN.nextLine().trim().toUpperCase();
+        String kode = INPUT_USER.nextLine().trim().toUpperCase();
         if (kode.isEmpty()) {
             return "";
         }
@@ -257,7 +257,7 @@ public class Main {
         while (true) {
             System.out.print("Uang dibayar = ");
             try {
-                float uang = Float.parseFloat(IN.nextLine().trim());
+                float uang = Float.parseFloat(INPUT_USER.nextLine().trim());
                 if (uang < total) {
                     System.out.println("Uang kurang Rp" + (total - uang) + ". Coba lagi.");
                     continue;
@@ -274,7 +274,7 @@ public class Main {
         while (true) {
             System.out.print(label + " (" + min + ".." + maks + ") = ");
             try {
-                int n = Integer.parseInt(IN.nextLine().trim());
+                int n = Integer.parseInt(INPUT_USER.nextLine().trim());
                 if (n < min || n > maks) {
                     System.out.println("Di luar rentang. Coba lagi.");
                     continue;

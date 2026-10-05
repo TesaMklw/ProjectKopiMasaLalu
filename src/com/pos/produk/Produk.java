@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public abstract class Produk {// abstrak
     // Satu Scanner dipakai bersama oleh Produk dan semua subclass-nya
-    public static Scanner inputUser = new Scanner(System.in);
+    public static Scanner INPUT_USER = new Scanner(System.in);
     //encapsualtion
     private String namaProduk;
     private float hargaProduk;
@@ -23,10 +23,10 @@ public abstract class Produk {// abstrak
     // Constructor 2: nilai ditanyakan langsung ke user
     public Produk() {
         System.out.print("Nama Produk = ");
-        this.namaProduk = inputUser.nextLine();
+        this.namaProduk = INPUT_USER.nextLine();
         this.hargaProduk = readHarga();
         System.out.print("Catatan = ");
-        this.catatanProduk = inputUser.nextLine();
+        this.catatanProduk = INPUT_USER.nextLine();
         this.jumlahProduk = readJumlah();
     }
 
@@ -35,7 +35,7 @@ public abstract class Produk {// abstrak
         while (true) {
             System.out.print("Harga Produk = ");
             try {
-                float h = Float.parseFloat(inputUser.nextLine().trim());
+                float h = Float.parseFloat(INPUT_USER.nextLine().trim());
                 if (h < 0) {
                     System.out.println("Harga tidak boleh negatif. Coba lagi.");
                     continue;
@@ -51,7 +51,7 @@ public abstract class Produk {// abstrak
         while (true) {
             System.out.print("Jumlah = ");
             try {
-                int j = Integer.parseInt(inputUser.nextLine().trim());
+                int j = Integer.parseInt(INPUT_USER.nextLine().trim());
                 if (j <= 0) {
                     System.out.println("Jumlah harus > 0. Coba lagi.");
                     continue;

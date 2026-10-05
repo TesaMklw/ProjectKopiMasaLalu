@@ -1,7 +1,7 @@
-# Data Gerai Kopi Kenangan
+# Data Gerai Kopi Masa Lalu
 # Format: KodeGerai|NamaGerai|AlamatGerai
-G001|Kopi Kenangan Tanjung Duren|Jl. Tanjung Duren Raya No. 359, RT.5/RW.3, Tanjung Duren Utara, Kec. Grogol Petamburan, Jakarta Barat
-G002|Kopi Kenangan RS Jantung Harapan Kita (Palmerah)|Jl. Letjen S. Parman Kav. 87, Palmerah, Jakarta Barat (dekat pintu masuk utama RS Harapan Kita)
+G001|Kopi Masa Lalu Tanjung Duren|Jl. Tanjung Duren Raya No. 359, RT.5/RW.3, Tanjung Duren Utara, Kec. Grogol Petamburan, Jakarta Barat
+G002|Kopi Masa Lalu RS Jantung Harapan Kita (Palmerah)|Jl. Letjen S. Parman Kav. 87, Palmerah, Jakarta Barat (dekat pintu masuk utama RS Harapan Kita)
 G003|Season City Mall (Tambora)|Season City Mall, Lantai GF, Jl. Prof. Dr. Latumeten No.33, Jembatan Besi, Tambora, Jakarta Barat 11320
 G004|Mall Taman Anggrek|Mall Taman Anggrek, Lantai LG, Jl. Letjen S. Parman Kav. 21, Tanjung Duren Selatan, Jakarta Barat
 G005|Central Park Mall|Central Park Mall, Lantai LG, Jl. Letjen S. Parman No.28, Tanjung Duren Selatan, Jakarta Barat

@@ -12,7 +12,7 @@ public class Pembayaran {
     private String metodePembayaran;
 
     // static final itu satu scanner bisa dipakai bersama (objek class) tapi variabel nya bersifat kostanta
-    private static final Scanner inputUser = new Scanner(System.in);
+    private static final Scanner INPUT_USER = new Scanner(System.in);
 
     // Constructor 1 (Parameterized Constructor)
     public Pembayaran(String metodePembayaran){
@@ -22,7 +22,7 @@ public class Pembayaran {
     // Constructor 2 (Default/No-Arg Constructor)
     public Pembayaran(){
         System.out.print("Metode Pembayaran = ");
-        this.metodePembayaran = inputUser.nextLine();
+        this.metodePembayaran = INPUT_USER.nextLine();
     }
 
     // setters untuk mangatur/mengubah nilai variabel private 

@@ -45,3 +45,37 @@ Potongan     : Rp11000.0
 Total        : 11000.0
 Uang Kembali : 0.0
 ========================
+
+=== STRUK TRANSAKSI ===
+ID Transaksi : TRX79291
+Gerai        : Kopi Kenangan Tanjung Duren
+Alamat Gerai : Jl. Tanjung Duren Raya No. 359, RT.5/RW.3, Tanjung Duren Utara, Kec. Grogol Petamburan, Jakarta Barat
+Pelanggan    : Vionanda
+Tanggal      : 2026-10-06
+Metode Bayar : Cash
+Produk       : 
+ - Kopi Kenangan Mantan x2 Rp14400.0 [less sugar, less ice]
+Subtotal     : 36000.0
+Promo        : HEMAT20
+Potongan     : Rp7200.0
+Total        : 28800.0
+Uang Kembali : 71200.0
+========================
+
+=== STRUK TRANSAKSI ===
+ID Transaksi : TRX60406
+Gerai        : Kopi Masa Lalu RS Jantung Harapan Kita (Palmerah)
+Alamat Gerai : Jl. Letjen S. Parman Kav. 87, Palmerah, Jakarta Barat (dekat pintu masuk utama RS Harapan Kita)
+Pelanggan    : Mayranda
+Tanggal      : 2026-10-06
+Metode Bayar : QRIS
+Produk       : 
+ - Matcha Latte x1 Rp11000.0 [less sugar, less ice]
+ - Caramel Macchiato x2 Rp12500.0 [Less sugar]
+ - Roti Abon Ayam x2 Rp10400.0 [Hangat]
+Subtotal     : 98000.0
+Promo        : HEMAT50
+Potongan     : Rp41200.0
+Total        : 56800.0
+Uang Kembali : 0.0
+========================
