@@ -1,4 +1,7 @@
-// TESALONIKA
+/*
+author : Tesalonika Miracle Makalew - 825250020
+*/
+
 package com.pos.produk;
 
 import java.util.Scanner;

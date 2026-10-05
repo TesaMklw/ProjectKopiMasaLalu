@@ -1,4 +1,7 @@
-// AUTOR TESALONIKA
+/*
+author : Tesalonika Miracle Makalew - 825250020
+*/
+
 package com.pos.produk;
 
 public class BukanKopi extends Minuman {// struktur hierarki, inheritence

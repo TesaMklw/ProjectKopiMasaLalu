@@ -1,3 +1,10 @@
+/*
+author :
+    1. Tesalonika Miracle Makalew - 825250020
+    2. Riza Rosmeri - 825250153
+    3. Vionanda Ginting - 825250018
+*/
+
 package com.pos;
 
 // panggil class dari package lain yang digunakan

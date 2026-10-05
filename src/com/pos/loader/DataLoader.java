@@ -1,5 +1,7 @@
+/*
+author : Tesalonika Miracle Makalew - 825250020
+*/
 package com.pos.loader;
-// TESALONIKA
 
 import com.pos.gerai.Gerai;
 import com.pos.pelanggan.Pelanggan;
