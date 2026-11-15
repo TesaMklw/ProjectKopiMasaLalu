@@ -1,13 +1,32 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Main - KopiKenangan",
-            "request": "launch",
-            "mainClass": "com.pos.Main",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "App",
+      "request": "launch",
+      "mainClass": "App",
+      "projectName": "ProjectKopiKenangan_8c693272"
+    },
+    {
+      "type": "java",
+      "name": "App",
+      "request": "launch",
+      "mainClass": "App",
+      "projectName": "ProjectKopiKenangan",
+      "javaExec": "C:\\JDK\\oracleJdk-26\\bin\\java.exe",
+      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web",
+      "console": "internalConsole"
+    },
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}",
+      "projectName": "ProjectKopiKenangan",
+      "javaExec": "C:\\JDK\\oracleJdk-26\\bin\\java.exe",
+      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web",
+      "console": "internalConsole"
+    }
+  ]
 }

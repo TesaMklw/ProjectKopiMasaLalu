@@ -2,6 +2,35 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
-    ]
+        "C:\\javafx-sdk-27\\lib\\*.jar"
+    ],
+    "java.jdt.ls.java.home": "C:\\JDK\\oracleJdk-26",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-26",
+            "path": "C:\\JDK\\oracleJdk-26",
+            "default": true
+        }
+    ],
+    "java.jdt.core.compiler.source": "25",
+    "java.jdt.core.compiler.compliance": "25",
+    "java.jdt.core.compiler.codegen.targetPlatform": "25",
+
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.jdt.core.compiler.problem.incompleteClasspath": "ignore",
+    "java.jdt.core.compiler.problem.uncheckedTypeOperation": "ignore",
+    "java.jdt.core.compiler.problem.rawTypeReference": "ignore",
+    "java.jdt.core.compiler.problem.unusedImport": "ignore",
+    "java.jdt.core.compiler.problem.unusedLocal": "ignore",
+    "java.jdt.core.compiler.problem.unusedPrivateMember": "ignore",
+    "java.jdt.core.compiler.problem.deadCode": "ignore",
+    "java.jdt.core.compiler.problem.thisEscape": "ignore",
+    "java.jdt.core.compiler.problem.previewFeatures": "ignore",
+    "java.jdt.core.compiler.problem.forbiddenReference": "warning",
+    "java.jdt.core.compiler.problem.deprecation": "ignore",
+
+    "java.debug.settings.console": "internalConsole",
+    "java.debug.settings.onBuildFailureProceed": true
 }

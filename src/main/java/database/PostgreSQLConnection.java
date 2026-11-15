@@ -1,0 +1,25 @@
+package main.java.database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ * Koneksi PostgreSQL untuk POS Kopi Kenangan.
+ * Ubah USER / PASSWORD kalau akun postgres di komputer berbeda.
+ */
+public class PostgreSQLConnection {
+    public static final String URL = "jdbc:postgresql://localhost:5432/kopimasalalu";
+    public static final String USER = "Tesa";
+    public static final String PASSWORD = "Tesa";
+
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new SQLException(
+                    "Driver org.postgresql.Driver tidak ditemukan. Tambahkan postgresql-42.7.14.jar.", e);
+        }
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+}
