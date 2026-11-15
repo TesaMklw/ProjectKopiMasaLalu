@@ -21,20 +21,21 @@ public class Gerai {// inheritance
         public void setNamaGerai(String namaGerai) {
             this.namaGerai = namaGerai;
         }
-        public String getNamaGerai() {
-            return namaGerai;
-        }
 
         public void setAlamatGerai(String alamatGerai) {
             this.alamatGerai = alamatGerai;
         }
+
+        public String getNamaGerai() {
+            return namaGerai;
+        }
         public String getAlamatGerai() {
             return alamatGerai;
         }
+
         // polymorphism
         @Override
         public String toString() {
             return namaGerai;
         }
     }
-   
