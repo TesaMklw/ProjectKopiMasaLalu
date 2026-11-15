@@ -4,35 +4,23 @@ author : Tesalonika Miracle Makalew - 825250020
 
 package main.java.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class Minuman extends Produk {// inheritance
-    private final StringProperty ukuranMinuman = new SimpleStringProperty();// escapsulation
+    private String ukuranMinuman;// escapsulation
 
     public Minuman(String ukuranMinuman, String namaProduk, float hargaProduk,
                     String catatanProduk, int jumlahProduk) {
         super(namaProduk, hargaProduk, catatanProduk, jumlahProduk);
-        this.ukuranMinuman.set(ukuranMinuman);
+        this.ukuranMinuman = ukuranMinuman;
     }
 
     public Minuman() {
         super();   // menanyakan nama, harga, catatan, jumlah
         System.out.print("Ukuran Minuman = ");
-        this.ukuranMinuman.set(INPUT_USER.nextLine());
+        this.ukuranMinuman = INPUT_USER.nextLine();
     }
 
-    public void setUkuranMinuman(String ukuranMinuman) { this.ukuranMinuman.set(ukuranMinuman); }
-    public String getUkuranMinuman() { return ukuranMinuman.get(); }
-    public StringProperty ukuranMinumanProperty() { return ukuranMinuman; }
-
-    @Override
-    public String getTipeProduk() { return "Minuman"; }
-
-    @Override
-    public String getUkuranTampil() {
-        return getUkuranMinuman() == null ? "-" : getUkuranMinuman();
-    }
+    public void setUkuranMinuman(String ukuranMinuman) { this.ukuranMinuman = ukuranMinuman; }
+    public String getUkuranMinuman() { return ukuranMinuman; }
 
     // Minuman: diskon sesuai persen yang diberikan
     @Override// polymorphism

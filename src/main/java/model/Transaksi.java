@@ -5,42 +5,40 @@ author : Vionanda Ginting - 825250018
 package main.java.model;
 
 // Import class-class dari package lain
-import java.util.ArrayList;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import main.java.controller.Cetak;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 
 public class Transaksi implements Cetak {
-    private final StringProperty idTransaksi = new SimpleStringProperty();
+    private String idTransaksi;
     private Gerai gerai;
     private ArrayList<Produk> listProduk; // Menyimpan daftar objek Produk secara dinamis ke dalam arraylist nya
-    private final FloatProperty subtotalTransaksi = new SimpleFloatProperty();
-    private final FloatProperty totalTransaksi = new SimpleFloatProperty();
-    private final FloatProperty uangKembali = new SimpleFloatProperty();
-    private final StringProperty kodePromo = new SimpleStringProperty("");
-    private final FloatProperty totalDiskon = new SimpleFloatProperty();
+    private float subtotalTransaksi;
+    private float totalTransaksi;
+    private float uangKembali;
+    private String kodePromo = "";
+    private float totalDiskon = 0;
     private Pelanggan pelanggan;
-    private final StringProperty tanggalTransaksi = new SimpleStringProperty();
+    private String tanggalTransaksi;
     private Pembayaran pembayaran;
-    // Teks singkat untuk kolom TableView (ikut berubah lewat setter relasi)
-    private final StringProperty namaGerai = new SimpleStringProperty("");
-    private final StringProperty namaPelanggan = new SimpleStringProperty("");
-    private final StringProperty metodePembayaranTampil = new SimpleStringProperty("");
 
     // Constructor 1 (Parameterized Constructor)
     public Transaksi(String idTransaksi, Gerai gerai, float subtotalTransaksi, float totalTransaksi,
                     float uangKembali, Pelanggan pelanggan, String tanggalTransaksi, Pembayaran pembayaran) {
+        this.idTransaksi = idTransaksi;
+        this.gerai = gerai;
         this.listProduk = new ArrayList<>();
-        setIdTransaksi(idTransaksi);
-        setGerai(gerai);
-        setSubtotalTransaksi(subtotalTransaksi);
-        setTotalTransaksi(totalTransaksi);
-        setUangKembali(uangKembali);
-        setPelanggan(pelanggan);
-        setTanggalTransaksi(tanggalTransaksi);
-        setPembayaran(pembayaran);
+        this.subtotalTransaksi = subtotalTransaksi;
+        this.totalTransaksi = totalTransaksi;
+        this.uangKembali = uangKembali;
+        this.pelanggan = pelanggan;
+        this.tanggalTransaksi = tanggalTransaksi;
+        this.pembayaran = pembayaran;
     }
 
     // Constructor 2 (Default/No-Arg Constructor)
@@ -50,69 +48,52 @@ public class Transaksi implements Cetak {
 
     // setters untuk mengatur/mengubah nilai variabel private
     public void setIdTransaksi(String idTransaksi) {
-        this.idTransaksi.set(idTransaksi);
+        this.idTransaksi = idTransaksi;
     }
 
     public void setGerai(Gerai gerai) {
         this.gerai = gerai;
-        this.namaGerai.set(gerai != null && gerai.getNamaGerai() != null ? gerai.getNamaGerai() : "");
     }
 
     public void setSubtotalTransaksi(float subtotalTransaksi) {
-        this.subtotalTransaksi.set(subtotalTransaksi);
+        this.subtotalTransaksi = subtotalTransaksi;
     }
 
     public void setTotalTransaksi(float totalTransaksi) {
-        this.totalTransaksi.set(totalTransaksi);
+        this.totalTransaksi = totalTransaksi;
     }
 
     public void setUangKembali(float uangKembali) {
-        this.uangKembali.set(uangKembali);
+        this.uangKembali = uangKembali;
     }
 
     public void setKodePromo(String kodePromo) {
-        this.kodePromo.set(kodePromo);
+        this.kodePromo = kodePromo;
     }
 
     public void setTotalDiskon(float totalDiskon) {
-        this.totalDiskon.set(totalDiskon);
+        this.totalDiskon = totalDiskon;
     }
 
     public void setPelanggan(Pelanggan pelanggan) {
         this.pelanggan = pelanggan;
-        this.namaPelanggan.set(pelanggan != null && pelanggan.getNamaPelanggan() != null
-                ? pelanggan.getNamaPelanggan() : "");
     }
 
     public void setTanggalTransaksi(String tanggalTransaksi) {
-        this.tanggalTransaksi.set(tanggalTransaksi);
+        this.tanggalTransaksi = tanggalTransaksi;
     }
 
     public void setPembayaran(Pembayaran pembayaran) {
         this.pembayaran = pembayaran;
-        this.metodePembayaranTampil.set(pembayaran != null && pembayaran.getMetodePembayaran() != null
-                ? pembayaran.getMetodePembayaran() : "");
     }
 
     // getters untuk mengambil/membaca nilai variabel private
     public String getIdTransaksi() {
-        return idTransaksi.get();
-    }
-
-    public StringProperty idTransaksiProperty() {
         return idTransaksi;
     }
 
     public Gerai getGerai() {
         return gerai;
-    }
-
-    public String getNamaGerai() {
-        return namaGerai.get();
-    }
-
-    public StringProperty namaGeraiProperty() {
-        return namaGerai;
     }
 
     // Mengembalikan salinan (copy) ArrayList
@@ -121,42 +102,22 @@ public class Transaksi implements Cetak {
     }
 
     public float getSubtotalTransaksi() {
-        return subtotalTransaksi.get();
-    }
-
-    public FloatProperty subtotalTransaksiProperty() {
         return subtotalTransaksi;
     }
 
     public float getTotalTransaksi() {
-        return totalTransaksi.get();
-    }
-
-    public FloatProperty totalTransaksiProperty() {
         return totalTransaksi;
     }
 
     public float getUangKembali() {
-        return uangKembali.get();
-    }
-
-    public FloatProperty uangKembaliProperty() {
         return uangKembali;
     }
 
     public String getKodePromo() {
-        return kodePromo.get();
-    }
-
-    public StringProperty kodePromoProperty() {
         return kodePromo;
     }
 
     public float getTotalDiskon() {
-        return totalDiskon.get();
-    }
-
-    public FloatProperty totalDiskonProperty() {
         return totalDiskon;
     }
 
@@ -164,32 +125,12 @@ public class Transaksi implements Cetak {
         return pelanggan;
     }
 
-    public String getNamaPelanggan() {
-        return namaPelanggan.get();
-    }
-
-    public StringProperty namaPelangganProperty() {
-        return namaPelanggan;
-    }
-
     public String getTanggalTransaksi() {
-        return tanggalTransaksi.get();
-    }
-
-    public StringProperty tanggalTransaksiProperty() {
         return tanggalTransaksi;
     }
 
     public Pembayaran getPembayaran() {
         return pembayaran;
-    }
-
-    public String getMetodePembayaranTampil() {
-        return metodePembayaranTampil.get();
-    }
-
-    public StringProperty metodePembayaranTampilProperty() {
-        return metodePembayaranTampil;
     }
 
     // method operasional yang untuk menambahkan item Produk ke dalam ArrayList listProduk
@@ -198,15 +139,11 @@ public class Transaksi implements Cetak {
         listProduk.add(produk);
     }
 
-    public void clearProduk() {
-        listProduk.clear();
-    }
-
-    // menghitung kembalian/ sisa uang
+    // menghitung kembalian/ sisa uang 
     public void calcUangKembali(float uangDibayar){
-        this.uangKembali.set(uangDibayar - getTotalTransaksi());
-        if (getUangKembali() < 0) {
-            System.out.println("Peringatan: uang dibayar kurang Rp" + (-getUangKembali()));
+        this.uangKembali = uangDibayar - totalTransaksi;
+        if (this.uangKembali < 0) {
+            System.out.println("Peringatan: uang dibayar kurang Rp" + (-this.uangKembali));
         }
     }
 
@@ -216,8 +153,8 @@ public class Transaksi implements Cetak {
         for (Produk p : listProduk) {
             sum += p.getHargaProduk() * p.getJumlahProduk();
         }
-        this.subtotalTransaksi.set(sum);
-        this.totalTransaksi.set(sum);
+        this.subtotalTransaksi = sum;
+        this.totalTransaksi = sum;
     }
 
     // memenuhi kontrak interface Cetak untuk menampilkan isi struk di konsol (Polymorphism - Method Overriding)
@@ -230,13 +167,13 @@ public class Transaksi implements Cetak {
     public String getStrukText() {
         StringBuilder sb = new StringBuilder();
         sb.append("=== STRUK TRANSAKSI ===\n");
-        sb.append("ID Transaksi : ").append(getIdTransaksi()).append("\n");
+        sb.append("ID Transaksi : ").append(idTransaksi).append("\n");
 
         // ternary operator (? :) untuk mencegah NullPointerException
         sb.append("Gerai        : ").append(gerai != null ? gerai.getNamaGerai() : "-").append("\n");
         sb.append("Alamat Gerai : ").append(gerai != null ? gerai.getAlamatGerai() : "-").append("\n");
         sb.append("Pelanggan    : ").append(pelanggan != null ? pelanggan.getNamaPelanggan() : "-").append("\n");
-        sb.append("Tanggal      : ").append(getTanggalTransaksi()).append("\n");
+        sb.append("Tanggal      : ").append(tanggalTransaksi).append("\n");
         sb.append("Metode Bayar : ").append(pembayaran != null ? pembayaran.getMetodePembayaran() : "-").append("\n");
         sb.append("Produk       : \n");
 
@@ -249,14 +186,29 @@ public class Transaksi implements Cetak {
             }
             sb.append("\n");
         }
-        sb.append("Subtotal     : ").append(getSubtotalTransaksi()).append("\n");
-        if (getKodePromo() != null && !getKodePromo().isEmpty()) {
-            sb.append("Promo        : ").append(getKodePromo()).append("\n");
-            sb.append("Potongan     : Rp").append(getTotalDiskon()).append("\n");
+        sb.append("Subtotal     : ").append(subtotalTransaksi).append("\n");
+        if (kodePromo != null && !kodePromo.isEmpty()) {
+            sb.append("Promo        : ").append(kodePromo).append("\n");
+            sb.append("Potongan     : Rp").append(totalDiskon).append("\n");
         }
-        sb.append("Total        : ").append(getTotalTransaksi()).append("\n");
-        sb.append("Uang Kembali : ").append(getUangKembali()).append("\n");
+        sb.append("Total        : ").append(totalTransaksi).append("\n");
+        sb.append("Uang Kembali : ").append(uangKembali).append("\n");
         sb.append("========================\n");
         return sb.toString();
+    }
+
+    // Simpan struk ke 1 file txt (src/com/pos/struk/struk.txt);
+    // tiap struk baru ditambah di bawahnya.
+    public String simpanStruk() throws IOException {
+        Files.createDirectories(Paths.get("src/com/pos/struk"));
+        Path path = Paths.get("src/com/pos/struk/struk.txt");
+        String pemisah = (Files.exists(path) && Files.size(path) > 0)
+                ? System.lineSeparator() : "";
+
+        // penulisan byte teks ke file lokal
+        Files.write(path,
+                (pemisah + getStrukText()).getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        return path.toString();
     }
 }
