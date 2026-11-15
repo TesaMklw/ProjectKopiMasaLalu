@@ -1,6 +1,5 @@
 /*
-author : Vionanda Ginting
-
+author : Vionanda Ginting - 825250018
 */
 
 package com.pos.interfaces;

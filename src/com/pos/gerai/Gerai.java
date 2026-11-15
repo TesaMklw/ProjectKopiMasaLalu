@@ -1,4 +1,7 @@
-// AUTOR = RIZA ROSMERI
+/*
+author : Riza Rosmeri - 825250153
+*/
+
 package com.pos.gerai;
 
 public class Gerai {// inheritance

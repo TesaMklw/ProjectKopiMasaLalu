@@ -1,4 +1,7 @@
-// AUTOR TESALONIKA
+/*
+author : Tesalonika Miracle Makalew - 825250020
+*/
+
 package com.pos.produk;
 
 public class Kopi extends Minuman {// hierarki, inheritace
@@ -13,7 +16,7 @@ public class Kopi extends Minuman {// hierarki, inheritace
     public Kopi() {
         super();   // menanyakan semua data Produk + ukuran Minuman
         System.out.print("Jenis Kopi = ");
-        this.jenisKopi = inputUser.nextLine();
+        this.jenisKopi = INPUT_USER.nextLine();
     }
 
     public void setJenisKopi(String jenisKopi) { this.jenisKopi = jenisKopi; }
