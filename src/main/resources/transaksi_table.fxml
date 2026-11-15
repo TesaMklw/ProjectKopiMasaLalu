@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="main.java.controller.TransaksiTableController"
+            stylesheets="@css/style.css" fitToWidth="true" prefWidth="1100" prefHeight="760">
+    <VBox spacing="12" styleClass="page">
+        <Label text="Transaksi" styleClass="page-title"/>
+        <Label text="Promo: HEMAT10, HEMAT20, HEMAT50. Makanan penutup otomatis dibatasi diskon 20%." styleClass="hint" wrapText="true"/>
+        <TableView fx:id="tabel" prefHeight="200">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="90"/>
+                <TableColumn fx:id="colTanggal" text="Tanggal" prefWidth="110"/>
+                <TableColumn fx:id="colPelanggan" text="Pelanggan" prefWidth="140"/>
+                <TableColumn fx:id="colGerai" text="Gerai" prefWidth="220"/>
+                <TableColumn fx:id="colMetode" text="Bayar" prefWidth="120"/>
+                <TableColumn fx:id="colTotal" text="Total" prefWidth="110"/>
+            </columns>
+            <placeholder>
+                <Label text="Belum ada transaksi."/>
+            </placeholder>
+        </TableView>
+        <GridPane hgap="8" vgap="8" styleClass="form-grid">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="130"/>
+                <ColumnConstraints hgrow="ALWAYS" prefWidth="240"/>
+                <ColumnConstraints prefWidth="130"/>
+                <ColumnConstraints hgrow="ALWAYS" prefWidth="240"/>
+            </columnConstraints>
+            <Label text="ID" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtId" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Tanggal" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <DatePicker fx:id="dpTanggal" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+            <Label text="Gerai" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cmbGerai" maxWidth="Infinity" promptText="Pilih gerai" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Pelanggan" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="cmbPelanggan" maxWidth="Infinity" promptText="Pilih pelanggan" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+            <Label text="Pembayaran" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cmbBayar" maxWidth="Infinity" promptText="Pilih metode" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label text="Kode promo" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtPromo" promptText="HEMAT10" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+            <Label text="Uang dibayar" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtUang" promptText="50000" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        </GridPane>
+        <Label text="Keranjang" styleClass="page-title"/>
+        <HBox spacing="8">
+            <ComboBox fx:id="cmbProduk" promptText="Pilih produk" prefWidth="360"/>
+            <TextField fx:id="txtJumlahItem" promptText="Jumlah" prefWidth="80" text="1"/>
+            <TextField fx:id="txtCatatanItem" promptText="Catatan (opsional)" HBox.hgrow="ALWAYS"/>
+            <Button text="Tambah item" onAction="#tambahItem"/>
+            <Button text="Hapus item" onAction="#hapusItem" styleClass="ghost"/>
+        </HBox>
+        <TableView fx:id="tabelKeranjang" prefHeight="160">
+            <columns>
+                <TableColumn fx:id="colItemNama" text="Produk" prefWidth="280"/>
+                <TableColumn fx:id="colItemJumlah" text="Jumlah" prefWidth="80"/>
+                <TableColumn fx:id="colItemHarga" text="Harga" prefWidth="120"/>
+                <TableColumn fx:id="colItemCatatan" text="Catatan" prefWidth="220"/>
+            </columns>
+            <placeholder>
+                <Label text="Keranjang masih kosong."/>
+            </placeholder>
+        </TableView>
+        <HBox spacing="18">
+            <Label text="Subtotal"/>
+            <Label fx:id="lblSubtotal" text="Rp 0" styleClass="total-label"/>
+            <Label text="Potongan"/>
+            <Label fx:id="lblDiskon" text="Rp 0" styleClass="total-label"/>
+            <Label text="Total"/>
+            <Label fx:id="lblTotal" text="Rp 0" styleClass="total-label"/>
+            <Label text="Kembali"/>
+            <Label fx:id="lblKembali" text="Rp 0" styleClass="total-label"/>
+        </HBox>
+        <HBox spacing="8">
+            <Button text="Hitung" onAction="#hitung" styleClass="secondary"/>
+            <Button text="Simpan" onAction="#simpan"/>
+            <Button text="Ubah" onAction="#ubah" styleClass="secondary"/>
+            <Button text="Hapus" onAction="#hapus" styleClass="ghost"/>
+            <Button text="Cetak struk" onAction="#struk"/>
+            <Button text="Bersihkan" onAction="#bersih" styleClass="ghost"/>
+            <Button text="Muat ulang" onAction="#muat" styleClass="secondary"/>
+        </HBox>
+    </VBox>
+</ScrollPane>

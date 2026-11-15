@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.java.controller.GeraiTableController"
+      stylesheets="@css/style.css" spacing="12" styleClass="page"
+      prefWidth="980" prefHeight="640">
+    <Label text="Data Gerai" styleClass="page-title"/>
+    <TableView fx:id="tabel" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colKode" text="Kode" prefWidth="100"/>
+            <TableColumn fx:id="colNama" text="Nama gerai" prefWidth="260"/>
+            <TableColumn fx:id="colAlamat" text="Alamat" prefWidth="480"/>
+        </columns>
+        <placeholder>
+            <Label text="Belum ada gerai."/>
+        </placeholder>
+    </TableView>
+    <GridPane hgap="8" vgap="8" styleClass="form-grid">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="110"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        <Label text="Kode" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtKode" promptText="G006" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Nama" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNama" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Alamat" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextArea fx:id="txtAlamat" prefRowCount="2" wrapText="true" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <padding>
+            <Insets top="4" right="4" bottom="4" left="4"/>
+        </padding>
+    </GridPane>
+    <HBox spacing="8">
+        <Button text="Tambah" onAction="#tambah"/>
+        <Button text="Ubah" onAction="#ubah" styleClass="secondary"/>
+        <Button text="Hapus" onAction="#hapus" styleClass="ghost"/>
+        <Button text="Bersihkan" onAction="#bersih" styleClass="ghost"/>
+        <Button text="Muat ulang" onAction="#muat" styleClass="secondary"/>
+    </HBox>
+</VBox>

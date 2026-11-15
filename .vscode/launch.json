@@ -3,11 +3,12 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Main - KopiKenangan",
+            "name": "App",
             "request": "launch",
-            "mainClass": "com.pos.Main",
+            "mainClass": "App",
             "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web"
         }
     ]
 }

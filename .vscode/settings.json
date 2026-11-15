@@ -2,6 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
+        "C:\\javafx-sdk-27\\lib\\*.jar",
+        "C:\\javafx-sdk-27\\lib\\postgresql-42.7.14.jar"
     ]
 }
