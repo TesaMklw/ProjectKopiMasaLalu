@@ -17,9 +17,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -56,6 +59,10 @@ public class TransaksiTableController implements Cetak {
     @FXML private DatePicker dpTanggal;
     @FXML private TextField txtPromo;
     @FXML private TextField txtUang;
+    @FXML private ToggleGroup grupKategori;
+    @FXML private RadioButton rbMakanan;
+    @FXML private RadioButton rbKopi;
+    @FXML private RadioButton rbNonKopi;
     @FXML private ComboBox<Produk> cmbProduk;
     @FXML private TextField txtJumlahItem;
     @FXML private TextField txtCatatanItem;
@@ -102,6 +109,29 @@ public class TransaksiTableController implements Cetak {
         txtJumlahItem.setText("1");
         dpTanggal.setValue(LocalDate.now());
         txtId.setText(idBaru());
+        ListCell<Produk> selProduk = new ListCell<>() {
+            @Override
+            protected void updateItem(Produk item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : teksPilihan(item));
+            }
+        };
+        cmbProduk.setButtonCell(selProduk);
+        cmbProduk.setCellFactory(list -> new ListCell<>() {
+            @Override
+            protected void updateItem(Produk item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : teksPilihan(item));
+            }
+        });
+        if (grupKategori != null) {
+            grupKategori.selectedToggleProperty().addListener((obs, lama, baru) -> {
+                if (cmbProduk != null) {
+                    cmbProduk.setValue(null);
+                }
+                muatDaftarProduk();
+            });
+        }
         muat();
     }
 
@@ -138,7 +168,7 @@ public class TransaksiTableController implements Cetak {
             cmbGerai.setItems(FXCollections.observableArrayList(geraiDAO.getAll()));
             cmbPelanggan.setItems(FXCollections.observableArrayList(pelangganDAO.getAll()));
             cmbBayar.setItems(FXCollections.observableArrayList(pembayaranDAO.getAll()));
-            cmbProduk.setItems(FXCollections.observableArrayList(produkDAO.getAll()));
+            muatDaftarProduk();
             if (modePelanggan && pelangganLogin != null) {
                 ObservableList<Transaksi> milik = FXCollections.observableArrayList();
                 for (Transaksi t : transaksiDAO.getAll()) {
@@ -156,6 +186,62 @@ public class TransaksiTableController implements Cetak {
         } catch (SQLException e) {
             Pesan.gagalSql(e);
         }
+    }
+
+    private void muatDaftarProduk() {
+        if (cmbProduk == null) {
+            return;
+        }
+        String tipe = tipeKeranjang();
+        if (tipe == null) {
+            cmbProduk.setPromptText("Pilih kategori dulu");
+            cmbProduk.getItems().clear();
+            cmbProduk.setValue(null);
+            return;
+        }
+        if ("Kopi".equals(tipe)) {
+            cmbProduk.setPromptText("Pilih kopi");
+        } else if ("BukanKopi".equals(tipe)) {
+            cmbProduk.setPromptText("Pilih non kopi");
+        } else {
+            cmbProduk.setPromptText("Pilih makanan");
+        }
+        try {
+            cmbProduk.setItems(FXCollections.observableArrayList(produkDAO.getByTipe(tipe)));
+            cmbProduk.setValue(null);
+        } catch (SQLException e) {
+            Pesan.gagalSql(e);
+        }
+    }
+
+    private String teksPilihan(Produk produk) {
+        String info;
+        if (produk instanceof Kopi kopi) {
+            info = kopi.getJenisKopi();
+        } else if (produk instanceof BukanKopi bukan) {
+            info = bukan.getJenisRasa();
+        } else if (produk instanceof MakananPenutup makanan) {
+            info = makanan.getVariasiMakananPenutup();
+        } else {
+            info = produk.getInfoTambahan();
+        }
+        if (info == null || info.isBlank()) {
+            return produk.getNamaProduk();
+        }
+        return produk.getNamaProduk() + " — " + info;
+    }
+
+    private String tipeKeranjang() {
+        if (rbMakanan != null && rbMakanan.isSelected()) {
+            return "MakananPenutup";
+        }
+        if (rbKopi != null && rbKopi.isSelected()) {
+            return "Kopi";
+        }
+        if (rbNonKopi != null && rbNonKopi.isSelected()) {
+            return "BukanKopi";
+        }
+        return null;
     }
 
     @FXML
@@ -182,9 +268,7 @@ public class TransaksiTableController implements Cetak {
             return;
         }
         String catatan = txtCatatanItem.getText() == null ? "" : txtCatatanItem.getText().trim();
-        if (!catatan.isEmpty()) {
-            salinan.setCatatanProduk(catatan);
-        }
+        salinan.setCatatanProduk(catatan);
         hargaDasar.put(salinan, asal.getHargaProduk());
         keranjang.add(salinan);
         txtCatatanItem.clear();
@@ -522,18 +606,15 @@ public class TransaksiTableController implements Cetak {
         if (produk instanceof Kopi) {
             Kopi kopi = (Kopi) produk;
             salinan = new Kopi(kopi.getJenisKopi(), kopi.getUkuranMinuman(),
-                    kopi.getNamaProduk(), kopi.getHargaProduk(),
-                    kopi.getCatatanProduk(), jumlah);
+                    kopi.getNamaProduk(), kopi.getHargaProduk(), jumlah);
         } else if (produk instanceof BukanKopi) {
             BukanKopi bukan = (BukanKopi) produk;
             salinan = new BukanKopi(bukan.getJenisRasa(), bukan.getUkuranMinuman(),
-                    bukan.getNamaProduk(), bukan.getHargaProduk(),
-                    bukan.getCatatanProduk(), jumlah);
+                    bukan.getNamaProduk(), bukan.getHargaProduk(), jumlah);
         } else if (produk instanceof MakananPenutup) {
             MakananPenutup makanan = (MakananPenutup) produk;
             salinan = new MakananPenutup(makanan.getVariasiMakananPenutup(),
-                    makanan.getNamaProduk(), makanan.getHargaProduk(),
-                    makanan.getCatatanProduk(), jumlah);
+                    makanan.getNamaProduk(), makanan.getHargaProduk(), jumlah);
         } else {
             return null;
         }

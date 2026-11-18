@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import main.java.model.Pelanggan;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PelangganDAO {
     public List<Pelanggan> getAll() throws SQLException {
@@ -39,17 +40,19 @@ public class PelangganDAO {
         return null;
     }
 
-    /** Login peka huruf besar/kecil, sama seperti Pelanggan.signin(). */
+    /** Login peka huruf besar/kecil pada nama. Password dicek dengan BCrypt. */
     public Pelanggan cariLogin(String nama, String password) throws SQLException {
         String sql = "SELECT id_pelanggan, nama_pelanggan, no_hp, password_pelanggan "
-                + "FROM pelanggan WHERE nama_pelanggan = ? AND password_pelanggan = ?";
+                + "FROM pelanggan WHERE nama_pelanggan = ?";
         try (Connection conn = PostgreSQLConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, nama);
-            ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return map(rs);
+                while (rs.next()) {
+                    Pelanggan pelanggan = map(rs);
+                    if (passwordCocok(password, pelanggan.getPasswordPelanggan())) {
+                        return pelanggan;
+                    }
                 }
             }
         }
@@ -72,9 +75,11 @@ public class PelangganDAO {
         String sql = "INSERT INTO pelanggan (nama_pelanggan, no_hp, password_pelanggan) VALUES (?, ?, ?)";
         try (Connection conn = PostgreSQLConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            String hash = hashPassword(pelanggan.getPasswordPelanggan());
+            pelanggan.setPasswordPelanggan(hash);
             ps.setString(1, pelanggan.getNamaPelanggan());
             ps.setString(2, pelanggan.getNoHp());
-            ps.setString(3, pelanggan.getPasswordPelanggan());
+            ps.setString(3, hash);
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) {
@@ -89,9 +94,11 @@ public class PelangganDAO {
                 + "WHERE id_pelanggan = ?";
         try (Connection conn = PostgreSQLConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
+            String hash = hashPassword(pelanggan.getPasswordPelanggan());
+            pelanggan.setPasswordPelanggan(hash);
             ps.setString(1, pelanggan.getNamaPelanggan());
             ps.setString(2, pelanggan.getNoHp());
-            ps.setString(3, pelanggan.getPasswordPelanggan());
+            ps.setString(3, hash);
             ps.setInt(4, pelanggan.getIdPelanggan());
             ps.executeUpdate();
         }
@@ -104,6 +111,30 @@ public class PelangganDAO {
             ps.setInt(1, id);
             ps.executeUpdate();
         }
+    }
+
+    /** Hash plaintext sekali. Hash BCrypt yang sudah ada tidak di-hash ulang. */
+    private String hashPassword(String password) {
+        if (sudahHash(password)) {
+            return password;
+        }
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    private boolean passwordCocok(String plain, String hash) {
+        if (plain == null || !sudahHash(hash)) {
+            return false;
+        }
+        try {
+            return BCrypt.checkpw(plain, hash);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private static boolean sudahHash(String password) {
+        return password != null
+                && (password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$"));
     }
 
     private Pelanggan map(ResultSet rs) throws SQLException {

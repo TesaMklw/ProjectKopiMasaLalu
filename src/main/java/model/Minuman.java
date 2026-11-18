@@ -10,14 +10,13 @@ import javafx.beans.property.StringProperty;
 public class Minuman extends Produk {// inheritance
     private final StringProperty ukuranMinuman = new SimpleStringProperty();// escapsulation
 
-    public Minuman(String ukuranMinuman, String namaProduk, float hargaProduk,
-                    String catatanProduk, int jumlahProduk) {
-        super(namaProduk, hargaProduk, catatanProduk, jumlahProduk);
+    public Minuman(String ukuranMinuman, String namaProduk, float hargaProduk, int jumlahProduk) {
+        super(namaProduk, hargaProduk, jumlahProduk);
         this.ukuranMinuman.set(ukuranMinuman);
     }
 
     public Minuman() {
-        super();   // menanyakan nama, harga, catatan, jumlah
+        super();   // menanyakan nama, harga, jumlah
         System.out.print("Ukuran Minuman = ");
         this.ukuranMinuman.set(INPUT_USER.nextLine());
     }

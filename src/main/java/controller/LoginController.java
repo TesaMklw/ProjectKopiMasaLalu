@@ -2,9 +2,9 @@ package main.java.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.database.GeraiDAO;
@@ -20,13 +21,15 @@ import main.java.model.Gerai;
 import main.java.model.Pelanggan;
 
 /**
- * Form masuk dual-mode: Pelanggan (nama + password) atau Gerai (kode + nama gerai).
- * Tidak ada kolom password di tabel gerai, jadi gerai memakai kode_gerai + nama_gerai.
+ * Halaman masuk satu peran: pelanggan (sign in / sign up) atau gerai (sign in saja).
+ * No HP hanya muncul saat sign up pelanggan.
  */
 public class LoginController {
-    @FXML private ToggleButton btnModePelanggan;
-    @FXML private ToggleButton btnModeGerai;
+    @FXML private HBox barisAkun;
+    @FXML private ToggleButton btnModeMasuk;
+    @FXML private ToggleButton btnModeDaftar;
     @FXML private VBox panelPelanggan;
+    @FXML private VBox panelNoHp;
     @FXML private VBox panelGerai;
     @FXML private TextField txtNama;
     @FXML private PasswordField txtPassword;
@@ -36,74 +39,95 @@ public class LoginController {
     @FXML private Label lblPesan;
     @FXML private Label lblSubtitle;
     @FXML private Label lblHint;
+    @FXML private Button btnMasuk;
     @FXML private Button btnDaftar;
 
     private final PelangganDAO pelangganDAO = new PelangganDAO();
     private final GeraiDAO geraiDAO = new GeraiDAO();
     private boolean modeGerai;
-    private boolean pindahDashboard;
+    private boolean modeDaftar;
 
-    @FXML
-    private void initialize() {
-        pilihModePelanggan();
-        txtNama.sceneProperty().addListener((obs, lama, scene) -> {
-            if (scene == null) {
-                return;
+    public void siapkan(boolean sebagaiGerai) {
+        this.modeGerai = sebagaiGerai;
+        if (sebagaiGerai) {
+            tampilkanNode(barisAkun, false);
+            tampilkanNode(panelPelanggan, false);
+            tampilkanNode(panelGerai, true);
+            tampilkanNode(btnMasuk, true);
+            tampilkanNode(btnDaftar, false);
+            if (btnMasuk != null) {
+                btnMasuk.setDefaultButton(true);
             }
-            scene.windowProperty().addListener((obs2, lamaJendela, jendela) -> {
-                if (jendela instanceof Stage stage) {
-                    stage.setOnCloseRequest(event -> {
-                        if (pindahDashboard) {
-                            return;
-                        }
-                        event.consume();
-                        keluar();
-                    });
-                }
-            });
-        });
+            if (lblSubtitle != null) {
+                lblSubtitle.setText("Masuk sebagai gerai / kasir");
+            }
+            if (lblHint != null) {
+                lblHint.setText("Gerai hanya sign in: isi kode gerai dan nama gerai yang sudah ada.");
+            }
+            tampil("");
+            return;
+        }
+        tampilkanNode(panelGerai, false);
+        tampilkanNode(panelPelanggan, true);
+        tampilkanNode(barisAkun, true);
+        tampilkanMasuk();
     }
 
     @FXML
-    private void pilihModePelanggan() {
-        modeGerai = false;
-        if (btnModePelanggan != null) {
-            btnModePelanggan.setSelected(true);
+    private void tampilkanMasuk() {
+        modeDaftar = false;
+        if (btnModeMasuk != null) {
+            btnModeMasuk.setSelected(true);
         }
-        setPanel(panelPelanggan, true);
-        setPanel(panelGerai, false);
+        tampilkanNode(panelNoHp, false);
+        tampilkanNode(btnMasuk, true);
+        tampilkanNode(btnDaftar, false);
+        if (btnMasuk != null) {
+            btnMasuk.setDefaultButton(true);
+        }
         if (btnDaftar != null) {
-            btnDaftar.setVisible(true);
-            btnDaftar.setManaged(true);
+            btnDaftar.setDefaultButton(false);
         }
         if (lblSubtitle != null) {
-            lblSubtitle.setText("Masuk sebagai pelanggan");
+            lblSubtitle.setText("Sign in pelanggan");
         }
         if (lblHint != null) {
-            lblHint.setText("Pelanggan: nama + password dari tabel pelanggan. Bisa daftar akun baru.");
+            lblHint.setText("Masuk dengan nama dan password. No HP hanya diisi saat sign up.");
         }
         tampil("");
     }
 
     @FXML
-    private void pilihModeGerai() {
-        modeGerai = true;
-        if (btnModeGerai != null) {
-            btnModeGerai.setSelected(true);
+    private void tampilkanDaftar() {
+        modeDaftar = true;
+        if (btnModeDaftar != null) {
+            btnModeDaftar.setSelected(true);
         }
-        setPanel(panelPelanggan, false);
-        setPanel(panelGerai, true);
+        tampilkanNode(panelNoHp, true);
+        tampilkanNode(btnMasuk, false);
+        tampilkanNode(btnDaftar, true);
+        if (btnMasuk != null) {
+            btnMasuk.setDefaultButton(false);
+        }
         if (btnDaftar != null) {
-            btnDaftar.setVisible(false);
-            btnDaftar.setManaged(false);
+            btnDaftar.setDefaultButton(true);
         }
         if (lblSubtitle != null) {
-            lblSubtitle.setText("Masuk sebagai gerai / kasir");
+            lblSubtitle.setText("Sign up pelanggan");
         }
         if (lblHint != null) {
-            lblHint.setText("Gerai: isi kode_gerai dan nama_gerai yang sudah ada di tabel gerai (tanpa password).");
+            lblHint.setText("Daftar akun baru dengan nama, password, dan no HP.");
         }
         tampil("");
+    }
+
+    @FXML
+    private void tekanEnterPelanggan() {
+        if (modeDaftar) {
+            daftar();
+        } else {
+            masuk();
+        }
     }
 
     @FXML
@@ -156,7 +180,7 @@ public class LoginController {
     @FXML
     private void daftar() {
         if (modeGerai) {
-            tampil("Pendaftaran gerai hanya lewat menu admin setelah login gerai.");
+            tampil("Gerai tidak punya sign up. Masuk dengan kode dan nama gerai.");
             return;
         }
         String nama = teks(txtNama);
@@ -183,10 +207,13 @@ public class LoginController {
     }
 
     @FXML
-    private void keluar() {
-        if (Pesan.konfirmasi("Keluar", "Keluar dari Kopi Kenangan?")) {
-            Platform.exit();
+    private void tutup() {
+        Node sumber = modeGerai ? txtKodeGerai : txtNama;
+        if (sumber == null || sumber.getScene() == null) {
+            return;
         }
+        Stage stage = (Stage) sumber.getScene().getWindow();
+        stage.close();
     }
 
     private void bukaDashboard(Pelanggan pelanggan, Gerai gerai) {
@@ -210,7 +237,6 @@ public class LoginController {
             }
             stage.setScene(scene);
             stage.show();
-            pindahDashboard = true;
             Stage login = (Stage) (modeGerai ? txtKodeGerai : txtNama).getScene().getWindow();
             login.close();
         } catch (IOException e) {
@@ -218,17 +244,17 @@ public class LoginController {
         }
     }
 
-    private void setPanel(VBox panel, boolean tampil) {
-        if (panel == null) {
+    private void tampilkanNode(Node node, boolean tampil) {
+        if (node == null) {
             return;
         }
-        panel.setVisible(tampil);
-        panel.setManaged(tampil);
+        node.setVisible(tampil);
+        node.setManaged(tampil);
     }
 
-    private void tampil(String teks) {
+    private void tampil(String teksPesan) {
         if (lblPesan != null) {
-            lblPesan.setText(teks);
+            lblPesan.setText(teksPesan);
         }
     }
 

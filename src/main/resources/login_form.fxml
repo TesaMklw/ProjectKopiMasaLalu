@@ -13,22 +13,20 @@
 
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
            fx:controller="main.java.controller.LoginController"
-           stylesheets="@css/style.css" prefWidth="520" prefHeight="620">
+           stylesheets="@css/style.css" prefWidth="480" prefHeight="560">
     <fx:define>
-        <ToggleGroup fx:id="modeLogin"/>
+        <ToggleGroup fx:id="modeAkun"/>
     </fx:define>
-    <VBox alignment="CENTER" spacing="10" maxWidth="400" styleClass="card">
+    <VBox alignment="CENTER" spacing="10" maxWidth="380" styleClass="card">
         <Label text="KOPI KENANGAN" styleClass="brand"/>
-        <Label fx:id="lblSubtitle" text="Pilih cara masuk" styleClass="subtitle"/>
+        <Label fx:id="lblSubtitle" text="Masuk sebagai pelanggan" styleClass="subtitle"/>
 
-        <HBox spacing="8" alignment="CENTER" styleClass="mode-row">
-            <ToggleButton fx:id="btnModePelanggan" text="Masuk sebagai Pelanggan"
-                          toggleGroup="$modeLogin" selected="true"
-                          onAction="#pilihModePelanggan" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+        <HBox fx:id="barisAkun" spacing="8" alignment="CENTER" styleClass="mode-row">
+            <ToggleButton fx:id="btnModeMasuk" text="Sign in" toggleGroup="$modeAkun" selected="true"
+                          onAction="#tampilkanMasuk" maxWidth="Infinity" HBox.hgrow="ALWAYS"
                           styleClass="mode-btn"/>
-            <ToggleButton fx:id="btnModeGerai" text="Masuk sebagai Gerai"
-                          toggleGroup="$modeLogin"
-                          onAction="#pilihModeGerai" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+            <ToggleButton fx:id="btnModeDaftar" text="Sign up" toggleGroup="$modeAkun"
+                          onAction="#tampilkanDaftar" maxWidth="Infinity" HBox.hgrow="ALWAYS"
                           styleClass="mode-btn"/>
         </HBox>
 
@@ -36,9 +34,11 @@
             <Label text="Nama pelanggan"/>
             <TextField fx:id="txtNama" promptText="contoh: Vionanda"/>
             <Label text="Password"/>
-            <PasswordField fx:id="txtPassword" promptText="password" onAction="#masuk"/>
-            <Label text="No HP (untuk daftar)"/>
-            <TextField fx:id="txtNoHp" promptText="08xxxxxxxxxx"/>
+            <PasswordField fx:id="txtPassword" promptText="password" onAction="#tekanEnterPelanggan"/>
+            <VBox fx:id="panelNoHp" spacing="10" managed="false" visible="false">
+                <Label text="No HP"/>
+                <TextField fx:id="txtNoHp" promptText="08xxxxxxxxxx" onAction="#daftar"/>
+            </VBox>
         </VBox>
 
         <VBox fx:id="panelGerai" spacing="10" managed="false" visible="false">
@@ -50,12 +50,13 @@
 
         <Label fx:id="lblPesan" styleClass="error" wrapText="true"/>
         <HBox spacing="8" alignment="CENTER">
-            <Button text="Masuk" onAction="#masuk" defaultButton="true"/>
-            <Button fx:id="btnDaftar" text="Daftar" onAction="#daftar" styleClass="secondary"/>
-            <Button text="Keluar" onAction="#keluar" styleClass="ghost"/>
+            <Button fx:id="btnMasuk" text="Masuk" onAction="#masuk" defaultButton="true"/>
+            <Button fx:id="btnDaftar" text="Daftar" onAction="#daftar" styleClass="secondary"
+                    managed="false" visible="false"/>
+            <Button text="Tutup" onAction="#tutup" styleClass="ghost"/>
         </HBox>
         <Label fx:id="lblHint"
-               text="Pelanggan: nama + password dari tabel pelanggan. Bisa daftar akun baru."
+               text="Masuk dengan nama dan password. No HP hanya diisi saat sign up."
                styleClass="hint" wrapText="true"/>
         <padding>
             <Insets top="8" right="8" bottom="8" left="8"/>

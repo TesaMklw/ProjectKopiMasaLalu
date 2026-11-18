@@ -11,8 +11,8 @@ public class BukanKopi extends Minuman {// struktur hierarki, inheritence
     private final StringProperty jenisRasa = new SimpleStringProperty();// encapsulation
 
     public BukanKopi(String jenisRasa, String ukuranMinuman, String namaProduk, float hargaProduk,
-                    String catatanProduk, int jumlahProduk) {
-        super(ukuranMinuman, namaProduk, hargaProduk, catatanProduk, jumlahProduk);
+                    int jumlahProduk) {
+        super(ukuranMinuman, namaProduk, hargaProduk, jumlahProduk);
         this.jenisRasa.set(jenisRasa);
     }
 

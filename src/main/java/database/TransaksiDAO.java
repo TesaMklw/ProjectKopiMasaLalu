@@ -183,12 +183,15 @@ public class TransaksiDAO {
         }
         Produk produk;
         if ("Kopi".equalsIgnoreCase(tipe)) {
-            produk = new Kopi(info, ukuran, nama, harga, catatan, jumlah);
+            produk = new Kopi(info, ukuran, nama, harga, jumlah);
         } else if ("BukanKopi".equalsIgnoreCase(tipe)) {
-            produk = new BukanKopi(info, ukuran, nama, harga, catatan, jumlah);
+            produk = new BukanKopi(info, ukuran, nama, harga, jumlah);
+        } else if ("MakananPenutup".equalsIgnoreCase(tipe)) {
+            produk = new MakananPenutup(info, nama, harga, jumlah);
         } else {
-            produk = new MakananPenutup(info, nama, harga, catatan, jumlah);
+            throw new SQLException("Tipe produk tidak dikenali: " + tipe);
         }
+        produk.setCatatanProduk(catatan == null ? "" : catatan);
         int idProduk = rs.getInt("id_produk");
         if (!rs.wasNull()) {
             produk.setIdProduk(idProduk);

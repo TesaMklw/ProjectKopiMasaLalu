@@ -118,7 +118,7 @@ public class PelangganTableController {
         idDipilih = pelanggan.getIdPelanggan();
         txtNama.setText(pelanggan.getNamaPelanggan());
         txtHp.setText(pelanggan.getNoHp());
-        txtPassword.setText(pelanggan.getPasswordPelanggan());
+        txtPassword.clear();
     }
 
     private Pelanggan baca(boolean ubah) {
@@ -129,13 +129,19 @@ public class PelangganTableController {
             Pesan.gagal("Nama, no HP, dan password wajib diisi.");
             return null;
         }
-        if (password.isEmpty()) {
-            Pesan.gagal("Password tidak boleh kosong.");
-            return null;
-        }
         Pelanggan pelanggan = new Pelanggan(nama);
         pelanggan.setNoHp(hp);
-        pelanggan.setPasswordPelanggan(password);
+        if (password.isEmpty()) {
+            Pelanggan dipilih = tabel.getSelectionModel().getSelectedItem();
+            if (dipilih == null || dipilih.getPasswordPelanggan() == null
+                    || dipilih.getPasswordPelanggan().isEmpty()) {
+                Pesan.gagal("Password tidak boleh kosong.");
+                return null;
+            }
+            pelanggan.setPasswordPelanggan(dipilih.getPasswordPelanggan());
+        } else {
+            pelanggan.setPasswordPelanggan(password);
+        }
         return pelanggan;
     }
 }

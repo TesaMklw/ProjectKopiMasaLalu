@@ -1,7 +1,8 @@
 package main.java.controller;
 
 import java.io.IOException;
-import javafx.application.Platform;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +14,7 @@ import main.java.model.Gerai;
 import main.java.model.Pelanggan;
 
 /**
- * Controller main_window.fxml: sapaan, menu tabel, dan konfirmasi keluar.
+ * Controller main_window.fxml: sapaan, menu tabel, dan logout ke halaman masuk.
  * Mode gerai = menu admin penuh; mode pelanggan = hanya pesan/transaksi.
  */
 public class MainWindowController extends DashboardController {
@@ -29,9 +30,11 @@ public class MainWindowController extends DashboardController {
     @FXML private Button btnBukaTransaksi;
     @FXML private Button btnKelolaProduk;
 
+    private final List<Stage> jendelaData = new ArrayList<>();
     private Pelanggan pelangganLogin;
     private Gerai geraiLogin;
     private boolean modePelanggan;
+    private boolean sedangLogout;
 
     @FXML
     private void initialize() {
@@ -138,10 +141,29 @@ public class MainWindowController extends DashboardController {
         }
     }
 
+    @Override
+    protected Stage tampil(Parent root, String judul) {
+        Stage stage = super.tampil(root, judul);
+        jendelaData.add(stage);
+        stage.setOnHidden(event -> jendelaData.remove(stage));
+        return stage;
+    }
+
     @FXML
     public void keluar() {
-        if (Pesan.konfirmasi("Keluar", "Keluar dari Kopi Kenangan?")) {
-            Platform.exit();
+        if (sedangLogout) {
+            return;
+        }
+        if (!Pesan.konfirmasi("Logout", "Keluar dari akun dan kembali ke halaman masuk?")) {
+            return;
+        }
+        sedangLogout = true;
+        for (Stage anak : new ArrayList<>(jendelaData)) {
+            anak.close();
+        }
+        PilihInterfaceController.bukaLogin(!modePelanggan);
+        if (lblSapaan != null && lblSapaan.getScene() != null) {
+            ((Stage) lblSapaan.getScene().getWindow()).close();
         }
     }
 
@@ -156,6 +178,9 @@ public class MainWindowController extends DashboardController {
     private void pasangTutup(Window jendela) {
         if (jendela instanceof Stage stage) {
             stage.setOnCloseRequest(event -> {
+                if (sedangLogout) {
+                    return;
+                }
                 event.consume();
                 keluar();
             });

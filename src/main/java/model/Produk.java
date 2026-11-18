@@ -23,10 +23,10 @@ public abstract class Produk {// abstrak
     private final IntegerProperty jumlahProduk = new SimpleIntegerProperty();
 
     // Constructor 1: nilai dikirim lewat parameter
-    public Produk(String namaProduk, float hargaProduk, String catatanProduk, int jumlahProduk) {
+    public Produk(String namaProduk, float hargaProduk, int jumlahProduk) {
         this.namaProduk.set(namaProduk);
         this.hargaProduk.set(hargaProduk);
-        this.catatanProduk.set(catatanProduk);
+        this.catatanProduk.set("");
         this.jumlahProduk.set(jumlahProduk);
     }
 
@@ -35,8 +35,7 @@ public abstract class Produk {// abstrak
         System.out.print("Nama Produk = ");
         this.namaProduk.set(INPUT_USER.nextLine());
         this.hargaProduk.set(readHarga());
-        System.out.print("Catatan = ");
-        this.catatanProduk.set(INPUT_USER.nextLine());
+        this.catatanProduk.set("");
         this.jumlahProduk.set(readJumlah());
     }
 

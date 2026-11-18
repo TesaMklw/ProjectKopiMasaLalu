@@ -15,15 +15,6 @@
       stylesheets="@css/style.css" spacing="12" styleClass="page"
       prefWidth="760" prefHeight="560">
     <Label text="Metode Pembayaran" styleClass="page-title"/>
-    <TableView fx:id="tabel" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="colKode" text="Kode" prefWidth="140"/>
-            <TableColumn fx:id="colMetode" text="Metode" prefWidth="320"/>
-        </columns>
-        <placeholder>
-            <Label text="Belum ada metode pembayaran."/>
-        </placeholder>
-    </TableView>
     <GridPane hgap="8" vgap="8" styleClass="form-grid">
         <columnConstraints>
             <ColumnConstraints prefWidth="110"/>
@@ -41,4 +32,13 @@
         <Button text="Bersihkan" onAction="#bersih" styleClass="ghost"/>
         <Button text="Muat ulang" onAction="#muat" styleClass="secondary"/>
     </HBox>
+    <TableView fx:id="tabel" VBox.vgrow="ALWAYS" minHeight="220">
+        <columns>
+            <TableColumn fx:id="colKode" text="Kode" prefWidth="140"/>
+            <TableColumn fx:id="colMetode" text="Metode" prefWidth="320"/>
+        </columns>
+        <placeholder>
+            <Label text="Belum ada metode pembayaran."/>
+        </placeholder>
+    </TableView>
 </VBox>

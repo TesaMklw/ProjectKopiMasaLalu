@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/resources/login_form.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/resources/pilih_interface.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         var css = getClass().getResource("/main/resources/css/style.css");

@@ -11,8 +11,8 @@ public class Kopi extends Minuman {// hierarki, inheritace
     private final StringProperty jenisKopi = new SimpleStringProperty();//edcapsulation
 
     public Kopi(String jenisKopi, String ukuranMinuman, String namaProduk, float hargaProduk,
-                String catatanProduk, int jumlahProduk) {
-        super(ukuranMinuman, namaProduk, hargaProduk, catatanProduk, jumlahProduk);
+                int jumlahProduk) {
+        super(ukuranMinuman, namaProduk, hargaProduk, jumlahProduk);
         this.jenisKopi.set(jenisKopi);
     }
 

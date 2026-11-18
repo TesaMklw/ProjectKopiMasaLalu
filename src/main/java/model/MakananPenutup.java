@@ -11,13 +11,13 @@ public class MakananPenutup extends Produk {
     private final StringProperty variasiMakananPenutup = new SimpleStringProperty();
     // constructor overloading
     public MakananPenutup(String variasiMakananPenutup, String namaProduk, float hargaProduk,
-                            String catatanProduk, int jumlahProduk) {
-        super(namaProduk, hargaProduk, catatanProduk, jumlahProduk);
+                            int jumlahProduk) {
+        super(namaProduk, hargaProduk, jumlahProduk);
         this.variasiMakananPenutup.set(variasiMakananPenutup);
     }
 
     public MakananPenutup() {// constructor overloading
-        super();   // menanyakan nama, harga, catatan, jumlah
+        super();   // menanyakan nama, harga, jumlah
         System.out.print("Variasi Makanan Penutup = ");
         this.variasiMakananPenutup.set(INPUT_USER.nextLine());
     }
