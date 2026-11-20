@@ -76,6 +76,7 @@
             <Button fx:id="btnUbah" text="Ubah" onAction="#ubah" styleClass="secondary"/>
             <Button fx:id="btnHapus" text="Hapus" onAction="#hapus" styleClass="ghost"/>
             <Button text="Cetak struk" onAction="#struk"/>
+            <Button text="Print" onAction="#printWebView"/>
             <Button text="Bersihkan" onAction="#bersih" styleClass="ghost"/>
             <Button text="Muat ulang" onAction="#muat" styleClass="secondary"/>
         </HBox>

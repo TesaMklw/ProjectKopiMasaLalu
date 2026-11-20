@@ -10,9 +10,7 @@ import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import main.java.controller.Cetak;
-
-public class Transaksi implements Cetak {
+public class Transaksi {
     private final StringProperty idTransaksi = new SimpleStringProperty();
     private Gerai gerai;
     private ArrayList<Produk> listProduk; // Menyimpan daftar objek Produk secara dinamis ke dalam arraylist nya
@@ -205,9 +203,6 @@ public class Transaksi implements Cetak {
     // menghitung kembalian/ sisa uang
     public void calcUangKembali(float uangDibayar){
         this.uangKembali.set(uangDibayar - getTotalTransaksi());
-        if (getUangKembali() < 0) {
-            System.out.println("Peringatan: uang dibayar kurang Rp" + (-getUangKembali()));
-        }
     }
 
     // Hitung subtotal & total otomatis dari listProduk (harga * jumlah) - (for-each loop)
@@ -220,13 +215,7 @@ public class Transaksi implements Cetak {
         this.totalTransaksi.set(sum);
     }
 
-    // memenuhi kontrak interface Cetak untuk menampilkan isi struk di konsol (Polymorphism - Method Overriding)
-    @Override
-    public void struk() {
-        System.out.print(getStrukText());
-    }
-
-    // Isi struk yang sama, dikembalikan sebagai teks untuk ditampilkan di GUI
+    // Isi struk dikembalikan sebagai teks. Cetak ke layar ada di TransaksiTableController.
     public String getStrukText() {
         StringBuilder sb = new StringBuilder();
         sb.append("=== STRUK TRANSAKSI ===\n");

@@ -16,12 +16,6 @@ public class Kopi extends Minuman {// hierarki, inheritace
         this.jenisKopi.set(jenisKopi);
     }
 
-    public Kopi() {
-        super();   // menanyakan semua data Produk + ukuran Minuman
-        System.out.print("Jenis Kopi = ");
-        this.jenisKopi.set(INPUT_USER.nextLine());
-    }
-
     public void setJenisKopi(String jenisKopi) { this.jenisKopi.set(jenisKopi); }
     public String getJenisKopi() { return jenisKopi.get(); }
     public StringProperty jenisKopiProperty() { return jenisKopi; }

@@ -22,9 +22,9 @@ import main.java.model.Pelanggan;
 
 /**
  * Halaman masuk satu peran: pelanggan (sign in / sign up) atau gerai (sign in saja).
- * No HP hanya muncul saat sign up pelanggan.
+ * Interface Login dipakai di sini, lewat PelangganDAO / GeraiDAO. No HP hanya saat sign up.
  */
-public class LoginController {
+public class LoginController implements Login {
     @FXML private HBox barisAkun;
     @FXML private ToggleButton btnModeMasuk;
     @FXML private ToggleButton btnModeDaftar;
@@ -124,14 +124,15 @@ public class LoginController {
     @FXML
     private void tekanEnterPelanggan() {
         if (modeDaftar) {
-            daftar();
+            signup();
         } else {
-            masuk();
+            signin();
         }
     }
 
+    @Override
     @FXML
-    private void masuk() {
+    public void signin() {
         if (modeGerai) {
             masukGerai();
         } else {
@@ -177,8 +178,9 @@ public class LoginController {
         }
     }
 
+    @Override
     @FXML
-    private void daftar() {
+    public void signup() {
         if (modeGerai) {
             tampil("Gerai tidak punya sign up. Masuk dengan kode dan nama gerai.");
             return;
@@ -227,9 +229,7 @@ public class LoginController {
                 dashboard.setPelanggan(pelanggan);
             }
             Stage stage = new Stage();
-            stage.setTitle(gerai != null
-                    ? "Kopi Kenangan — Dashboard Gerai"
-                    : "Kopi Kenangan — Dashboard Pelanggan");
+            stage.setTitle("UI Baru – Tab Style");
             Scene scene = new Scene(root);
             var css = getClass().getResource("/main/resources/css/style.css");
             if (css != null) {

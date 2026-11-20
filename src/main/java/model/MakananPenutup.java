@@ -16,12 +16,6 @@ public class MakananPenutup extends Produk {
         this.variasiMakananPenutup.set(variasiMakananPenutup);
     }
 
-    public MakananPenutup() {// constructor overloading
-        super();   // menanyakan nama, harga, jumlah
-        System.out.print("Variasi Makanan Penutup = ");
-        this.variasiMakananPenutup.set(INPUT_USER.nextLine());
-    }
-
     public void setVariasiMakananPenutup(String variasiMakananPenutup) {
         this.variasiMakananPenutup.set(variasiMakananPenutup);
     }

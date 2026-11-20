@@ -95,12 +95,36 @@ public class TransaksiDAO {
         }
     }
 
-    public void delete(String idTransaksi) throws SQLException {
-        String sql = "DELETE FROM transaksi WHERE id_transaksi = ?";
+    public boolean idTerpakai(String idTransaksi) throws SQLException {
+        String sql = "SELECT 1 FROM transaksi WHERE id_transaksi = ?";
         try (Connection conn = PostgreSQLConnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, idTransaksi);
-            ps.executeUpdate();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    public void delete(String idTransaksi) throws SQLException {
+        try (Connection conn = PostgreSQLConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                try (PreparedStatement hapusDetail = conn.prepareStatement(
+                        "DELETE FROM detail_transaksi WHERE id_transaksi = ?")) {
+                    hapusDetail.setString(1, idTransaksi);
+                    hapusDetail.executeUpdate();
+                }
+                try (PreparedStatement hapus = conn.prepareStatement(
+                        "DELETE FROM transaksi WHERE id_transaksi = ?")) {
+                    hapus.setString(1, idTransaksi);
+                    hapus.executeUpdate();
+                }
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
         }
     }
 

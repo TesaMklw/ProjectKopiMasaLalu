@@ -8,8 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Membuka setiap jendela tabel dari dashboard.
- * MainWindowController mewarisi method ini dan menambah sapaan plus konfirmasi keluar.
+ * Pembuka layar tabel. MainWindowController menaruh setiap FXML ini di Tab,
+ * bukan jendela terpisah (UI Baru – Tab Style).
  */
 public class DashboardController {
 

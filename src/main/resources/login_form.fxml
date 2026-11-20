@@ -37,21 +37,21 @@
             <PasswordField fx:id="txtPassword" promptText="password" onAction="#tekanEnterPelanggan"/>
             <VBox fx:id="panelNoHp" spacing="10" managed="false" visible="false">
                 <Label text="No HP"/>
-                <TextField fx:id="txtNoHp" promptText="08xxxxxxxxxx" onAction="#daftar"/>
+                <TextField fx:id="txtNoHp" promptText="08xxxxxxxxxx" onAction="#signup"/>
             </VBox>
         </VBox>
 
         <VBox fx:id="panelGerai" spacing="10" managed="false" visible="false">
             <Label text="Kode gerai"/>
-            <TextField fx:id="txtKodeGerai" promptText="contoh: GR01" onAction="#masuk"/>
+            <TextField fx:id="txtKodeGerai" promptText="contoh: GR01" onAction="#signin"/>
             <Label text="Nama gerai"/>
-            <TextField fx:id="txtNamaGerai" promptText="sesuai data gerai" onAction="#masuk"/>
+            <TextField fx:id="txtNamaGerai" promptText="sesuai data gerai" onAction="#signin"/>
         </VBox>
 
         <Label fx:id="lblPesan" styleClass="error" wrapText="true"/>
         <HBox spacing="8" alignment="CENTER">
-            <Button fx:id="btnMasuk" text="Masuk" onAction="#masuk" defaultButton="true"/>
-            <Button fx:id="btnDaftar" text="Daftar" onAction="#daftar" styleClass="secondary"
+            <Button fx:id="btnMasuk" text="Masuk" onAction="#signin" defaultButton="true"/>
+            <Button fx:id="btnDaftar" text="Daftar" onAction="#signup" styleClass="secondary"
                     managed="false" visible="false"/>
             <Button text="Tutup" onAction="#tutup" styleClass="ghost"/>
         </HBox>

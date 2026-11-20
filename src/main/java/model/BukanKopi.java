@@ -16,12 +16,6 @@ public class BukanKopi extends Minuman {// struktur hierarki, inheritence
         this.jenisRasa.set(jenisRasa);
     }
 
-    public BukanKopi() {
-        super();   // menanyakan semua data Produk + ukuran Minuman
-        System.out.print("Jenis Rasa = ");
-        this.jenisRasa.set(INPUT_USER.nextLine());
-    }
-
     public void setJenisRasa(String jenisRasa) { this.jenisRasa.set(jenisRasa); }
     public String getJenisRasa() { return jenisRasa.get(); }
     public StringProperty jenisRasaProperty() { return jenisRasa; }

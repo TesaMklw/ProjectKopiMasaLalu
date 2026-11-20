@@ -15,7 +15,7 @@
       "mainClass": "App",
       "projectName": "ProjectKopiKenangan",
       "javaExec": "C:\\JDK\\oracleJdk-26\\bin\\java.exe",
-      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web",
+      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=ALL-UNNAMED",
       "console": "internalConsole"
     },
     {
@@ -25,7 +25,7 @@
       "mainClass": "${file}",
       "projectName": "ProjectKopiKenangan",
       "javaExec": "C:\\JDK\\oracleJdk-26\\bin\\java.exe",
-      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web",
+      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=ALL-UNNAMED",
       "console": "internalConsole"
     }
   ]

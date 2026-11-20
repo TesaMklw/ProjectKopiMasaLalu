@@ -3,13 +3,21 @@ package main.java.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.sql.SQLException;
+import java.util.concurrent.ThreadLocalRandom;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Worker;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -23,6 +31,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.print.PrinterJob;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -85,6 +94,17 @@ public class TransaksiTableController implements Cetak {
     private final ProdukDAO produkDAO = new ProdukDAO();
     private final ObservableList<Produk> keranjang = FXCollections.observableArrayList();
     private final Map<Produk, Float> hargaDasar = new IdentityHashMap<>();
+    // true = hargaDasar adalah harga katalog (sebelum diskon). false = harga di detail sudah harga akhir.
+    private final Map<Produk, Boolean> hargaDariKatalog = new IdentityHashMap<>();
+    // Harga satuan yang tersimpan di detail (sudah didiskon). Dipakai ulang saat Ubah tanpa ubah item.
+    private final Map<Produk, Float> hargaTersimpan = new IdentityHashMap<>();
+    private List<String> tandaTersimpan;
+    private String promoTersimpan;
+    private float subtotalTersimpan;
+    private float totalTersimpan;
+    private float diskonTersimpan;
+    private float uangKembaliTersimpan;
+    private String uangTeksTersimpan;
     private Pelanggan pelangganLogin;
     private Gerai geraiLogin;
     private boolean modePelanggan;
@@ -270,6 +290,7 @@ public class TransaksiTableController implements Cetak {
         String catatan = txtCatatanItem.getText() == null ? "" : txtCatatanItem.getText().trim();
         salinan.setCatatanProduk(catatan);
         hargaDasar.put(salinan, asal.getHargaProduk());
+        hargaDariKatalog.put(salinan, Boolean.TRUE);
         keranjang.add(salinan);
         txtCatatanItem.clear();
         perkiraan();
@@ -284,6 +305,7 @@ public class TransaksiTableController implements Cetak {
         }
         keranjang.remove(dipilih);
         hargaDasar.remove(dipilih);
+        hargaDariKatalog.remove(dipilih);
         perkiraan();
     }
 
@@ -298,13 +320,11 @@ public class TransaksiTableController implements Cetak {
         if (transaksi == null) {
             return;
         }
-        for (Transaksi ada : tabel.getItems()) {
-            if (transaksi.getIdTransaksi().equals(ada.getIdTransaksi())) {
+        try {
+            if (transaksiDAO.idTerpakai(transaksi.getIdTransaksi())) {
                 Pesan.gagal("ID sudah ada. Pakai Ubah, atau Bersihkan untuk ID baru.");
                 return;
             }
-        }
-        try {
             transaksiDAO.insert(transaksi);
             Pesan.info("Transaksi tersimpan.");
             bersih();
@@ -373,6 +393,11 @@ public class TransaksiTableController implements Cetak {
         tabel.getSelectionModel().clearSelection();
         keranjang.clear();
         hargaDasar.clear();
+        hargaDariKatalog.clear();
+        hargaTersimpan.clear();
+        tandaTersimpan = null;
+        promoTersimpan = null;
+        uangTeksTersimpan = null;
         txtId.setText(idBaru());
         cmbGerai.getSelectionModel().clearSelection();
         cmbBayar.getSelectionModel().clearSelection();
@@ -409,12 +434,63 @@ public class TransaksiTableController implements Cetak {
         }
     }
 
+    @FXML
+    private void printWebView() {
+        Transaksi transaksi = susun(false);
+        if (transaksi == null) {
+            return;
+        }
+        try {
+            WebView web = new WebView();
+            web.setPrefSize(440, 700);
+            Stage stage = new Stage();
+            stage.setTitle("Print " + transaksi.getIdTransaksi());
+            stage.setScene(new Scene(web, 440, 700));
+            boolean[] sudah = new boolean[] {false};
+            web.getEngine().getLoadWorker().stateProperty().addListener((obs, lama, state) -> {
+                if (state == Worker.State.SUCCEEDED && !sudah[0]) {
+                    sudah[0] = true;
+                    Platform.runLater(() -> kirimKePrinter(web, stage));
+                } else if (state == Worker.State.FAILED) {
+                    Pesan.gagal("Gagal menyiapkan struk untuk printer.");
+                }
+            });
+            web.getEngine().loadContent(render(transaksi));
+            stage.show();
+        } catch (IOException e) {
+            Pesan.gagal("Gagal menampilkan struk: " + e.getMessage());
+        }
+    }
+
+    private void kirimKePrinter(WebView web, Stage stage) {
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job == null) {
+            Pesan.gagal("Printer tidak tersedia.");
+            return;
+        }
+        if (!job.showPrintDialog(stage)) {
+            return;
+        }
+        try {
+            web.getEngine().print(job);
+            job.endJob();
+            Pesan.info("Struk dikirim ke printer.");
+        } catch (RuntimeException e) {
+            Pesan.gagal("Gagal mencetak struk: " + e.getMessage());
+        }
+    }
+
     private void isiTransaksi(Transaksi transaksi) {
         if (transaksi == null) {
             return;
         }
         keranjang.clear();
         hargaDasar.clear();
+        hargaDariKatalog.clear();
+        hargaTersimpan.clear();
+        tandaTersimpan = null;
+        promoTersimpan = null;
+        uangTeksTersimpan = null;
         txtId.setText(transaksi.getIdTransaksi());
         pilihGerai(transaksi.getGerai());
         pilihPelanggan(transaksi.getPelanggan());
@@ -422,8 +498,13 @@ public class TransaksiTableController implements Cetak {
         if (transaksi.getTanggalTransaksi() != null && !transaksi.getTanggalTransaksi().isBlank()) {
             dpTanggal.setValue(LocalDate.parse(transaksi.getTanggalTransaksi()));
         }
-        txtPromo.setText(transaksi.getKodePromo() == null ? "" : transaksi.getKodePromo());
-        txtUang.setText(Float.toString(transaksi.getTotalTransaksi() + transaksi.getUangKembali()));
+        String promo = normalPromo(transaksi.getKodePromo(), true);
+        txtPromo.setText(promo);
+        uangKembaliTersimpan = transaksi.getUangKembali();
+        uangTeksTersimpan = Float.toString(transaksi.getTotalTransaksi() + transaksi.getUangKembali());
+        txtUang.setText(uangTeksTersimpan);
+        Map<Integer, Float> katalog = muatHargaKatalog();
+        List<String> tanda = new ArrayList<>();
         for (Produk baris : transaksi.getListProduk()) {
             Produk salinan = salinProduk(baris, baris.getJumlahProduk());
             if (salinan == null) {
@@ -432,12 +513,39 @@ public class TransaksiTableController implements Cetak {
             if (baris.getCatatanProduk() != null) {
                 salinan.setCatatanProduk(baris.getCatatanProduk());
             }
-            float dasar = hargaKatalog(baris);
-            salinan.setHargaProduk(dasar);
-            hargaDasar.put(salinan, dasar);
+            // Detail menyimpan harga setelah diskon. Harga katalog dicari di seluruh produk, bukan combo kategori.
+            float tersimpan = baris.getHargaProduk();
+            Float asli = baris.getIdProduk() > 0 ? katalog.get(baris.getIdProduk()) : null;
+            salinan.setHargaProduk(tersimpan);
+            hargaTersimpan.put(salinan, tersimpan);
+            if (asli != null) {
+                hargaDasar.put(salinan, asli);
+                hargaDariKatalog.put(salinan, Boolean.TRUE);
+            } else {
+                hargaDasar.put(salinan, tersimpan);
+                hargaDariKatalog.put(salinan, Boolean.FALSE);
+            }
             keranjang.add(salinan);
+            tanda.add(tandaItem(salinan));
         }
+        promoTersimpan = promo;
+        subtotalTersimpan = transaksi.getSubtotalTransaksi();
+        totalTersimpan = transaksi.getTotalTransaksi();
+        diskonTersimpan = transaksi.getTotalDiskon();
+        tandaTersimpan = tanda;
         susun(true);
+    }
+
+    private Map<Integer, Float> muatHargaKatalog() {
+        Map<Integer, Float> katalog = new HashMap<>();
+        try {
+            for (Produk produk : produkDAO.getAll()) {
+                katalog.put(produk.getIdProduk(), produk.getHargaProduk());
+            }
+        } catch (SQLException e) {
+            Pesan.gagalSql(e);
+        }
+        return katalog;
     }
 
     private Transaksi susun(boolean diam) {
@@ -458,34 +566,37 @@ public class TransaksiTableController implements Cetak {
             id = idBaru();
             txtId.setText(id);
         }
-        String kode = txtPromo.getText() == null ? "" : txtPromo.getText().trim().toUpperCase();
-        txtPromo.setText(kode);
-        Float persen = null;
-        if (!kode.isEmpty()) {
-            switch (kode) {
-                case "HEMAT10":
-                    persen = 10f;
-                    break;
-                case "HEMAT20":
-                    persen = 20f;
-                    break;
-                case "HEMAT50":
-                    persen = 50f;
-                    break;
-                default:
-                    if (!diam) {
-                        Pesan.info("Kode tidak dikenal. Lanjut tanpa diskon.");
-                    }
-                    kode = "";
+        if (id.length() > 20) {
+            if (!diam) {
+                Pesan.gagal("ID transaksi maksimal 20 karakter.");
             }
+            return null;
         }
+        String kode = normalPromo(txtPromo.getText(), diam);
+        txtPromo.setText(kode);
+        Float persen = persenPromo(kode);
+        boolean tetap = keranjangMasihSama(kode);
         float subtotalAwal = 0;
-        for (Produk produk : keranjang) {
-            float dasar = hargaDasar.getOrDefault(produk, produk.getHargaProduk());
-            produk.setHargaProduk(dasar);
-            subtotalAwal += dasar * produk.getJumlahProduk();
-            if (persen != null) {
-                produk.calcDiscount(persen);
+        if (tetap) {
+            for (Produk produk : keranjang) {
+                Float harga = hargaTersimpan.get(produk);
+                if (harga != null) {
+                    produk.setHargaProduk(harga);
+                }
+            }
+        } else {
+            for (Produk produk : keranjang) {
+                float dasar = hargaDasar.getOrDefault(produk, produk.getHargaProduk());
+                boolean dariKatalog = hargaDariKatalog.getOrDefault(produk, Boolean.TRUE);
+                if (dariKatalog) {
+                    produk.setHargaProduk(dasar);
+                    subtotalAwal += dasar * produk.getJumlahProduk();
+                    if (persen != null) {
+                        produk.calcDiscount(persen);
+                    }
+                } else {
+                    subtotalAwal += produk.getHargaProduk() * produk.getJumlahProduk();
+                }
             }
         }
         LocalDate tanggal = dpTanggal.getValue() == null ? LocalDate.now() : dpTanggal.getValue();
@@ -495,11 +606,22 @@ public class TransaksiTableController implements Cetak {
         for (Produk produk : keranjang) {
             transaksi.addProduk(produk);
         }
-        transaksi.calcSubtotal();
-        transaksi.setSubtotalTransaksi(subtotalAwal);
         transaksi.setKodePromo(kode);
-        transaksi.setTotalDiskon(subtotalAwal - transaksi.getTotalTransaksi());
+        if (tetap) {
+            transaksi.setSubtotalTransaksi(subtotalTersimpan);
+            transaksi.setTotalTransaksi(totalTersimpan);
+            transaksi.setTotalDiskon(diskonTersimpan);
+        } else {
+            transaksi.calcSubtotal();
+            transaksi.setSubtotalTransaksi(subtotalAwal);
+            transaksi.setTotalDiskon(subtotalAwal - transaksi.getTotalTransaksi());
+        }
         String teksUang = txtUang.getText() == null ? "" : txtUang.getText().trim();
+        if (tetap && uangTeksTersimpan != null && teksUang.equals(uangTeksTersimpan.trim())) {
+            transaksi.setUangKembali(uangKembaliTersimpan);
+            tampilkanAngka(transaksi);
+            return transaksi;
+        }
         if (teksUang.isEmpty()) {
             if (!diam) {
                 Pesan.gagal("Isi uang dibayar.");
@@ -547,15 +669,55 @@ public class TransaksiTableController implements Cetak {
         lblKembali.setText(rupiah(transaksi.getUangKembali()));
     }
 
-    private float hargaKatalog(Produk baris) {
-        if (baris.getIdProduk() > 0) {
-            for (Produk katalog : cmbProduk.getItems()) {
-                if (katalog.getIdProduk() == baris.getIdProduk()) {
-                    return katalog.getHargaProduk();
+    private String normalPromo(String kode, boolean diam) {
+        if (kode == null) {
+            return "";
+        }
+        kode = kode.trim().toUpperCase();
+        switch (kode) {
+            case "HEMAT10":
+            case "HEMAT20":
+            case "HEMAT50":
+                return kode;
+            default:
+                if (!kode.isEmpty() && !diam) {
+                    Pesan.info("Kode tidak dikenal. Lanjut tanpa diskon.");
                 }
+                return "";
+        }
+    }
+
+    private static Float persenPromo(String kode) {
+        if ("HEMAT10".equals(kode)) {
+            return 10f;
+        }
+        if ("HEMAT20".equals(kode)) {
+            return 20f;
+        }
+        if ("HEMAT50".equals(kode)) {
+            return 50f;
+        }
+        return null;
+    }
+
+    // Item dan promo sama dengan saat dimuat: jangan hitung diskon lagi.
+    private boolean keranjangMasihSama(String kode) {
+        if (promoTersimpan == null || tandaTersimpan == null || !promoTersimpan.equals(kode)) {
+            return false;
+        }
+        if (tandaTersimpan.size() != keranjang.size()) {
+            return false;
+        }
+        for (int i = 0; i < keranjang.size(); i++) {
+            if (!tandaTersimpan.get(i).equals(tandaItem(keranjang.get(i)))) {
+                return false;
             }
         }
-        return baris.getHargaProduk();
+        return true;
+    }
+
+    private static String tandaItem(Produk produk) {
+        return produk.getIdProduk() + "|" + produk.getJumlahProduk();
     }
 
     private void pilihGerai(Gerai gerai) {
@@ -664,8 +826,45 @@ public class TransaksiTableController implements Cetak {
         }
     }
 
-    private static String idBaru() {
-        return "TRX" + (System.currentTimeMillis() % 100000);
+    private String idBaru() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyMMddHHmmss");
+        for (int i = 0; i < 30; i++) {
+            String id = "TRX" + LocalDateTime.now().format(fmt)
+                    + String.format("%03d", ThreadLocalRandom.current().nextInt(1000));
+            if (idBebas(id)) {
+                return id;
+            }
+        }
+        for (int i = 0; i < 30; i++) {
+            String angka = Long.toUnsignedString(System.nanoTime());
+            if (angka.length() > 16) {
+                angka = angka.substring(angka.length() - 16);
+            }
+            String id = "TRX" + angka;
+            if (idBebas(id)) {
+                return id;
+            }
+        }
+        String cadangan = "TRX" + Long.toUnsignedString(System.nanoTime());
+        if (cadangan.length() > 20) {
+            cadangan = cadangan.substring(0, 20);
+        }
+        return cadangan;
+    }
+
+    private boolean idBebas(String id) {
+        if (tabel != null) {
+            for (Transaksi ada : tabel.getItems()) {
+                if (id.equals(ada.getIdTransaksi())) {
+                    return false;
+                }
+            }
+        }
+        try {
+            return !transaksiDAO.idTerpakai(id);
+        } catch (SQLException e) {
+            return true;
+        }
     }
 
     private static String rupiah(float nilai) {

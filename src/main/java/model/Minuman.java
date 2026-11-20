@@ -15,12 +15,6 @@ public class Minuman extends Produk {// inheritance
         this.ukuranMinuman.set(ukuranMinuman);
     }
 
-    public Minuman() {
-        super();   // menanyakan nama, harga, jumlah
-        System.out.print("Ukuran Minuman = ");
-        this.ukuranMinuman.set(INPUT_USER.nextLine());
-    }
-
     public void setUkuranMinuman(String ukuranMinuman) { this.ukuranMinuman.set(ukuranMinuman); }
     public String getUkuranMinuman() { return ukuranMinuman.get(); }
     public StringProperty ukuranMinumanProperty() { return ukuranMinuman; }

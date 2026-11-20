@@ -4,7 +4,6 @@ author : Tesalonika Miracle Makalew - 825250020
 
 package main.java.model;
 
-import java.util.Scanner;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleFloatProperty;
@@ -13,8 +12,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public abstract class Produk {// abstrak
-    // Satu Scanner dipakai bersama oleh Produk dan semua subclass-nya
-    public static Scanner INPUT_USER = new Scanner(System.in);
     //encapsualtion — field JavaFX Property agar kolom TableView bisa bind
     private final IntegerProperty idProduk = new SimpleIntegerProperty();
     private final StringProperty namaProduk = new SimpleStringProperty();
@@ -28,48 +25,6 @@ public abstract class Produk {// abstrak
         this.hargaProduk.set(hargaProduk);
         this.catatanProduk.set("");
         this.jumlahProduk.set(jumlahProduk);
-    }
-
-    // Constructor 2: nilai ditanyakan langsung ke user
-    public Produk() {
-        System.out.print("Nama Produk = ");
-        this.namaProduk.set(INPUT_USER.nextLine());
-        this.hargaProduk.set(readHarga());
-        this.catatanProduk.set("");
-        this.jumlahProduk.set(readJumlah());
-    }
-
-    // Input angka aman: ulangi sampai valid, tidak crash kalau user ketik huruf
-    protected static float readHarga() {
-        while (true) {
-            System.out.print("Harga Produk = ");
-            try {
-                float h = Float.parseFloat(INPUT_USER.nextLine().trim());
-                if (h < 0) {
-                    System.out.println("Harga tidak boleh negatif. Coba lagi.");
-                    continue;
-                }
-                return h;
-            } catch (NumberFormatException e) {
-                System.out.println("Harga harus angka. Coba lagi.");
-            }
-        }
-    }
-
-    protected static int readJumlah() {
-        while (true) {
-            System.out.print("Jumlah = ");
-            try {
-                int j = Integer.parseInt(INPUT_USER.nextLine().trim());
-                if (j <= 0) {
-                    System.out.println("Jumlah harus > 0. Coba lagi.");
-                    continue;
-                }
-                return j;
-            } catch (NumberFormatException e) {
-                System.out.println("Jumlah harus angka bulat. Coba lagi.");
-            }
-        }
     }
 
     public void setIdProduk(int idProduk) { this.idProduk.set(idProduk); }
