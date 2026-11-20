@@ -32,5 +32,8 @@
     "java.jdt.core.compiler.problem.deprecation": "ignore",
 
     "java.debug.settings.console": "internalConsole",
-    "java.debug.settings.onBuildFailureProceed": true
+    "java.debug.settings.onBuildFailureProceed": true,
+
+    "css.lint.vendorPrefix": "ignore",
+    "css.lint.unknownProperties": "ignore"
 }
