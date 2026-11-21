@@ -16,15 +16,12 @@ public abstract class Produk {// abstrak
     private final IntegerProperty idProduk = new SimpleIntegerProperty();
     private final StringProperty namaProduk = new SimpleStringProperty();
     private final FloatProperty hargaProduk = new SimpleFloatProperty();
-    private final StringProperty catatanProduk = new SimpleStringProperty();
-    private final IntegerProperty jumlahProduk = new SimpleIntegerProperty();
+    // jumlah dan catatan pesanan sekarang ada di DetailTransaksi, bukan di katalog Produk
 
     // Constructor 1: nilai dikirim lewat parameter
-    public Produk(String namaProduk, float hargaProduk, int jumlahProduk) {
+    public Produk(String namaProduk, float hargaProduk) {
         this.namaProduk.set(namaProduk);
         this.hargaProduk.set(hargaProduk);
-        this.catatanProduk.set("");
-        this.jumlahProduk.set(jumlahProduk);
     }
 
     public void setIdProduk(int idProduk) { this.idProduk.set(idProduk); }
@@ -36,21 +33,12 @@ public abstract class Produk {// abstrak
         if (hargaProduk < 0) return;
         this.hargaProduk.set(hargaProduk);
     }
-    public void setCatatanProduk(String catatanProduk) { this.catatanProduk.set(catatanProduk); }
-    public void setJumlahProduk(int jumlahProduk) {
-        if (jumlahProduk <= 0) return;
-        this.jumlahProduk.set(jumlahProduk);
-    }
 
     public String getNamaProduk() { return namaProduk.get(); }
     public float getHargaProduk() { return hargaProduk.get(); }
-    public String getCatatanProduk() { return catatanProduk.get(); }
-    public int getJumlahProduk() { return jumlahProduk.get(); }
 
     public StringProperty namaProdukProperty() { return namaProduk; }
     public FloatProperty hargaProdukProperty() { return hargaProduk; }
-    public StringProperty catatanProdukProperty() { return catatanProduk; }
-    public IntegerProperty jumlahProdukProperty() { return jumlahProduk; }
 
     // Dipakai tabel dan DAO. Subclass menimpa sesuai jenisnya.
     public String getTipeProduk() { return "Produk"; }

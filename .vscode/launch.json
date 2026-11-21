@@ -7,7 +7,7 @@
       "request": "launch",
       "mainClass": "App",
       "javaExec": "C:\\Program Files\\Java\\jdk-26.0.2\\bin\\java.exe",
-      "vmArgs": "--module-path \"C:\\javafx-sdk\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web,ALL-UNNAMED",
+      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web,ALL-UNNAMED",
       "console": "internalConsole"
     },
     {
@@ -16,7 +16,7 @@
       "request": "launch",
       "mainClass": "${file}",
       "javaExec": "C:\\Program Files\\Java\\jdk-26.0.2\\bin\\java.exe",
-      "vmArgs": "--module-path \"C:\\javafx-sdk\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web,ALL-UNNAMED",
+      "vmArgs": "--module-path \"C:\\javafx-sdk-27\\lib\" --add-modules javafx.controls,javafx.fxml,javafx.web --enable-native-access=javafx.graphics,javafx.web,ALL-UNNAMED",
       "console": "internalConsole"
     }
   ]

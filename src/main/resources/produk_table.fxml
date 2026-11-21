@@ -16,7 +16,7 @@
       stylesheets="@css/style.css" spacing="12" styleClass="page"
       prefWidth="1100" prefHeight="700">
     <Label text="Katalog Produk" styleClass="page-title"/>
-    <Label text="Hierarki: Produk → Minuman → Kopi / BukanKopi, dan Produk → MakananPenutup. Diskon makanan penutup maksimal 20%." styleClass="hint" wrapText="true"/>
+    <Label text="Hierarki: Produk → Minuman → Kopi / BukanKopi, dan Produk → MakananPenutup. Diskon makanan penutup maksimal 20%. Minuman: isi harga untuk ukuran yang dijual, kosongkan ukuran yang tidak dijual." styleClass="hint" wrapText="true"/>
     <GridPane hgap="8" vgap="8" styleClass="form-grid">
         <columnConstraints>
             <ColumnConstraints prefWidth="130"/>
@@ -28,14 +28,19 @@
         <ComboBox fx:id="cmbTipe" maxWidth="Infinity" promptText="Kopi" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
         <Label text="Nama" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
         <TextField fx:id="txtNama" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
-        <Label text="Harga" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="lblHarga" text="Harga" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
         <TextField fx:id="txtHarga" promptText="18000" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-        <Label fx:id="lblUkuran" text="Ukuran" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-        <TextField fx:id="txtUkuran" promptText="Regular" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+        <Label fx:id="lblUkuran" text="Harga per ukuran" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <HBox fx:id="boxUkuran" spacing="6" alignment="CENTER_LEFT" GridPane.rowIndex="1" GridPane.columnIndex="3">
+            <Label text="S" minWidth="12"/>
+            <TextField fx:id="txtHargaSmall" promptText="Small" HBox.hgrow="ALWAYS"/>
+            <Label text="M" minWidth="14"/>
+            <TextField fx:id="txtHargaMedium" promptText="Medium" HBox.hgrow="ALWAYS"/>
+            <Label text="L" minWidth="10"/>
+            <TextField fx:id="txtHargaLarge" promptText="Large" HBox.hgrow="ALWAYS"/>
+        </HBox>
         <Label fx:id="lblInfo" text="Jenis / variasi" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <ComboBox fx:id="cmbInfo" maxWidth="Infinity" promptText="Pilih sesuai kategori" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-        <Label text="Jumlah" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
-        <TextField fx:id="txtJumlah" text="1" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
     </GridPane>
     <HBox spacing="8">
         <Button text="Tambah" onAction="#tambah"/>
@@ -49,10 +54,9 @@
             <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
             <TableColumn fx:id="colTipe" text="Tipe" prefWidth="130"/>
             <TableColumn fx:id="colNama" text="Nama" prefWidth="200"/>
-            <TableColumn fx:id="colHarga" text="Harga" prefWidth="90"/>
-            <TableColumn fx:id="colUkuran" text="Ukuran" prefWidth="90"/>
-            <TableColumn fx:id="colInfo" text="Jenis / variasi" prefWidth="180"/>
-            <TableColumn fx:id="colJumlah" text="Jumlah" prefWidth="70"/>
+            <TableColumn fx:id="colHarga" text="Harga mulai" prefWidth="100"/>
+            <TableColumn fx:id="colUkuran" text="Ukuran dan harga" prefWidth="260"/>
+            <TableColumn fx:id="colInfo" text="Jenis / variasi" prefWidth="160"/>
         </columns>
         <placeholder>
             <Label text="Belum ada produk."/>

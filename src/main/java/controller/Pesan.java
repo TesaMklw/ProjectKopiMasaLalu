@@ -33,7 +33,7 @@ public final class Pesan {
                 || pesan.contains("Connection") || pesan.contains("refused")
                 || pesan.contains("password authentication")) {
             gagal("Tidak bisa terhubung ke PostgreSQL (" + main.java.database.PostgreSQLConnection.URL
-                    + "). Nyalakan server, pastikan database kopikenangan sudah dibuat di pgAdmin, lalu cek user/password di PostgreSQLConnection.");
+                    + "). Nyalakan server, pastikan database kopimasalalu sudah dibuat di pgAdmin, lalu cek user/password di PostgreSQLConnection.");
             return;
         }
         gagal(pesan.isBlank() ? "Kesalahan database." : pesan);

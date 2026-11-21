@@ -10,9 +10,8 @@ import javafx.beans.property.StringProperty;
 public class Kopi extends Minuman {// hierarki, inheritace
     private final StringProperty jenisKopi = new SimpleStringProperty();//edcapsulation
 
-    public Kopi(String jenisKopi, String ukuranMinuman, String namaProduk, float hargaProduk,
-                int jumlahProduk) {
-        super(ukuranMinuman, namaProduk, hargaProduk, jumlahProduk);
+    public Kopi(String jenisKopi, String namaProduk, float hargaProduk) {
+        super(namaProduk, hargaProduk);
         this.jenisKopi.set(jenisKopi);
     }
 

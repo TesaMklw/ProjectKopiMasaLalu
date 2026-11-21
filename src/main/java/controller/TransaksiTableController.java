@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Worker;
 import javafx.collections.ObservableList;
@@ -41,13 +40,16 @@ import main.java.database.PembayaranDAO;
 import main.java.database.ProdukDAO;
 import main.java.database.TransaksiDAO;
 import main.java.model.BukanKopi;
+import main.java.model.DetailTransaksi;
 import main.java.model.Gerai;
 import main.java.model.Kopi;
 import main.java.model.MakananPenutup;
+import main.java.model.Minuman;
 import main.java.model.Pelanggan;
 import main.java.model.Pembayaran;
 import main.java.model.Produk;
 import main.java.model.Transaksi;
+import main.java.model.UkuranMinuman;
 
 /**
  * Kasir transaksi. Promo HEMAT10/HEMAT20/HEMAT50 memakai calcDiscount
@@ -73,13 +75,15 @@ public class TransaksiTableController implements Cetak {
     @FXML private RadioButton rbKopi;
     @FXML private RadioButton rbNonKopi;
     @FXML private ComboBox<Produk> cmbProduk;
+    @FXML private ComboBox<UkuranMinuman> cmbUkuran;
     @FXML private TextField txtJumlahItem;
     @FXML private TextField txtCatatanItem;
-    @FXML private TableView<Produk> tabelKeranjang;
-    @FXML private TableColumn<Produk, String> colItemNama;
-    @FXML private TableColumn<Produk, Number> colItemJumlah;
-    @FXML private TableColumn<Produk, Number> colItemHarga;
-    @FXML private TableColumn<Produk, String> colItemCatatan;
+    @FXML private TableView<DetailTransaksi> tabelKeranjang;
+    @FXML private TableColumn<DetailTransaksi, String> colItemNama;
+    @FXML private TableColumn<DetailTransaksi, String> colItemUkuran;
+    @FXML private TableColumn<DetailTransaksi, Number> colItemJumlah;
+    @FXML private TableColumn<DetailTransaksi, Number> colItemHarga;
+    @FXML private TableColumn<DetailTransaksi, String> colItemCatatan;
     @FXML private Label lblSubtotal;
     @FXML private Label lblDiskon;
     @FXML private Label lblTotal;
@@ -92,12 +96,12 @@ public class TransaksiTableController implements Cetak {
     private final PelangganDAO pelangganDAO = new PelangganDAO();
     private final PembayaranDAO pembayaranDAO = new PembayaranDAO();
     private final ProdukDAO produkDAO = new ProdukDAO();
-    private final ObservableList<Produk> keranjang = FXCollections.observableArrayList();
-    private final Map<Produk, Float> hargaDasar = new IdentityHashMap<>();
+    private final ObservableList<DetailTransaksi> keranjang = FXCollections.observableArrayList();
+    private final Map<DetailTransaksi, Float> hargaDasar = new IdentityHashMap<>();
     // true = hargaDasar adalah harga katalog (sebelum diskon). false = harga di detail sudah harga akhir.
-    private final Map<Produk, Boolean> hargaDariKatalog = new IdentityHashMap<>();
+    private final Map<DetailTransaksi, Boolean> hargaDariKatalog = new IdentityHashMap<>();
     // Harga satuan yang tersimpan di detail (sudah didiskon). Dipakai ulang saat Ubah tanpa ubah item.
-    private final Map<Produk, Float> hargaTersimpan = new IdentityHashMap<>();
+    private final Map<DetailTransaksi, Float> hargaTersimpan = new IdentityHashMap<>();
     private List<String> tandaTersimpan;
     private String promoTersimpan;
     private float subtotalTersimpan;
@@ -117,11 +121,11 @@ public class TransaksiTableController implements Cetak {
         colGerai.setCellValueFactory(new PropertyValueFactory<>("namaGerai"));
         colMetode.setCellValueFactory(new PropertyValueFactory<>("metodePembayaranTampil"));
         colTotal.setCellValueFactory(cell -> cell.getValue().totalTransaksiProperty());
-        colItemNama.setCellValueFactory(new PropertyValueFactory<>("namaProduk"));
-        colItemJumlah.setCellValueFactory(cell -> cell.getValue().jumlahProdukProperty());
-        colItemHarga.setCellValueFactory(cell -> cell.getValue().hargaProdukProperty());
-        colItemCatatan.setCellValueFactory(cell -> new SimpleStringProperty(
-                cell.getValue().getCatatanProduk() == null ? "" : cell.getValue().getCatatanProduk()));
+        colItemNama.setCellValueFactory(cell -> cell.getValue().getProduk().namaProdukProperty());
+        colItemUkuran.setCellValueFactory(cell -> cell.getValue().ukuranProperty());
+        colItemJumlah.setCellValueFactory(cell -> cell.getValue().jumlahProperty());
+        colItemHarga.setCellValueFactory(cell -> cell.getValue().getProduk().hargaProdukProperty());
+        colItemCatatan.setCellValueFactory(cell -> cell.getValue().catatanProperty());
         tabel.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tabelKeranjang.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tabelKeranjang.setItems(keranjang);
@@ -144,6 +148,9 @@ public class TransaksiTableController implements Cetak {
                 setText(empty || item == null ? null : teksPilihan(item));
             }
         });
+        // pilihan ukuran hanya aktif untuk minuman, isinya ukuran yang dijual produk itu
+        cmbProduk.valueProperty().addListener((obs, lama, baru) -> isiPilihanUkuran(baru));
+        isiPilihanUkuran(null);
         if (grupKategori != null) {
             grupKategori.selectedToggleProperty().addListener((obs, lama, baru) -> {
                 if (cmbProduk != null) {
@@ -234,6 +241,27 @@ public class TransaksiTableController implements Cetak {
         }
     }
 
+    private void isiPilihanUkuran(Produk produk) {
+        if (cmbUkuran == null) {
+            return;
+        }
+        if (produk instanceof Minuman minuman) {
+            cmbUkuran.setItems(FXCollections.observableArrayList(minuman.getDaftarUkuran()));
+            cmbUkuran.setDisable(false);
+            cmbUkuran.setPromptText("Pilih ukuran");
+            if (cmbUkuran.getItems().size() == 1) {
+                cmbUkuran.getSelectionModel().selectFirst();
+            } else {
+                cmbUkuran.setValue(null);
+            }
+        } else {
+            cmbUkuran.getItems().clear();
+            cmbUkuran.setValue(null);
+            cmbUkuran.setDisable(true);
+            cmbUkuran.setPromptText(produk == null ? "Ukuran" : "Tanpa ukuran");
+        }
+    }
+
     private String teksPilihan(Produk produk) {
         String info;
         if (produk instanceof Kopi kopi) {
@@ -282,23 +310,35 @@ public class TransaksiTableController implements Cetak {
             Pesan.gagal("Jumlah harus angka bulat.");
             return;
         }
-        Produk salinan = salinProduk(asal, jumlah);
+        float harga = asal.getHargaProduk();
+        String ukuran = "-";
+        if (asal instanceof Minuman) {
+            UkuranMinuman pilihan = cmbUkuran == null ? null : cmbUkuran.getValue();
+            if (pilihan == null) {
+                Pesan.gagal("Pilih ukuran minuman.");
+                return;
+            }
+            harga = pilihan.getHarga();
+            ukuran = pilihan.getUkuran();
+        }
+        Produk salinan = salinProduk(asal);
         if (salinan == null) {
             Pesan.gagal("Jenis produk tidak dikenali.");
             return;
         }
+        salinan.setHargaProduk(harga);
         String catatan = txtCatatanItem.getText() == null ? "" : txtCatatanItem.getText().trim();
-        salinan.setCatatanProduk(catatan);
-        hargaDasar.put(salinan, asal.getHargaProduk());
-        hargaDariKatalog.put(salinan, Boolean.TRUE);
-        keranjang.add(salinan);
+        DetailTransaksi detail = new DetailTransaksi(salinan, jumlah, ukuran, catatan);
+        hargaDasar.put(detail, harga);
+        hargaDariKatalog.put(detail, Boolean.TRUE);
+        keranjang.add(detail);
         txtCatatanItem.clear();
         perkiraan();
     }
 
     @FXML
     private void hapusItem() {
-        Produk dipilih = tabelKeranjang.getSelectionModel().getSelectedItem();
+        DetailTransaksi dipilih = tabelKeranjang.getSelectionModel().getSelectedItem();
         if (dipilih == null) {
             Pesan.gagal("Pilih item keranjang yang ingin dihapus.");
             return;
@@ -402,6 +442,7 @@ public class TransaksiTableController implements Cetak {
         cmbGerai.getSelectionModel().clearSelection();
         cmbBayar.getSelectionModel().clearSelection();
         cmbProduk.getSelectionModel().clearSelection();
+        isiPilihanUkuran(null);
         pilihPelanggan(pelangganLogin);
         pilihGerai(geraiLogin);
         dpTanggal.setValue(LocalDate.now());
@@ -503,20 +544,21 @@ public class TransaksiTableController implements Cetak {
         uangKembaliTersimpan = transaksi.getUangKembali();
         uangTeksTersimpan = Float.toString(transaksi.getTotalTransaksi() + transaksi.getUangKembali());
         txtUang.setText(uangTeksTersimpan);
-        Map<Integer, Float> katalog = muatHargaKatalog();
+        Map<String, Float> katalog = muatHargaKatalog();
         List<String> tanda = new ArrayList<>();
-        for (Produk baris : transaksi.getListProduk()) {
-            Produk salinan = salinProduk(baris, baris.getJumlahProduk());
-            if (salinan == null) {
+        for (DetailTransaksi baris : transaksi.getListDetail()) {
+            Produk produkBaris = baris.getProduk();
+            Produk produkSalinan = salinProduk(produkBaris);
+            if (produkSalinan == null) {
                 continue;
             }
-            if (baris.getCatatanProduk() != null) {
-                salinan.setCatatanProduk(baris.getCatatanProduk());
-            }
-            // Detail menyimpan harga setelah diskon. Harga katalog dicari di seluruh produk, bukan combo kategori.
-            float tersimpan = baris.getHargaProduk();
-            Float asli = baris.getIdProduk() > 0 ? katalog.get(baris.getIdProduk()) : null;
-            salinan.setHargaProduk(tersimpan);
+            // Detail menyimpan harga setelah diskon. Harga katalog dicari per produk + ukuran, bukan combo kategori.
+            float tersimpan = baris.getHargaSatuan();
+            Float asli = produkBaris.getIdProduk() > 0
+                    ? katalog.get(kunciHarga(produkBaris.getIdProduk(), baris.getUkuran())) : null;
+            produkSalinan.setHargaProduk(tersimpan);
+            DetailTransaksi salinan = new DetailTransaksi(produkSalinan, baris.getJumlah(),
+                    baris.getUkuran(), baris.getCatatan());
             hargaTersimpan.put(salinan, tersimpan);
             if (asli != null) {
                 hargaDasar.put(salinan, asli);
@@ -536,16 +578,27 @@ public class TransaksiTableController implements Cetak {
         susun(true);
     }
 
-    private Map<Integer, Float> muatHargaKatalog() {
-        Map<Integer, Float> katalog = new HashMap<>();
+    // kunci "id|ukuran": harga minuman beda per ukuran, makanan pakai ukuran "-"
+    private Map<String, Float> muatHargaKatalog() {
+        Map<String, Float> katalog = new HashMap<>();
         try {
             for (Produk produk : produkDAO.getAll()) {
-                katalog.put(produk.getIdProduk(), produk.getHargaProduk());
+                if (produk instanceof Minuman minuman) {
+                    for (UkuranMinuman ukuran : minuman.getDaftarUkuran()) {
+                        katalog.put(kunciHarga(produk.getIdProduk(), ukuran.getUkuran()), ukuran.getHarga());
+                    }
+                } else {
+                    katalog.put(kunciHarga(produk.getIdProduk(), "-"), produk.getHargaProduk());
+                }
             }
         } catch (SQLException e) {
             Pesan.gagalSql(e);
         }
         return katalog;
+    }
+
+    private static String kunciHarga(int idProduk, String ukuran) {
+        return idProduk + "|" + (ukuran == null ? "-" : ukuran.toLowerCase(Locale.ROOT));
     }
 
     private Transaksi susun(boolean diam) {
@@ -578,24 +631,25 @@ public class TransaksiTableController implements Cetak {
         boolean tetap = keranjangMasihSama(kode);
         float subtotalAwal = 0;
         if (tetap) {
-            for (Produk produk : keranjang) {
-                Float harga = hargaTersimpan.get(produk);
+            for (DetailTransaksi detail : keranjang) {
+                Float harga = hargaTersimpan.get(detail);
                 if (harga != null) {
-                    produk.setHargaProduk(harga);
+                    detail.getProduk().setHargaProduk(harga);
                 }
             }
         } else {
-            for (Produk produk : keranjang) {
-                float dasar = hargaDasar.getOrDefault(produk, produk.getHargaProduk());
-                boolean dariKatalog = hargaDariKatalog.getOrDefault(produk, Boolean.TRUE);
+            for (DetailTransaksi detail : keranjang) {
+                Produk produk = detail.getProduk();
+                float dasar = hargaDasar.getOrDefault(detail, produk.getHargaProduk());
+                boolean dariKatalog = hargaDariKatalog.getOrDefault(detail, Boolean.TRUE);
                 if (dariKatalog) {
                     produk.setHargaProduk(dasar);
-                    subtotalAwal += dasar * produk.getJumlahProduk();
+                    subtotalAwal += dasar * detail.getJumlah();
                     if (persen != null) {
-                        produk.calcDiscount(persen);
+                        produk.calcDiscount(persen); // polymorphism: Minuman vs MakananPenutup (maks 20%)
                     }
                 } else {
-                    subtotalAwal += produk.getHargaProduk() * produk.getJumlahProduk();
+                    subtotalAwal += detail.getSubtotal();
                 }
             }
         }
@@ -603,8 +657,8 @@ public class TransaksiTableController implements Cetak {
         dpTanggal.setValue(tanggal);
         Transaksi transaksi = new Transaksi(id, cmbGerai.getValue(), 0, 0, 0,
                 cmbPelanggan.getValue(), tanggal.toString(), cmbBayar.getValue());
-        for (Produk produk : keranjang) {
-            transaksi.addProduk(produk);
+        for (DetailTransaksi detail : keranjang) {
+            transaksi.addDetail(detail);
         }
         transaksi.setKodePromo(kode);
         if (tetap) {
@@ -652,9 +706,9 @@ public class TransaksiTableController implements Cetak {
 
     private void perkiraan() {
         float sum = 0;
-        for (Produk produk : keranjang) {
-            float dasar = hargaDasar.getOrDefault(produk, produk.getHargaProduk());
-            sum += dasar * produk.getJumlahProduk();
+        for (DetailTransaksi detail : keranjang) {
+            float dasar = hargaDasar.getOrDefault(detail, detail.getHargaSatuan());
+            sum += dasar * detail.getJumlah();
         }
         lblSubtotal.setText(rupiah(sum));
         lblDiskon.setText("Rp 0");
@@ -716,8 +770,8 @@ public class TransaksiTableController implements Cetak {
         return true;
     }
 
-    private static String tandaItem(Produk produk) {
-        return produk.getIdProduk() + "|" + produk.getJumlahProduk();
+    private static String tandaItem(DetailTransaksi detail) {
+        return detail.getProduk().getIdProduk() + "|" + detail.getUkuran() + "|" + detail.getJumlah();
     }
 
     private void pilihGerai(Gerai gerai) {
@@ -762,21 +816,16 @@ public class TransaksiTableController implements Cetak {
         }
     }
 
-    // Salin produk sesuai jenisnya supaya jumlah tiap transaksi tidak saling timpa
-    private Produk salinProduk(Produk produk, int jumlah) {
+    // Salin produk sesuai jenisnya supaya harga diskon di keranjang tidak mengubah objek katalog
+    private Produk salinProduk(Produk produk) {
         Produk salinan;
-        if (produk instanceof Kopi) {
-            Kopi kopi = (Kopi) produk;
-            salinan = new Kopi(kopi.getJenisKopi(), kopi.getUkuranMinuman(),
-                    kopi.getNamaProduk(), kopi.getHargaProduk(), jumlah);
-        } else if (produk instanceof BukanKopi) {
-            BukanKopi bukan = (BukanKopi) produk;
-            salinan = new BukanKopi(bukan.getJenisRasa(), bukan.getUkuranMinuman(),
-                    bukan.getNamaProduk(), bukan.getHargaProduk(), jumlah);
-        } else if (produk instanceof MakananPenutup) {
-            MakananPenutup makanan = (MakananPenutup) produk;
+        if (produk instanceof Kopi kopi) {
+            salinan = new Kopi(kopi.getJenisKopi(), kopi.getNamaProduk(), kopi.getHargaProduk());
+        } else if (produk instanceof BukanKopi bukan) {
+            salinan = new BukanKopi(bukan.getJenisRasa(), bukan.getNamaProduk(), bukan.getHargaProduk());
+        } else if (produk instanceof MakananPenutup makanan) {
             salinan = new MakananPenutup(makanan.getVariasiMakananPenutup(),
-                    makanan.getNamaProduk(), makanan.getHargaProduk(), jumlah);
+                    makanan.getNamaProduk(), makanan.getHargaProduk());
         } else {
             return null;
         }
@@ -787,13 +836,12 @@ public class TransaksiTableController implements Cetak {
     private String render(Transaksi transaksi) throws IOException {
         String html = bacaTemplate();
         StringBuilder baris = new StringBuilder();
-        for (Produk produk : transaksi.getListProduk()) {
-            float sub = produk.getHargaProduk() * produk.getJumlahProduk();
-            baris.append("<tr><td>").append(esc(produk.getNamaProduk()))
-                    .append("</td><td class=\"num\">x").append(produk.getJumlahProduk())
-                    .append("</td><td class=\"num\">").append(rupiah(produk.getHargaProduk()))
-                    .append("</td><td class=\"num\">").append(rupiah(sub))
-                    .append("</td><td>").append(esc(kosong(produk.getCatatanProduk())))
+        for (DetailTransaksi detail : transaksi.getListDetail()) {
+            baris.append("<tr><td>").append(esc(detail.getNamaTampil()))
+                    .append("</td><td class=\"num\">x").append(detail.getJumlah())
+                    .append("</td><td class=\"num\">").append(rupiah(detail.getHargaSatuan()))
+                    .append("</td><td class=\"num\">").append(rupiah(detail.getSubtotal()))
+                    .append("</td><td>").append(esc(kosong(detail.getCatatan())))
                     .append("</td></tr>");
         }
         String promo = transaksi.getKodePromo() == null || transaksi.getKodePromo().isEmpty()

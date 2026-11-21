@@ -10,9 +10,8 @@ import javafx.beans.property.StringProperty;
 public class BukanKopi extends Minuman {// struktur hierarki, inheritence
     private final StringProperty jenisRasa = new SimpleStringProperty();// encapsulation
 
-    public BukanKopi(String jenisRasa, String ukuranMinuman, String namaProduk, float hargaProduk,
-                    int jumlahProduk) {
-        super(ukuranMinuman, namaProduk, hargaProduk, jumlahProduk);
+    public BukanKopi(String jenisRasa, String namaProduk, float hargaProduk) {
+        super(namaProduk, hargaProduk);
         this.jenisRasa.set(jenisRasa);
     }
 

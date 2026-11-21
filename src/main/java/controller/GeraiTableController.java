@@ -2,6 +2,7 @@ package main.java.controller;
 
 import java.sql.SQLException;
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -18,6 +19,7 @@ public class GeraiTableController {
     @FXML private TextField txtKode;
     @FXML private TextField txtNama;
     @FXML private TextArea txtAlamat;
+    @FXML private PasswordField txtPassword;
 
     private final GeraiDAO dao = new GeraiDAO();
     private String kodeDipilih;
@@ -45,6 +47,10 @@ public class GeraiTableController {
     private void tambah() {
         Gerai gerai = baca();
         if (gerai == null) {
+            return;
+        }
+        if (gerai.getPasswordGerai().isEmpty()) {
+            Pesan.gagal("Password gerai wajib diisi untuk gerai baru.");
             return;
         }
         try {
@@ -105,6 +111,7 @@ public class GeraiTableController {
         txtKode.clear();
         txtNama.clear();
         txtAlamat.clear();
+        txtPassword.clear();
         tabel.getSelectionModel().clearSelection();
     }
 
@@ -116,6 +123,7 @@ public class GeraiTableController {
         txtKode.setText(gerai.getKodeGerai());
         txtNama.setText(gerai.getNamaGerai());
         txtAlamat.setText(gerai.getAlamatGerai());
+        txtPassword.clear(); // hash tidak ditampilkan; kosong = password lama dipakai
     }
 
     private Gerai baca() {
@@ -128,6 +136,7 @@ public class GeraiTableController {
         }
         Gerai gerai = new Gerai(nama, alamat);
         gerai.setKodeGerai(kode);
+        gerai.setPasswordGerai(txtPassword.getText() == null ? "" : txtPassword.getText());
         return gerai;
     }
 }

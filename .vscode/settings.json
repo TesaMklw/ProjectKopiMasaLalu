@@ -1,53 +1,64 @@
 {
-    "java.project.sourcePaths": [
-        "src"
-    ],
-    "java.project.outputPath": "bin",
-    "java.project.referencedLibraries": [
-        "c:\\javafx-sdk\\lib\\javafx.base.jar",
-        "c:\\javafx-sdk\\lib\\javafx.controls.jar",
-        "c:\\javafx-sdk\\lib\\javafx.fxml.jar",
-        "c:\\javafx-sdk\\lib\\javafx.graphics.jar",
-        "c:\\javafx-sdk\\lib\\javafx.media.jar",
-        "c:\\javafx-sdk\\lib\\javafx.swing.jar",
-        "c:\\javafx-sdk\\lib\\javafx.web.jar",
-        "c:\\javafx-sdk\\lib\\javafx-swt.jar",
-        "c:\\javafx-sdk\\lib\\jbcrypt-0.4.jar",
-        "c:\\javafx-sdk\\lib\\jdk.jsobject.jar",
-        "c:\\javafx-sdk\\lib\\jfx.incubator.input.jar",
-        "c:\\javafx-sdk\\lib\\jfx.incubator.richtext.jar",
-        "c:\\javafx-sdk\\lib\\postgresql-42.7.14.jar"
-    ],
-    "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-26.0.2",
-    "java.configuration.runtimes": [
-        {
-            "name": "JavaSE-26",
-            "path": "C:\\Program Files\\Java\\jdk-26.0.2",
-            "default": true
-        }
-    ],
-    "java.jdt.core.compiler.source": "25",
-    "java.jdt.core.compiler.compliance": "25",
-    "java.jdt.core.compiler.codegen.targetPlatform": "25",
+  "java.project.sourcePaths": ["src"],
+  "java.project.outputPath": "bin",
+  "java.project.referencedLibraries": [
+    "c:\\javafx-sdk\\lib\\javafx.base.jar",
+    "c:\\javafx-sdk\\lib\\javafx.controls.jar",
+    "c:\\javafx-sdk\\lib\\javafx.fxml.jar",
+    "c:\\javafx-sdk\\lib\\javafx.graphics.jar",
+    "c:\\javafx-sdk\\lib\\javafx.media.jar",
+    "c:\\javafx-sdk\\lib\\javafx.swing.jar",
+    "c:\\javafx-sdk\\lib\\javafx.web.jar",
+    "c:\\javafx-sdk\\lib\\javafx-swt.jar",
+    "c:\\javafx-sdk\\lib\\jbcrypt-0.4.jar",
+    "c:\\javafx-sdk\\lib\\jdk.jsobject.jar",
+    "c:\\javafx-sdk\\lib\\jfx.incubator.input.jar",
+    "c:\\javafx-sdk\\lib\\jfx.incubator.richtext.jar",
+    "c:\\javafx-sdk\\lib\\postgresql-42.7.14.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.base.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.controls.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.fxml.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.graphics.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.media.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.swing.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx.web.jar",
+    "c:\\javafx-sdk-27\\lib\\javafx-swt.jar",
+    "c:\\javafx-sdk-27\\lib\\jbcrypt-0.4.jar",
+    "c:\\javafx-sdk-27\\lib\\jdk.jsobject.jar",
+    "c:\\javafx-sdk-27\\lib\\jfx.incubator.input.jar",
+    "c:\\javafx-sdk-27\\lib\\jfx.incubator.richtext.jar",
+    "c:\\javafx-sdk-27\\lib\\postgresql-42.7.14.jar"
+  ],
+  "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-26.0.2",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-26",
+      "path": "C:\\Program Files\\Java\\jdk-26.0.2",
+      "default": true
+    }
+  ],
+  "java.jdt.core.compiler.source": "25",
+  "java.jdt.core.compiler.compliance": "25",
+  "java.jdt.core.compiler.codegen.targetPlatform": "25",
 
-    "java.compile.nullAnalysis.mode": "disabled",
-    "java.errors.incompleteClasspath.severity": "ignore",
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "java.jdt.core.compiler.problem.incompleteClasspath": "ignore",
-    "java.jdt.core.compiler.problem.uncheckedTypeOperation": "ignore",
-    "java.jdt.core.compiler.problem.rawTypeReference": "ignore",
-    "java.jdt.core.compiler.problem.unusedImport": "ignore",
-    "java.jdt.core.compiler.problem.unusedLocal": "ignore",
-    "java.jdt.core.compiler.problem.unusedPrivateMember": "ignore",
-    "java.jdt.core.compiler.problem.deadCode": "ignore",
-    "java.jdt.core.compiler.problem.thisEscape": "ignore",
-    "java.jdt.core.compiler.problem.previewFeatures": "ignore",
-    "java.jdt.core.compiler.problem.forbiddenReference": "warning",
-    "java.jdt.core.compiler.problem.deprecation": "ignore",
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.errors.incompleteClasspath.severity": "ignore",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.jdt.core.compiler.problem.incompleteClasspath": "ignore",
+  "java.jdt.core.compiler.problem.uncheckedTypeOperation": "ignore",
+  "java.jdt.core.compiler.problem.rawTypeReference": "ignore",
+  "java.jdt.core.compiler.problem.unusedImport": "ignore",
+  "java.jdt.core.compiler.problem.unusedLocal": "ignore",
+  "java.jdt.core.compiler.problem.unusedPrivateMember": "ignore",
+  "java.jdt.core.compiler.problem.deadCode": "ignore",
+  "java.jdt.core.compiler.problem.thisEscape": "ignore",
+  "java.jdt.core.compiler.problem.previewFeatures": "ignore",
+  "java.jdt.core.compiler.problem.forbiddenReference": "warning",
+  "java.jdt.core.compiler.problem.deprecation": "ignore",
 
-    "java.debug.settings.console": "internalConsole",
-    "java.debug.settings.onBuildFailureProceed": true,
+  "java.debug.settings.console": "internalConsole",
+  "java.debug.settings.onBuildFailureProceed": true,
 
-    "css.lint.vendorPrefix": "ignore",
-    "css.lint.unknownProperties": "ignore"
+  "css.lint.vendorPrefix": "ignore",
+  "css.lint.unknownProperties": "ignore"
 }
