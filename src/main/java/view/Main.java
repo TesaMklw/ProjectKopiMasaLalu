@@ -23,7 +23,7 @@ public class Main extends Application {
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());
         }
-        stage.setTitle("Kopi Kenangan");
+        stage.setTitle("Kopi Masa Lalu");
         stage.setScene(scene);
         stage.show();
     }

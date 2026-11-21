@@ -3,22 +3,24 @@ package main.java.controller;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import main.java.model.Gerai;
 import main.java.model.Pelanggan;
 
 /**
- * Controller main_window.fxml: sapaan, menu, dan tab data (UI Baru – Tab Style).
- * Mode gerai = semua tabel; mode pelanggan = hanya tab pesan/transaksi.
+ * Controller main_window.fxml: sapaan, menu samping, dan area konten.
+ * Semua halaman dibuka di area konten lewat menu samping (tanpa tab).
+ * Mode gerai = semua menu; mode pelanggan = hanya form pemesanan.
  */
 public class MainWindowController extends DashboardController {
+    @FXML private Label lblPageTitle;
     @FXML private Label lblSapaan;
     @FXML private Label lblMenuSub;
     @FXML private Label lblJudul;
@@ -30,18 +32,18 @@ public class MainWindowController extends DashboardController {
     @FXML private Button btnTransaksi;
     @FXML private Button btnBukaTransaksi;
     @FXML private Button btnKelolaProduk;
-    @FXML private TabPane tabData;
+    @FXML private Node boxAksi;
+    @FXML private StackPane konten;
 
     private Pelanggan pelangganLogin;
     private Gerai geraiLogin;
     private boolean modePelanggan;
     private boolean sedangLogout;
-    private boolean tabSiap;
 
     @FXML
     private void initialize() {
         if (lblSapaan != null && (lblSapaan.getText() == null || lblSapaan.getText().isBlank())) {
-            lblSapaan.setText("Halo, kasir Kopi Kenangan");
+            lblSapaan.setText("Halo, kasir Kopi Masa Lalu");
         }
         if (lblSapaan != null) {
             lblSapaan.sceneProperty().addListener((obs, lama, scene) -> {
@@ -62,7 +64,7 @@ public class MainWindowController extends DashboardController {
             lblSapaan.setText("Halo, " + pelanggan.getNamaPelanggan() + " — selamat memesan.");
         }
         terapkanModePelanggan();
-        susunTab();
+        bukaTransaksi();
     }
 
     public void setGerai(Gerai gerai) {
@@ -75,7 +77,7 @@ public class MainWindowController extends DashboardController {
             lblSapaan.setText("Halo, kasir " + nama + kode + " — selamat bertugas.");
         }
         terapkanModeGerai();
-        susunTab();
+        tampilkanSambutan();
     }
 
     private void terapkanModePelanggan() {
@@ -83,12 +85,12 @@ public class MainWindowController extends DashboardController {
         setVisible(btnProduk, false);
         setVisible(btnPelanggan, false);
         setVisible(btnPembayaran, false);
-        setVisible(btnKelolaProduk, false);
+        setVisible(boxAksi, false);
         if (btnTransaksi != null) {
             btnTransaksi.setText("Pesan");
         }
-        if (btnBukaTransaksi != null) {
-            btnBukaTransaksi.setText("Buat Pesanan");
+        if (lblPageTitle != null) {
+            lblPageTitle.setText("Dashboard Pelanggan");
         }
         if (lblMenuSub != null) {
             lblMenuSub.setText("Menu pelanggan");
@@ -98,7 +100,7 @@ public class MainWindowController extends DashboardController {
         }
         if (lblDeskripsi != null) {
             lblDeskripsi.setText(
-                    "Anda masuk sebagai pelanggan. Buat pesanan lewat tab Pesan. "
+                    "Anda masuk sebagai pelanggan. Form pemesanan langsung ditampilkan. "
                             + "Data gerai, produk, dan admin lainnya hanya untuk kasir gerai.");
         }
     }
@@ -108,12 +110,12 @@ public class MainWindowController extends DashboardController {
         setVisible(btnProduk, true);
         setVisible(btnPelanggan, true);
         setVisible(btnPembayaran, true);
-        setVisible(btnKelolaProduk, true);
+        setVisible(boxAksi, true);
         if (btnTransaksi != null) {
             btnTransaksi.setText("Transaksi");
         }
-        if (btnBukaTransaksi != null) {
-            btnBukaTransaksi.setText("Buka Transaksi");
+        if (lblPageTitle != null) {
+            lblPageTitle.setText("Dashboard Gerai");
         }
         if (lblMenuSub != null) {
             lblMenuSub.setText("Menu kasir gerai");
@@ -123,61 +125,43 @@ public class MainWindowController extends DashboardController {
         }
         if (lblDeskripsi != null) {
             lblDeskripsi.setText(
-                    "Anda masuk sebagai gerai. Kelola Gerai, Produk, Pelanggan, Pembayaran, dan Transaksi lewat tab.");
+                    "Pilih Gerai, Produk, Pelanggan, Pembayaran, atau Transaksi di menu samping.");
         }
     }
 
-    private void susunTab() {
-        if (tabData == null || tabSiap) {
+    private void tampilkanSambutan() {
+        if (konten == null) {
             return;
         }
-        tabSiap = true;
-        tabData.getTabs().clear();
-        if (!modePelanggan) {
-            tabData.getTabs().add(buatTab("Gerai", "/main/resources/gerai_table.fxml"));
-            tabData.getTabs().add(buatTab("Produk", "/main/resources/produk_table.fxml"));
-            tabData.getTabs().add(buatTab("Pelanggan", "/main/resources/pelanggan_table.fxml"));
-            tabData.getTabs().add(buatTab("Pembayaran", "/main/resources/pembayaran_table.fxml"));
-        }
-        tabData.getTabs().add(buatTabTransaksi());
-        if (!tabData.getTabs().isEmpty()) {
-            tabData.getSelectionModel().select(modePelanggan ? tabData.getTabs().size() - 1 : 0);
-        }
+        konten.getChildren().clear();
+        Label sambutan = new Label("Selamat datang di Dashboard Gerai. Pilih menu di samping untuk memulai.");
+        sambutan.setWrapText(true);
+        sambutan.setStyle("-fx-font-size: 15px; -fx-text-fill: #94857B;");
+        konten.getChildren().add(sambutan);
     }
 
-    private Tab buatTab(String judul, String fxml) {
-        Tab tab = new Tab(judul);
-        tab.setClosable(false);
+    /** Mengganti isi area konten dengan FXML yang dipilih dari menu samping. */
+    private void tampilkan(String judul, String fxml) {
+        if (konten == null) {
+            return;
+        }
+        konten.getChildren().clear();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
-            tab.setContent(bungkus(root));
+            if ("/main/resources/transaksi_table.fxml".equals(fxml)) {
+                TransaksiTableController controller = loader.getController();
+                if (modePelanggan) {
+                    controller.setPelangganLogin(pelangganLogin);
+                } else if (geraiLogin != null) {
+                    controller.setGeraiLogin(geraiLogin);
+                }
+            }
+            konten.getChildren().add(bungkus(root));
         } catch (IOException e) {
             Pesan.gagal("Gagal membuka " + judul + ": " + e.getMessage());
-            tab.setContent(new Label("Gagal memuat " + judul));
+            konten.getChildren().add(new Label("Gagal memuat " + judul));
         }
-        return tab;
-    }
-
-    private Tab buatTabTransaksi() {
-        String judul = modePelanggan ? "Pesan" : "Transaksi";
-        Tab tab = new Tab(judul);
-        tab.setClosable(false);
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/resources/transaksi_table.fxml"));
-            Parent root = loader.load();
-            TransaksiTableController controller = loader.getController();
-            if (modePelanggan) {
-                controller.setPelangganLogin(pelangganLogin);
-            } else if (geraiLogin != null) {
-                controller.setGeraiLogin(geraiLogin);
-            }
-            tab.setContent(bungkus(root));
-        } catch (IOException e) {
-            Pesan.gagal("Gagal membuka transaksi: " + e.getMessage());
-            tab.setContent(new Label("Gagal memuat transaksi"));
-        }
-        return tab;
     }
 
     private Parent bungkus(Parent root) {
@@ -190,47 +174,34 @@ public class MainWindowController extends DashboardController {
         return scroll;
     }
 
-    private void pilihTab(String judul) {
-        susunTab();
-        if (tabData == null) {
-            return;
-        }
-        for (Tab tab : tabData.getTabs()) {
-            if (judul.equals(tab.getText())) {
-                tabData.getSelectionModel().select(tab);
-                return;
-            }
-        }
-    }
-
     @Override
     @FXML
     public void bukaGerai() {
-        pilihTab("Gerai");
+        tampilkan("Gerai", "/main/resources/gerai_table.fxml");
     }
 
     @Override
     @FXML
     public void bukaProduk() {
-        pilihTab("Produk");
+        tampilkan("Produk", "/main/resources/produk_table.fxml");
     }
 
     @Override
     @FXML
     public void bukaPelanggan() {
-        pilihTab("Pelanggan");
+        tampilkan("Pelanggan", "/main/resources/pelanggan_table.fxml");
     }
 
     @Override
     @FXML
     public void bukaPembayaran() {
-        pilihTab("Pembayaran");
+        tampilkan("Pembayaran", "/main/resources/pembayaran_table.fxml");
     }
 
     @Override
     @FXML
     public void bukaTransaksi() {
-        pilihTab(modePelanggan ? "Pesan" : "Transaksi");
+        tampilkan("Transaksi", "/main/resources/transaksi_table.fxml");
     }
 
     @FXML
@@ -248,12 +219,12 @@ public class MainWindowController extends DashboardController {
         }
     }
 
-    private void setVisible(Button button, boolean tampil) {
-        if (button == null) {
+    private void setVisible(Node node, boolean tampil) {
+        if (node == null) {
             return;
         }
-        button.setVisible(tampil);
-        button.setManaged(tampil);
+        node.setVisible(tampil);
+        node.setManaged(tampil);
     }
 
     private void pasangTutup(Window jendela) {

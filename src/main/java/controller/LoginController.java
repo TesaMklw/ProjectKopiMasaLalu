@@ -229,7 +229,7 @@ public class LoginController implements Login {
                 dashboard.setPelanggan(pelanggan);
             }
             Stage stage = new Stage();
-            stage.setTitle("UI Baru – Tab Style");
+            stage.setTitle(gerai != null ? "Dashboard Gerai" : "Dashboard Pelanggan");
             Scene scene = new Scene(root);
             var css = getClass().getResource("/main/resources/css/style.css");
             if (css != null) {

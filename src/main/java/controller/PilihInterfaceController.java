@@ -42,7 +42,7 @@ public class PilihInterfaceController {
 
     @FXML
     private void keluarProgram() {
-        if (Pesan.konfirmasi("Keluar", "Keluar dari Kopi Kenangan?")) {
+        if (Pesan.konfirmasi("Keluar", "Keluar dari Kopi Masa Lalu?")) {
             Platform.exit();
         }
     }
@@ -56,8 +56,8 @@ public class PilihInterfaceController {
             login.siapkan(modeGerai);
             Stage stage = new Stage();
             stage.setTitle(modeGerai
-                    ? "Kopi Kenangan — Masuk Gerai"
-                    : "Kopi Kenangan — Pelanggan");
+                    ? "Kopi Masa Lalu — Masuk Gerai"
+                    : "Kopi Masa Lalu — Pelanggan");
             Scene scene = new Scene(root);
             var css = PilihInterfaceController.class.getResource("/main/resources/css/style.css");
             if (css != null) {

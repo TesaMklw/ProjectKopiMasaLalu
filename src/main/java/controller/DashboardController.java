@@ -8,34 +8,34 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Pembuka layar tabel. MainWindowController menaruh setiap FXML ini di Tab,
- * bukan jendela terpisah (UI Baru – Tab Style).
+ * Pembuka layar tabel. MainWindowController menaruh setiap FXML ini di area
+ * konten utama lewat menu samping, bukan jendela terpisah.
  */
 public class DashboardController {
 
     @FXML
     public void bukaGerai() {
-        buka("/main/resources/gerai_table.fxml", "Gerai — Kopi Kenangan");
+        buka("/main/resources/gerai_table.fxml", "Gerai — Kopi Masa Lalu");
     }
 
     @FXML
     public void bukaProduk() {
-        buka("/main/resources/produk_table.fxml", "Produk — Kopi Kenangan");
+        buka("/main/resources/produk_table.fxml", "Produk — Kopi Masa Lalu");
     }
 
     @FXML
     public void bukaPelanggan() {
-        buka("/main/resources/pelanggan_table.fxml", "Pelanggan — Kopi Kenangan");
+        buka("/main/resources/pelanggan_table.fxml", "Pelanggan — Kopi Masa Lalu");
     }
 
     @FXML
     public void bukaPembayaran() {
-        buka("/main/resources/pembayaran_table.fxml", "Pembayaran — Kopi Kenangan");
+        buka("/main/resources/pembayaran_table.fxml", "Pembayaran — Kopi Masa Lalu");
     }
 
     @FXML
     public void bukaTransaksi() {
-        buka("/main/resources/transaksi_table.fxml", "Transaksi — Kopi Kenangan");
+        buka("/main/resources/transaksi_table.fxml", "Transaksi — Kopi Masa Lalu");
     }
 
     protected void buka(String fxml, String judul) {

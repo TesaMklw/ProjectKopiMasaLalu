@@ -1,4 +1,4 @@
-/* Kopi Kenangan - Coffee & Red palette
+/* Kopi Masa Lalu - Coffee & Red palette
    Coffee: #44312B #8F5D46 #E0FDF8 #1F2122 #94857B
    Red:    #800000 #620000 #450000 #2A0001 #000000
    Class names are unchanged; no FXML edits required. */
@@ -329,9 +329,14 @@
 }
 
 .button.tile,
-.tile {
+.tile,
+.button.tile.secondary,
+.tile.secondary {
     -fx-font-size: 14px;
     -fx-padding: 8 14 8 14;
+    -fx-min-height: 36;
+    -fx-pref-height: 36;
+    -fx-max-height: 36;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
 }

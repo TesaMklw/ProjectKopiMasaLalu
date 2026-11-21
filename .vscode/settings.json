@@ -1,14 +1,28 @@
 {
-    "java.project.sourcePaths": ["src"],
+    "java.project.sourcePaths": [
+        "src"
+    ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "C:\\javafx-sdk-27\\lib\\*.jar"
+        "c:\\javafx-sdk\\lib\\javafx.base.jar",
+        "c:\\javafx-sdk\\lib\\javafx.controls.jar",
+        "c:\\javafx-sdk\\lib\\javafx.fxml.jar",
+        "c:\\javafx-sdk\\lib\\javafx.graphics.jar",
+        "c:\\javafx-sdk\\lib\\javafx.media.jar",
+        "c:\\javafx-sdk\\lib\\javafx.swing.jar",
+        "c:\\javafx-sdk\\lib\\javafx.web.jar",
+        "c:\\javafx-sdk\\lib\\javafx-swt.jar",
+        "c:\\javafx-sdk\\lib\\jbcrypt-0.4.jar",
+        "c:\\javafx-sdk\\lib\\jdk.jsobject.jar",
+        "c:\\javafx-sdk\\lib\\jfx.incubator.input.jar",
+        "c:\\javafx-sdk\\lib\\jfx.incubator.richtext.jar",
+        "c:\\javafx-sdk\\lib\\postgresql-42.7.14.jar"
     ],
-    "java.jdt.ls.java.home": "C:\\JDK\\oracleJdk-26",
+    "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-26.0.2",
     "java.configuration.runtimes": [
         {
             "name": "JavaSE-26",
-            "path": "C:\\JDK\\oracleJdk-26",
+            "path": "C:\\Program Files\\Java\\jdk-26.0.2",
             "default": true
         }
     ],

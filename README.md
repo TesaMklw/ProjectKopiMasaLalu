@@ -1,6 +1,6 @@
-# Kopi Kenangan POS
+# Kopi Masa Lalu POS
 
-Kerangka proyek JavaFX MVC untuk kasir Kopi Kenangan. Kelas domain yang sudah ada dipindah ke paket baru. Kelas, FXML, CSS, dan template struk yang baru masih kerangka kosong. Tabel PostgreSQL dibuat manual di pgAdmin; repositori ini tidak menyertakan `schema.sql`.
+Kerangka proyek JavaFX MVC untuk kasir Kopi Masa Lalu. Kelas domain yang sudah ada dipindah ke paket baru. Kelas, FXML, CSS, dan template struk yang baru masih kerangka kosong. Tabel PostgreSQL dibuat manual di pgAdmin; repositori ini tidak menyertakan `schema.sql`.
 
 ## Pohon folder
 

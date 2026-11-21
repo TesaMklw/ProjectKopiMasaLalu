@@ -5,13 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Koneksi PostgreSQL untuk POS Kopi Kenangan.
+ * Koneksi PostgreSQL untuk POS Kopi Masa Lalu.
  * Ubah USER / PASSWORD kalau akun postgres di komputer berbeda.
  */
 public class PostgreSQLConnection {
-    public static final String URL = "jdbc:postgresql://localhost:5432/kopimasalalu";
-    public static final String USER = "Tesa";
-    public static final String PASSWORD = "Tesa";
+    public static final String URL = "jdbc:postgresql://localhost:5432/KopiMasaLalu";
+    public static final String USER = "Vionanda";
+    public static final String PASSWORD = "vionanda";
 
     public static Connection getConnection() throws SQLException {
         try {

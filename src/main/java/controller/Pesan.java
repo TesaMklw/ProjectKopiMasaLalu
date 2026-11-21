@@ -5,17 +5,17 @@ import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-/** Dialog singkat untuk layar JavaFX Kopi Kenangan. */
+/** Dialog singkat untuk layar JavaFX Kopi Masa Lalu. */
 public final class Pesan {
     private Pesan() {
     }
 
     public static void info(String teks) {
-        alert(Alert.AlertType.INFORMATION, "Kopi Kenangan", teks);
+        alert(Alert.AlertType.INFORMATION, "Kopi Masa Lalu", teks);
     }
 
     public static void gagal(String teks) {
-        alert(Alert.AlertType.ERROR, "Kopi Kenangan", teks);
+        alert(Alert.AlertType.ERROR, "Kopi Masa Lalu", teks);
     }
 
     public static void gagalSql(SQLException e) {

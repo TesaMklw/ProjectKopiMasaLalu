@@ -10,10 +10,12 @@
            fx:controller="main.java.controller.PilihInterfaceController"
            stylesheets="@css/style.css" prefWidth="480" prefHeight="460">
     <VBox alignment="CENTER" spacing="14" maxWidth="360" styleClass="card">
-        <Label fx:id="lblJudul" text="KOPI KENANGAN" styleClass="brand"/>
+        <Label fx:id="lblJudul" text="KOPI MASA LALU" styleClass="brand"/>
         <Label text="Pilih tampilan yang ingin dibuka" styleClass="subtitle"/>
-        <Button text="Pelanggan" onAction="#bukaPelanggan" maxWidth="Infinity" styleClass="tile"/>
-        <Button text="Gerai" onAction="#bukaGerai" maxWidth="Infinity" styleClass="tile secondary"/>
+        <Button text="Pelanggan" onAction="#bukaPelanggan" maxWidth="Infinity" styleClass="tile"
+                style="-fx-font-size: 14px; -fx-padding: 8 14 8 14; -fx-min-height: 36; -fx-pref-height: 36; -fx-max-height: 36; -fx-background-radius: 8; -fx-border-radius: 8;"/>
+        <Button text="Gerai" onAction="#bukaGerai" maxWidth="Infinity" styleClass="tile secondary"
+                style="-fx-font-size: 14px; -fx-padding: 8 14 8 14; -fx-min-height: 36; -fx-pref-height: 36; -fx-max-height: 36; -fx-background-radius: 8; -fx-border-radius: 8;"/>
         <Button text="Keluar Program" onAction="#keluarProgram" maxWidth="Infinity" styleClass="ghost"/>
         <Label text="Pelanggan dan gerai terbuka di jendela baru. Keluar program hanya dari layar ini."
                styleClass="hint" wrapText="true"/>

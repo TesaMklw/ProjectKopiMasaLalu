@@ -4,10 +4,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
@@ -18,7 +18,7 @@
             <padding>
                 <Insets top="24" right="16" bottom="24" left="16"/>
             </padding>
-            <Label text="KOPI KENANGAN" styleClass="sidebar-brand"/>
+            <Label text="KOPI MASA LALU" styleClass="sidebar-brand"/>
             <Label fx:id="lblMenuSub" text="Menu kasir" styleClass="sidebar-sub"/>
             <Separator styleClass="sidebar-sep"/>
             <Button fx:id="btnGerai" text="Gerai" onAction="#bukaGerai" maxWidth="Infinity" styleClass="sidebar-btn"/>
@@ -33,16 +33,16 @@
     </left>
     <center>
         <VBox spacing="8" styleClass="page">
-            <Label text="UI Baru – Tab Style" styleClass="page-title"/>
+            <Label fx:id="lblPageTitle" text="Dashboard Gerai" styleClass="page-title"/>
             <Label fx:id="lblJudul" text="Dashboard" styleClass="header-sub"/>
             <Label fx:id="lblDeskripsi"
-                   text="Gerai, Produk, Pelanggan, Pembayaran, dan Transaksi terbuka sebagai tab di halaman ini."
+                   text="Pilih Gerai, Produk, Pelanggan, Pembayaran, atau Transaksi di menu samping."
                    styleClass="hint" wrapText="true"/>
-            <HBox spacing="12">
+            <HBox fx:id="boxAksi" spacing="12">
                 <Button fx:id="btnBukaTransaksi" text="Buka Transaksi" onAction="#bukaTransaksi"/>
                 <Button fx:id="btnKelolaProduk" text="Kelola Produk" onAction="#bukaProduk" styleClass="secondary"/>
             </HBox>
-            <TabPane fx:id="tabData" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS"/>
+            <StackPane fx:id="konten" VBox.vgrow="ALWAYS"/>
         </VBox>
     </center>
 </BorderPane>

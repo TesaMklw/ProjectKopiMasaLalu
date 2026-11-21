@@ -18,7 +18,7 @@
         <ToggleGroup fx:id="modeAkun"/>
     </fx:define>
     <VBox alignment="CENTER" spacing="10" maxWidth="380" styleClass="card">
-        <Label text="KOPI KENANGAN" styleClass="brand"/>
+        <Label text="KOPI MASA LALU" styleClass="brand"/>
         <Label fx:id="lblSubtitle" text="Masuk sebagai pelanggan" styleClass="subtitle"/>
 
         <HBox fx:id="barisAkun" spacing="8" alignment="CENTER" styleClass="mode-row">
