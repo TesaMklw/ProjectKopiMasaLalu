@@ -13,7 +13,7 @@ import javafx.beans.property.StringProperty;
 public class Transaksi {
     private final StringProperty idTransaksi = new SimpleStringProperty();
     private Gerai gerai;
-    private ArrayList<Produk> listProduk; // Menyimpan daftar objek Produk secara dinamis ke dalam arraylist nya
+    private ArrayList<DetailTransaksi> listDetail; // Menyimpan baris pesanan (produk, ukuran, jumlah, catatan) secara dinamis
     private final FloatProperty subtotalTransaksi = new SimpleFloatProperty();
     private final FloatProperty totalTransaksi = new SimpleFloatProperty();
     private final FloatProperty uangKembali = new SimpleFloatProperty();
@@ -30,7 +30,7 @@ public class Transaksi {
     // Constructor 1 (Parameterized Constructor)
     public Transaksi(String idTransaksi, Gerai gerai, float subtotalTransaksi, float totalTransaksi,
                     float uangKembali, Pelanggan pelanggan, String tanggalTransaksi, Pembayaran pembayaran) {
-        this.listProduk = new ArrayList<>();
+        this.listDetail = new ArrayList<>();
         setIdTransaksi(idTransaksi);
         setGerai(gerai);
         setSubtotalTransaksi(subtotalTransaksi);
@@ -43,7 +43,7 @@ public class Transaksi {
 
     // Constructor 2 (Default/No-Arg Constructor)
     public Transaksi() {
-        this.listProduk = new ArrayList<>();
+        this.listDetail = new ArrayList<>();
     }
 
     // setters untuk mengatur/mengubah nilai variabel private
@@ -114,8 +114,8 @@ public class Transaksi {
     }
 
     // Mengembalikan salinan (copy) ArrayList
-    public ArrayList<Produk> getListProduk() {
-        return new ArrayList<>(listProduk);
+    public ArrayList<DetailTransaksi> getListDetail() {
+        return new ArrayList<>(listDetail);
     }
 
     public float getSubtotalTransaksi() {
@@ -190,14 +190,14 @@ public class Transaksi {
         return metodePembayaranTampil;
     }
 
-    // method operasional yang untuk menambahkan item Produk ke dalam ArrayList listProduk
-    public void addProduk (Produk produk){
-        if (produk == null) return;
-        listProduk.add(produk);
+    // method operasional untuk menambahkan baris pesanan ke dalam ArrayList listDetail
+    public void addDetail(DetailTransaksi detail) {
+        if (detail == null) return;
+        listDetail.add(detail);
     }
 
-    public void clearProduk() {
-        listProduk.clear();
+    public void clearDetail() {
+        listDetail.clear();
     }
 
     // menghitung kembalian/ sisa uang
@@ -205,11 +205,11 @@ public class Transaksi {
         this.uangKembali.set(uangDibayar - getTotalTransaksi());
     }
 
-    // Hitung subtotal & total otomatis dari listProduk (harga * jumlah) - (for-each loop)
+    // Hitung subtotal & total otomatis dari listDetail (harga * jumlah) - (for-each loop)
     public void calcSubtotal() {
         float sum = 0;
-        for (Produk p : listProduk) {
-            sum += p.getHargaProduk() * p.getJumlahProduk();
+        for (DetailTransaksi d : listDetail) {
+            sum += d.getSubtotal();
         }
         this.subtotalTransaksi.set(sum);
         this.totalTransaksi.set(sum);
@@ -230,11 +230,11 @@ public class Transaksi {
         sb.append("Produk       : \n");
 
         // for untuk baca seluruh produk dalam transaksi
-        for (Produk p : listProduk) {
-            sb.append(" - ").append(p.getNamaProduk()).append(" x").append(p.getJumlahProduk())
-            .append(" Rp").append(p.getHargaProduk());
-            if (p.getCatatanProduk() != null && !p.getCatatanProduk().trim().isEmpty()) {
-                sb.append(" [").append(p.getCatatanProduk().trim()).append("]");
+        for (DetailTransaksi d : listDetail) {
+            sb.append(" - ").append(d.getNamaTampil()).append(" x").append(d.getJumlah())
+            .append(" Rp").append(d.getHargaSatuan());
+            if (!d.getCatatan().isEmpty()) {
+                sb.append(" [").append(d.getCatatan()).append("]");
             }
             sb.append("\n");
         }

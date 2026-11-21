@@ -44,8 +44,8 @@
         <VBox fx:id="panelGerai" spacing="10" managed="false" visible="false">
             <Label text="Kode gerai"/>
             <TextField fx:id="txtKodeGerai" promptText="contoh: GR01" onAction="#signin"/>
-            <Label text="Nama gerai"/>
-            <TextField fx:id="txtNamaGerai" promptText="sesuai data gerai" onAction="#signin"/>
+            <Label text="Password gerai"/>
+            <PasswordField fx:id="txtPasswordGerai" promptText="password" onAction="#signin"/>
         </VBox>
 
         <Label fx:id="lblPesan" styleClass="error" wrapText="true"/>

@@ -40,7 +40,6 @@
             <TableColumn fx:id="colId" text="ID" prefWidth="70"/>
             <TableColumn fx:id="colNama" text="Nama" prefWidth="200"/>
             <TableColumn fx:id="colHp" text="No HP" prefWidth="180"/>
-            <TableColumn fx:id="colPassword" text="Password" prefWidth="180"/>
         </columns>
         <placeholder>
             <Label text="Belum ada pelanggan."/>

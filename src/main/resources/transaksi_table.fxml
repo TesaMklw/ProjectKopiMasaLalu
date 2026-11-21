@@ -54,7 +54,8 @@
             <RadioButton fx:id="rbNonKopi" text="Non Kopi" toggleGroup="$grupKategori"/>
         </HBox>
         <HBox spacing="8">
-            <ComboBox fx:id="cmbProduk" promptText="Pilih produk" prefWidth="360"/>
+            <ComboBox fx:id="cmbProduk" promptText="Pilih produk" prefWidth="320"/>
+            <ComboBox fx:id="cmbUkuran" promptText="Ukuran" prefWidth="170"/>
             <TextField fx:id="txtJumlahItem" promptText="Jumlah" prefWidth="80" text="1"/>
             <TextField fx:id="txtCatatanItem" promptText="Catatan (opsional)" HBox.hgrow="ALWAYS"/>
             <Button text="Tambah item" onAction="#tambahItem"/>
@@ -95,7 +96,8 @@
         </TableView>
         <TableView fx:id="tabelKeranjang" prefHeight="180" minHeight="140">
             <columns>
-                <TableColumn fx:id="colItemNama" text="Produk" prefWidth="280"/>
+                <TableColumn fx:id="colItemNama" text="Produk" prefWidth="240"/>
+                <TableColumn fx:id="colItemUkuran" text="Ukuran" prefWidth="90"/>
                 <TableColumn fx:id="colItemJumlah" text="Jumlah" prefWidth="80"/>
                 <TableColumn fx:id="colItemHarga" text="Harga" prefWidth="120"/>
                 <TableColumn fx:id="colItemCatatan" text="Catatan" prefWidth="220"/>

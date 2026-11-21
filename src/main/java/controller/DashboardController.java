@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  * Pembuka layar tabel. MainWindowController menaruh setiap FXML ini di area
  * konten utama lewat menu samping, bukan jendela terpisah.
  */
-public class DashboardController {
+public abstract class DashboardController {
 
     @FXML
     public void bukaGerai() {

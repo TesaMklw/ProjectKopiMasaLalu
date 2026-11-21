@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.java.database.ProdukDAO;
 import main.java.model.BukanKopi;
@@ -17,6 +18,7 @@ import main.java.model.Kopi;
 import main.java.model.MakananPenutup;
 import main.java.model.Minuman;
 import main.java.model.Produk;
+import main.java.model.UkuranMinuman;
 
 public class ProdukTableController {
     @FXML private TableView<Produk> tabel;
@@ -26,15 +28,17 @@ public class ProdukTableController {
     @FXML private TableColumn<Produk, Number> colHarga;
     @FXML private TableColumn<Produk, String> colUkuran;
     @FXML private TableColumn<Produk, String> colInfo;
-    @FXML private TableColumn<Produk, Number> colJumlah;
     @FXML private ComboBox<String> cmbTipe;
     @FXML private TextField txtNama;
+    @FXML private Label lblHarga;
     @FXML private TextField txtHarga;
     @FXML private Label lblUkuran;
-    @FXML private TextField txtUkuran;
+    @FXML private HBox boxUkuran;
+    @FXML private TextField txtHargaSmall;
+    @FXML private TextField txtHargaMedium;
+    @FXML private TextField txtHargaLarge;
     @FXML private Label lblInfo;
     @FXML private ComboBox<String> cmbInfo;
-    @FXML private TextField txtJumlah;
 
     private static final List<String> JENIS_KOPI = List.of("Americano", "Latte", "Cappuccino", "Espresso");
     private static final List<String> JENIS_RASA = List.of("Matcha", "Cokelat", "Thai Tea", "Lemon Tea");
@@ -57,9 +61,8 @@ public class ProdukTableController {
         colTipe.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTipeProduk()));
         colNama.setCellValueFactory(new PropertyValueFactory<>("namaProduk"));
         colHarga.setCellValueFactory(cell -> cell.getValue().hargaProdukProperty());
-        colUkuran.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getUkuranTampil()));
+        colUkuran.setCellValueFactory(cell -> new SimpleStringProperty(teksUkuran(cell.getValue())));
         colInfo.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getInfoTambahan()));
-        colJumlah.setCellValueFactory(cell -> cell.getValue().jumlahProdukProperty());
         tabel.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tabel.getSelectionModel().selectedItemProperty().addListener((obs, lama, baru) -> isiForm(baru));
         muat();
@@ -136,7 +139,6 @@ public class ProdukTableController {
         txtNama.clear();
         txtHarga.clear();
         aturPilihan(null, true);
-        txtJumlah.setText("1");
         tabel.getSelectionModel().clearSelection();
     }
 
@@ -150,11 +152,17 @@ public class ProdukTableController {
         cmbTipe.setValue(labelTipe(kode));
         aturPilihan(kode, false);
         txtNama.setText(produk.getNamaProduk());
-        txtHarga.setText(Float.toString(produk.getHargaProduk()));
+        kosongkanHargaUkuran();
         if (produk instanceof Minuman minuman) {
-            txtUkuran.setText(minuman.getUkuranMinuman());
+            txtHarga.clear();
+            for (UkuranMinuman ukuran : minuman.getDaftarUkuran()) {
+                TextField field = fieldUkuran(ukuran.getUkuran());
+                if (field != null) {
+                    field.setText(Float.toString(ukuran.getHarga()));
+                }
+            }
         } else {
-            txtUkuran.setText("-");
+            txtHarga.setText(Float.toString(produk.getHargaProduk()));
         }
         if (produk instanceof Kopi kopi) {
             pilihInfo(kopi.getJenisKopi());
@@ -165,14 +173,12 @@ public class ProdukTableController {
         } else {
             pilihInfo(produk.getInfoTambahan());
         }
-        txtJumlah.setText(Integer.toString(produk.getJumlahProduk()));
         sedangIsi = false;
     }
 
     private Produk baca() {
         String tipe = kodeTipe(cmbTipe.getValue());
         String nama = nilai(txtNama);
-        String ukuran = nilai(txtUkuran);
         String info = cmbInfo.getValue() == null ? "" : cmbInfo.getValue().trim();
         if (tipe == null || tipe.isBlank() || nama.isEmpty()) {
             Pesan.gagal("Pilih tipe dan isi nama produk.");
@@ -182,40 +188,79 @@ public class ProdukTableController {
             Pesan.gagal(pesanInfoKosong(tipe));
             return null;
         }
-        float harga;
-        int jumlah;
-        try {
-            harga = Float.parseFloat(nilai(txtHarga));
-            if (harga < 0) {
-                Pesan.gagal("Harga tidak boleh negatif.");
-                return null;
-            }
-        } catch (NumberFormatException e) {
-            Pesan.gagal("Harga harus angka. Contoh: 18000");
-            return null;
-        }
-        try {
-            String teksJumlah = nilai(txtJumlah);
-            jumlah = teksJumlah.isEmpty() ? 1 : Integer.parseInt(teksJumlah);
-            if (jumlah <= 0) {
-                Pesan.gagal("Jumlah harus lebih dari 0.");
-                return null;
-            }
-        } catch (NumberFormatException e) {
-            Pesan.gagal("Jumlah harus angka bulat.");
-            return null;
-        }
         if ("MakananPenutup".equals(tipe)) {
-            return new MakananPenutup(info, nama, harga, jumlah);
+            Float harga = bacaHarga(txtHarga, "Harga");
+            if (harga == null) {
+                return null;
+            }
+            return new MakananPenutup(info, nama, harga);
         }
-        if (ukuran.isEmpty()) {
-            Pesan.gagal("Ukuran minuman wajib diisi.");
+        Minuman minuman = "Kopi".equals(tipe) ? new Kopi(info, nama, 0) : new BukanKopi(info, nama, 0);
+        for (String ukuran : UkuranMinuman.PILIHAN) {
+            TextField field = fieldUkuran(ukuran);
+            if (nilai(field).isEmpty()) {
+                continue; // ukuran ini tidak dijual
+            }
+            Float harga = bacaHarga(field, "Harga " + ukuran);
+            if (harga == null) {
+                return null;
+            }
+            minuman.tambahUkuran(new UkuranMinuman(ukuran, harga));
+        }
+        if (minuman.getDaftarUkuran().isEmpty()) {
+            Pesan.gagal("Isi harga minimal satu ukuran (Small, Medium, atau Large).");
             return null;
         }
-        if ("Kopi".equals(tipe)) {
-            return new Kopi(info, ukuran, nama, harga, jumlah);
+        return minuman;
+    }
+
+    /** null kalau tidak valid (pesan error sudah ditampilkan). */
+    private static Float bacaHarga(TextField field, String label) {
+        try {
+            float harga = Float.parseFloat(nilai(field));
+            if (harga < 0) {
+                Pesan.gagal(label + " tidak boleh negatif.");
+                return null;
+            }
+            return harga;
+        } catch (NumberFormatException e) {
+            Pesan.gagal(label + " harus angka. Contoh: 18000");
+            return null;
         }
-        return new BukanKopi(info, ukuran, nama, harga, jumlah);
+    }
+
+    private TextField fieldUkuran(String ukuran) {
+        if ("Small".equalsIgnoreCase(ukuran)) {
+            return txtHargaSmall;
+        }
+        if ("Medium".equalsIgnoreCase(ukuran)) {
+            return txtHargaMedium;
+        }
+        if ("Large".equalsIgnoreCase(ukuran)) {
+            return txtHargaLarge;
+        }
+        return null;
+    }
+
+    private void kosongkanHargaUkuran() {
+        txtHargaSmall.clear();
+        txtHargaMedium.clear();
+        txtHargaLarge.clear();
+    }
+
+    /** Contoh: "Small 15000, Large 20000" untuk minuman, "-" untuk makanan. */
+    private static String teksUkuran(Produk produk) {
+        if (!(produk instanceof Minuman minuman)) {
+            return "-";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (UkuranMinuman ukuran : minuman.getDaftarUkuran()) {
+            if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            sb.append(ukuran.getUkuran()).append(' ').append(String.format("%.0f", ukuran.getHarga()));
+        }
+        return sb.length() == 0 ? "-" : sb.toString();
     }
 
     private void aturPilihan(String kode, boolean reset) {
@@ -225,13 +270,16 @@ public class ProdukTableController {
             lblUkuran.setVisible(minuman);
             lblUkuran.setManaged(minuman);
         }
-        txtUkuran.setVisible(minuman);
-        txtUkuran.setManaged(minuman);
-        txtUkuran.setDisable(!minuman);
-        if (makanan) {
-            txtUkuran.setText("-");
-        } else if (reset) {
-            txtUkuran.clear();
+        boxUkuran.setVisible(minuman);
+        boxUkuran.setManaged(minuman);
+        // minuman pakai harga per ukuran, jadi field harga tunggal hanya untuk makanan
+        lblHarga.setVisible(!minuman);
+        lblHarga.setManaged(!minuman);
+        txtHarga.setVisible(!minuman);
+        txtHarga.setManaged(!minuman);
+        if (reset) {
+            txtHarga.clear();
+            kosongkanHargaUkuran();
         }
         if ("Kopi".equals(kode)) {
             lblInfo.setText("Jenis kopi");

@@ -35,7 +35,7 @@ public class LoginController implements Login {
     @FXML private PasswordField txtPassword;
     @FXML private TextField txtNoHp;
     @FXML private TextField txtKodeGerai;
-    @FXML private TextField txtNamaGerai;
+    @FXML private PasswordField txtPasswordGerai;
     @FXML private Label lblPesan;
     @FXML private Label lblSubtitle;
     @FXML private Label lblHint;
@@ -62,7 +62,7 @@ public class LoginController implements Login {
                 lblSubtitle.setText("Masuk sebagai gerai / kasir");
             }
             if (lblHint != null) {
-                lblHint.setText("Gerai hanya sign in: isi kode gerai dan nama gerai yang sudah ada.");
+                lblHint.setText("Gerai hanya sign in: isi kode gerai dan password gerai.");
             }
             tampil("");
             return;
@@ -161,15 +161,15 @@ public class LoginController implements Login {
 
     private void masukGerai() {
         String kode = teks(txtKodeGerai);
-        String nama = teks(txtNamaGerai);
-        if (kode.isEmpty() || nama.isEmpty()) {
-            tampil("Isi kode gerai dan nama gerai.");
+        String password = txtPasswordGerai.getText() == null ? "" : txtPasswordGerai.getText();
+        if (kode.isEmpty() || password.isEmpty()) {
+            tampil("Isi kode gerai dan password gerai.");
             return;
         }
         try {
-            Gerai gerai = geraiDAO.cariLogin(kode, nama);
+            Gerai gerai = geraiDAO.cariLogin(kode, password);
             if (gerai == null) {
-                tampil("Login gerai gagal. Kode atau nama tidak cocok.");
+                tampil("Login gerai gagal. Kode atau password salah.");
                 return;
             }
             bukaDashboard(null, gerai);
@@ -182,7 +182,7 @@ public class LoginController implements Login {
     @FXML
     public void signup() {
         if (modeGerai) {
-            tampil("Gerai tidak punya sign up. Masuk dengan kode dan nama gerai.");
+            tampil("Gerai tidak punya sign up. Masuk dengan kode dan password gerai.");
             return;
         }
         String nama = teks(txtNama);

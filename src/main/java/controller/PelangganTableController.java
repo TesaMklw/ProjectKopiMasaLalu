@@ -15,7 +15,6 @@ public class PelangganTableController {
     @FXML private TableColumn<Pelanggan, Number> colId;
     @FXML private TableColumn<Pelanggan, String> colNama;
     @FXML private TableColumn<Pelanggan, String> colHp;
-    @FXML private TableColumn<Pelanggan, String> colPassword;
     @FXML private TextField txtNama;
     @FXML private TextField txtHp;
     @FXML private PasswordField txtPassword;
@@ -28,7 +27,6 @@ public class PelangganTableController {
         colId.setCellValueFactory(cell -> cell.getValue().idPelangganProperty());
         colNama.setCellValueFactory(new PropertyValueFactory<>("namaPelanggan"));
         colHp.setCellValueFactory(new PropertyValueFactory<>("noHp"));
-        colPassword.setCellValueFactory(new PropertyValueFactory<>("passwordPelanggan"));
         tabel.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         tabel.getSelectionModel().selectedItemProperty().addListener((obs, lama, baru) -> isiForm(baru));
         muat();

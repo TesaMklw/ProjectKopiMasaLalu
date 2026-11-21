@@ -12,6 +12,8 @@ public class Gerai {// inheritance
     private final StringProperty kodeGerai = new SimpleStringProperty();
     private final StringProperty namaGerai = new SimpleStringProperty();
     private final StringProperty alamatGerai = new SimpleStringProperty();
+    // berisi hash BCrypt dari database, atau password baru (plaintext) dari form sebelum di-hash GeraiDAO
+    private final StringProperty passwordGerai = new SimpleStringProperty("");
 
         //constructor 1
         public Gerai(String namaGerai, String alamatGerai){
@@ -54,6 +56,16 @@ public class Gerai {// inheritance
         public StringProperty alamatGeraiProperty() {
             return alamatGerai;
         }
+        public void setPasswordGerai(String passwordGerai) {
+            this.passwordGerai.set(passwordGerai == null ? "" : passwordGerai);
+        }
+        public String getPasswordGerai() {
+            return passwordGerai.get();
+        }
+        public StringProperty passwordGeraiProperty() {
+            return passwordGerai;
+        }
+
         // polymorphism
         @Override
         public String toString() {

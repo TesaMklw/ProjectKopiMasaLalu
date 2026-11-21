@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import main.java.model.BukanKopi;
+import main.java.model.DetailTransaksi;
 import main.java.model.Gerai;
 import main.java.model.Kopi;
 import main.java.model.MakananPenutup;
@@ -161,19 +162,22 @@ public class TransaksiDAO {
         String sql = "INSERT INTO detail_transaksi (id_transaksi, id_produk, nama_produk, tipe, harga_produk, "
                 + "jumlah_produk, catatan_produk, ukuran, info_tambahan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (Produk produk : transaksi.getListProduk()) {
+            for (DetailTransaksi detail : transaksi.getListDetail()) {
+                Produk produk = detail.getProduk();
                 ps.setString(1, transaksi.getIdTransaksi());
                 if (produk.getIdProduk() <= 0) {
                     ps.setNull(2, Types.INTEGER);
                 } else {
                     ps.setInt(2, produk.getIdProduk());
                 }
+                // nama, tipe, harga, ukuran, dan info disimpan sebagai salinan (snapshot)
+                // supaya riwayat transaksi tetap terbaca walau produk di katalog diubah/dihapus
                 ps.setString(3, produk.getNamaProduk());
                 ps.setString(4, produk.getTipeProduk());
-                ps.setFloat(5, produk.getHargaProduk());
-                ps.setInt(6, produk.getJumlahProduk());
-                ps.setString(7, produk.getCatatanProduk());
-                ps.setString(8, produk.getUkuranTampil());
+                ps.setFloat(5, detail.getHargaSatuan());
+                ps.setInt(6, detail.getJumlah());
+                ps.setString(7, detail.getCatatan());
+                ps.setString(8, detail.getUkuran());
                 ps.setString(9, produk.getInfoTambahan());
                 ps.addBatch();
             }
@@ -188,13 +192,13 @@ public class TransaksiDAO {
             ps.setString(1, transaksi.getIdTransaksi());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    transaksi.addProduk(mapDetail(rs));
+                    transaksi.addDetail(mapDetail(rs));
                 }
             }
         }
     }
 
-    private Produk mapDetail(ResultSet rs) throws SQLException {
+    private DetailTransaksi mapDetail(ResultSet rs) throws SQLException {
         String tipe = rs.getString("tipe");
         String nama = rs.getString("nama_produk");
         float harga = rs.getFloat("harga_produk");
@@ -207,20 +211,19 @@ public class TransaksiDAO {
         }
         Produk produk;
         if ("Kopi".equalsIgnoreCase(tipe)) {
-            produk = new Kopi(info, ukuran, nama, harga, jumlah);
+            produk = new Kopi(info, nama, harga);
         } else if ("BukanKopi".equalsIgnoreCase(tipe)) {
-            produk = new BukanKopi(info, ukuran, nama, harga, jumlah);
+            produk = new BukanKopi(info, nama, harga);
         } else if ("MakananPenutup".equalsIgnoreCase(tipe)) {
-            produk = new MakananPenutup(info, nama, harga, jumlah);
+            produk = new MakananPenutup(info, nama, harga);
         } else {
             throw new SQLException("Tipe produk tidak dikenali: " + tipe);
         }
-        produk.setCatatanProduk(catatan == null ? "" : catatan);
         int idProduk = rs.getInt("id_produk");
         if (!rs.wasNull()) {
             produk.setIdProduk(idProduk);
         }
-        return produk;
+        return new DetailTransaksi(produk, jumlah, ukuran, catatan);
     }
 
     private Transaksi mapHeader(ResultSet rs) throws SQLException {

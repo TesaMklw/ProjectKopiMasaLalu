@@ -10,9 +10,8 @@ import javafx.beans.property.StringProperty;
 public class MakananPenutup extends Produk {
     private final StringProperty variasiMakananPenutup = new SimpleStringProperty();
     // constructor overloading
-    public MakananPenutup(String variasiMakananPenutup, String namaProduk, float hargaProduk,
-                            int jumlahProduk) {
-        super(namaProduk, hargaProduk, jumlahProduk);
+    public MakananPenutup(String variasiMakananPenutup, String namaProduk, float hargaProduk) {
+        super(namaProduk, hargaProduk);
         this.variasiMakananPenutup.set(variasiMakananPenutup);
     }
 
