@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.java.controller.KelolaAkunController"
+      stylesheets="@css/style.css" spacing="12" styleClass="page"
+      prefWidth="720" prefHeight="420">
+    <Label text="Kelola Akun" styleClass="page-title"/>
+    <Label text="Ubah nomor HP atau kata sandi akun Anda. Nama tidak bisa diubah. Kosongkan kata sandi jika hanya ingin mengubah nomor HP."
+           styleClass="hint" wrapText="true"/>
+    <GridPane hgap="8" vgap="8" styleClass="form-grid">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="180"/>
+            <ColumnConstraints hgrow="ALWAYS" prefWidth="360"/>
+        </columnConstraints>
+        <Label text="Nama Pelanggan" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNama" editable="false" focusTraversable="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="No. HP" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtHp" promptText="08xxxxxxxxxx" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Kata Sandi Baru" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="txtSandi" promptText="Opsional" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Konfirmasi Kata Sandi Baru" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="txtKonfirmasi" promptText="Ulangi kata sandi baru" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    </GridPane>
+    <HBox spacing="8">
+        <Button text="Simpan Perubahan" onAction="#simpan"/>
+    </HBox>
+</VBox>

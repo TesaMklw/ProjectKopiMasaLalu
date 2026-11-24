@@ -22,7 +22,7 @@
         <ToggleGroup fx:id="grupKategori"/>
     </fx:define>
     <VBox spacing="12" styleClass="page">
-        <Label text="Transaksi" styleClass="page-title"/>
+        <Label fx:id="lblJudul" text="Transaksi" styleClass="page-title"/>
         <Label text="Promo: HEMAT10, HEMAT20, HEMAT50. Makanan penutup otomatis dibatasi diskon 20%." styleClass="hint" wrapText="true"/>
         <GridPane hgap="8" vgap="8" styleClass="form-grid">
             <columnConstraints>
@@ -61,6 +61,18 @@
             <Button text="Tambah item" onAction="#tambahItem"/>
             <Button text="Hapus item" onAction="#hapusItem" styleClass="ghost"/>
         </HBox>
+        <TableView fx:id="tabelKeranjang" prefHeight="200" minHeight="160">
+            <columns>
+                <TableColumn fx:id="colItemNama" text="Produk" prefWidth="240"/>
+                <TableColumn fx:id="colItemUkuran" text="Ukuran" prefWidth="90"/>
+                <TableColumn fx:id="colItemJumlah" text="Jumlah" prefWidth="80"/>
+                <TableColumn fx:id="colItemHarga" text="Harga" prefWidth="120"/>
+                <TableColumn fx:id="colItemCatatan" text="Catatan" prefWidth="220"/>
+            </columns>
+            <placeholder>
+                <Label text="Keranjang masih kosong."/>
+            </placeholder>
+        </TableView>
         <HBox spacing="18">
             <Label text="Subtotal"/>
             <Label fx:id="lblSubtotal" text="Rp 0" styleClass="total-label"/>
@@ -81,6 +93,7 @@
             <Button text="Bersihkan" onAction="#bersih" styleClass="ghost"/>
             <Button text="Muat ulang" onAction="#muat" styleClass="secondary"/>
         </HBox>
+        <Label text="Riwayat" styleClass="page-title"/>
         <TableView fx:id="tabel" prefHeight="220" minHeight="180">
             <columns>
                 <TableColumn fx:id="colId" text="ID" prefWidth="90"/>
@@ -92,18 +105,6 @@
             </columns>
             <placeholder>
                 <Label text="Belum ada transaksi."/>
-            </placeholder>
-        </TableView>
-        <TableView fx:id="tabelKeranjang" prefHeight="180" minHeight="140">
-            <columns>
-                <TableColumn fx:id="colItemNama" text="Produk" prefWidth="240"/>
-                <TableColumn fx:id="colItemUkuran" text="Ukuran" prefWidth="90"/>
-                <TableColumn fx:id="colItemJumlah" text="Jumlah" prefWidth="80"/>
-                <TableColumn fx:id="colItemHarga" text="Harga" prefWidth="120"/>
-                <TableColumn fx:id="colItemCatatan" text="Catatan" prefWidth="220"/>
-            </columns>
-            <placeholder>
-                <Label text="Keranjang masih kosong."/>
             </placeholder>
         </TableView>
     </VBox>

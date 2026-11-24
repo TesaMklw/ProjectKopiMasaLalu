@@ -25,7 +25,9 @@
             <Button fx:id="btnProduk" text="Produk" onAction="#bukaProduk" maxWidth="Infinity" styleClass="sidebar-btn"/>
             <Button fx:id="btnPelanggan" text="Pelanggan" onAction="#bukaPelanggan" maxWidth="Infinity" styleClass="sidebar-btn"/>
             <Button fx:id="btnPembayaran" text="Pembayaran" onAction="#bukaPembayaran" maxWidth="Infinity" styleClass="sidebar-btn"/>
-            <Button fx:id="btnTransaksi" text="Transaksi" onAction="#bukaTransaksi" maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button fx:id="btnTransaksi" text="Kasir" onAction="#bukaTransaksi" maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button fx:id="btnKelolaAkun" text="Kelola Akun" onAction="#bukaKelolaAkun" maxWidth="Infinity"
+                    styleClass="sidebar-btn" visible="false" managed="false"/>
             <Region VBox.vgrow="ALWAYS"/>
             <Label fx:id="lblSapaan" text="Halo, kasir" styleClass="sidebar-user" wrapText="true"/>
             <Button text="Keluar" onAction="#keluar" maxWidth="Infinity" styleClass="ghost"/>
@@ -34,12 +36,11 @@
     <center>
         <VBox spacing="8" styleClass="page">
             <Label fx:id="lblPageTitle" text="Dashboard Gerai" styleClass="page-title"/>
-            <Label fx:id="lblJudul" text="Dashboard" styleClass="header-sub"/>
             <Label fx:id="lblDeskripsi"
-                   text="Pilih Gerai, Produk, Pelanggan, Pembayaran, atau Transaksi di menu samping."
+                   text="Pilih Gerai, Produk, Pelanggan, Pembayaran, atau Kasir di menu samping."
                    styleClass="hint" wrapText="true"/>
             <HBox fx:id="boxAksi" spacing="12">
-                <Button fx:id="btnBukaTransaksi" text="Buka Transaksi" onAction="#bukaTransaksi"/>
+                <Button fx:id="btnBukaTransaksi" text="Buka Kasir" onAction="#bukaTransaksi"/>
                 <Button fx:id="btnKelolaProduk" text="Kelola Produk" onAction="#bukaProduk" styleClass="secondary"/>
             </HBox>
             <StackPane fx:id="konten" VBox.vgrow="ALWAYS"/>

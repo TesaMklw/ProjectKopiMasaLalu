@@ -17,7 +17,7 @@ import main.java.model.Pelanggan;
 /**
  * Controller main_window.fxml: sapaan, menu samping, dan area konten.
  * Semua halaman dibuka di area konten lewat menu samping (tanpa tab).
- * Mode gerai = semua menu; mode pelanggan = hanya form pemesanan.
+ * Mode gerai = menu kasir; mode pelanggan = pemesanan dan kelola akun sendiri.
  */
 public class MainWindowController extends DashboardController {
     @FXML private Label lblPageTitle;
@@ -30,6 +30,7 @@ public class MainWindowController extends DashboardController {
     @FXML private Button btnPelanggan;
     @FXML private Button btnPembayaran;
     @FXML private Button btnTransaksi;
+    @FXML private Button btnKelolaAkun;
     @FXML private Button btnBukaTransaksi;
     @FXML private Button btnKelolaProduk;
     @FXML private Node boxAksi;
@@ -89,6 +90,10 @@ public class MainWindowController extends DashboardController {
         if (btnTransaksi != null) {
             btnTransaksi.setText("Pesan");
         }
+        setVisible(btnKelolaAkun, true);
+        if (btnKelolaAkun != null) {
+            btnKelolaAkun.setDisable(false);
+        }
         if (lblPageTitle != null) {
             lblPageTitle.setText("Dashboard Pelanggan");
         }
@@ -101,7 +106,7 @@ public class MainWindowController extends DashboardController {
         if (lblDeskripsi != null) {
             lblDeskripsi.setText(
                     "Anda masuk sebagai pelanggan. Form pemesanan langsung ditampilkan. "
-                            + "Data gerai, produk, dan admin lainnya hanya untuk kasir gerai.");
+                            + "Nomor HP dan kata sandi diubah dari menu Kelola Akun.");
         }
     }
 
@@ -112,20 +117,21 @@ public class MainWindowController extends DashboardController {
         setVisible(btnPembayaran, true);
         setVisible(boxAksi, true);
         if (btnTransaksi != null) {
-            btnTransaksi.setText("Transaksi");
+            btnTransaksi.setText("Kasir");
+        }
+        setVisible(btnKelolaAkun, false);
+        if (btnKelolaAkun != null) {
+            btnKelolaAkun.setDisable(true);
+        }
+        if (btnBukaTransaksi != null) {
+            btnBukaTransaksi.setText("Buka Kasir");
         }
         if (lblPageTitle != null) {
             lblPageTitle.setText("Dashboard Gerai");
         }
-        if (lblMenuSub != null) {
-            lblMenuSub.setText("Menu kasir gerai");
-        }
-        if (lblJudul != null) {
-            lblJudul.setText("Dashboard Gerai");
-        }
         if (lblDeskripsi != null) {
             lblDeskripsi.setText(
-                    "Pilih Gerai, Produk, Pelanggan, Pembayaran, atau Transaksi di menu samping.");
+                    "Pilih Gerai, Produk, Pelanggan, Pembayaran, atau Kasir di menu samping.");
         }
     }
 
@@ -156,6 +162,9 @@ public class MainWindowController extends DashboardController {
                 } else if (geraiLogin != null) {
                     controller.setGeraiLogin(geraiLogin);
                 }
+            } else if ("/main/resources/kelola_akun.fxml".equals(fxml)) {
+                KelolaAkunController controller = loader.getController();
+                controller.setPelanggan(pelangganLogin);
             }
             konten.getChildren().add(bungkus(root));
         } catch (IOException e) {
@@ -201,7 +210,15 @@ public class MainWindowController extends DashboardController {
     @Override
     @FXML
     public void bukaTransaksi() {
-        tampilkan("Transaksi", "/main/resources/transaksi_table.fxml");
+        tampilkan(modePelanggan ? "Transaksi" : "Kasir", "/main/resources/transaksi_table.fxml");
+    }
+
+    @FXML
+    public void bukaKelolaAkun() {
+        if (!modePelanggan) {
+            return;
+        }
+        tampilkan("Kelola Akun", "/main/resources/kelola_akun.fxml");
     }
 
     @FXML

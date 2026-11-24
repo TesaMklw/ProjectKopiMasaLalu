@@ -89,6 +89,28 @@ public class PelangganDAO {
         }
     }
 
+    /**
+     * Pelanggan yang sedang login hanya mengubah no HP, dan password jika diisi.
+     * Password kosong tidak di-hash ulang.
+     */
+    public void updateAkunSendiri(int idPelanggan, String noHp, String passwordBaru) throws SQLException {
+        boolean gantiPassword = passwordBaru != null && !passwordBaru.isBlank();
+        String sql = gantiPassword
+                ? "UPDATE pelanggan SET no_hp = ?, password_pelanggan = ? WHERE id_pelanggan = ?"
+                : "UPDATE pelanggan SET no_hp = ? WHERE id_pelanggan = ?";
+        try (Connection conn = PostgreSQLConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, noHp);
+            if (gantiPassword) {
+                ps.setString(2, hashPassword(passwordBaru));
+                ps.setInt(3, idPelanggan);
+            } else {
+                ps.setInt(2, idPelanggan);
+            }
+            ps.executeUpdate();
+        }
+    }
+
     public void update(Pelanggan pelanggan) throws SQLException {
         String sql = "UPDATE pelanggan SET nama_pelanggan = ?, no_hp = ?, password_pelanggan = ? "
                 + "WHERE id_pelanggan = ?";

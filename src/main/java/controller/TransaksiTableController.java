@@ -84,6 +84,7 @@ public class TransaksiTableController implements Cetak {
     @FXML private TableColumn<DetailTransaksi, Number> colItemJumlah;
     @FXML private TableColumn<DetailTransaksi, Number> colItemHarga;
     @FXML private TableColumn<DetailTransaksi, String> colItemCatatan;
+    @FXML private Label lblJudul;
     @FXML private Label lblSubtotal;
     @FXML private Label lblDiskon;
     @FXML private Label lblTotal;
@@ -177,6 +178,9 @@ public class TransaksiTableController implements Cetak {
             btnHapus.setVisible(false);
             btnHapus.setManaged(false);
         }
+        if (lblJudul != null) {
+            lblJudul.setText("Transaksi");
+        }
         pilihPelanggan(pelanggan);
         muat();
     }
@@ -185,6 +189,12 @@ public class TransaksiTableController implements Cetak {
         this.geraiLogin = gerai;
         this.pelangganLogin = null;
         this.modePelanggan = false;
+        if (lblJudul != null) {
+            lblJudul.setText("Kasir");
+        }
+        if (tabel != null) {
+            tabel.setPlaceholder(new Label("Belum ada riwayat."));
+        }
         pilihGerai(gerai);
         muat();
     }
@@ -608,11 +618,13 @@ public class TransaksiTableController implements Cetak {
             }
             return null;
         }
-        if (cmbGerai.getValue() == null || cmbPelanggan.getValue() == null || cmbBayar.getValue() == null) {
+        if (cmbGerai.getValue() == null || (modePelanggan && cmbPelanggan.getValue() == null) || cmbBayar.getValue() == null) {
             if (!diam) {
-                Pesan.gagal("Pilih gerai, pelanggan, dan metode pembayaran.");
+                Pesan.gagal(modePelanggan
+                    ? "Pilih gerai, pelanggan, dan metode pembayaran."
+                    : "Pilih gerai dan metode pembayaran.");
             }
-            return null;
+        return null;
         }
         String id = txtId.getText() == null ? "" : txtId.getText().trim();
         if (id.isEmpty()) {
