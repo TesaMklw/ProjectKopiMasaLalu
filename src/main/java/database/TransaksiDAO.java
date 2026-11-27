@@ -23,7 +23,7 @@ public class TransaksiDAO {
     private static final String HEADER = "SELECT t.id_transaksi, t.kode_gerai, t.id_pelanggan, t.kode_pembayaran, "
             + "t.subtotal_transaksi, t.total_transaksi, t.uang_kembali, t.kode_promo, t.total_diskon, "
             + "t.tanggal_transaksi, g.nama_gerai, g.alamat_gerai, p.nama_pelanggan, p.no_hp, "
-            + "p.password_pelanggan, b.metode_pembayaran "
+            + "p.password_pelanggan, COALESCE(b.metode_pembayaran, t.metode_pembayaran) AS metode_pembayaran "
             + "FROM transaksi t "
             + "LEFT JOIN gerai g ON g.kode_gerai = t.kode_gerai "
             + "LEFT JOIN pelanggan p ON p.id_pelanggan = t.id_pelanggan "
@@ -46,8 +46,8 @@ public class TransaksiDAO {
 
     public void insert(Transaksi transaksi) throws SQLException {
         String sql = "INSERT INTO transaksi (id_transaksi, kode_gerai, id_pelanggan, kode_pembayaran, "
-                + "subtotal_transaksi, total_transaksi, uang_kembali, kode_promo, total_diskon, tanggal_transaksi) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "metode_pembayaran, subtotal_transaksi, total_transaksi, uang_kembali, kode_promo, total_diskon, "
+                + "tanggal_transaksi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = PostgreSQLConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
@@ -66,20 +66,20 @@ public class TransaksiDAO {
 
     public void update(Transaksi transaksi) throws SQLException {
         String sql = "UPDATE transaksi SET kode_gerai = ?, id_pelanggan = ?, kode_pembayaran = ?, "
-                + "subtotal_transaksi = ?, total_transaksi = ?, uang_kembali = ?, kode_promo = ?, "
-                + "total_diskon = ?, tanggal_transaksi = ? WHERE id_transaksi = ?";
+                + "metode_pembayaran = ?, subtotal_transaksi = ?, total_transaksi = ?, uang_kembali = ?, "
+                + "kode_promo = ?, total_diskon = ?, tanggal_transaksi = ? WHERE id_transaksi = ?";
         try (Connection conn = PostgreSQLConnection.getConnection()) {
             conn.setAutoCommit(false);
             try {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     isiRelasi(ps, transaksi, 1);
-                    ps.setFloat(4, transaksi.getSubtotalTransaksi());
-                    ps.setFloat(5, transaksi.getTotalTransaksi());
-                    ps.setFloat(6, transaksi.getUangKembali());
-                    ps.setString(7, kosong(transaksi.getKodePromo()));
-                    ps.setFloat(8, transaksi.getTotalDiskon());
-                    isiTanggal(ps, 9, transaksi.getTanggalTransaksi());
-                    ps.setString(10, transaksi.getIdTransaksi());
+                    ps.setFloat(5, transaksi.getSubtotalTransaksi());
+                    ps.setFloat(6, transaksi.getTotalTransaksi());
+                    ps.setFloat(7, transaksi.getUangKembali());
+                    ps.setString(8, kosong(transaksi.getKodePromo()));
+                    ps.setFloat(9, transaksi.getTotalDiskon());
+                    isiTanggal(ps, 10, transaksi.getTanggalTransaksi());
+                    ps.setString(11, transaksi.getIdTransaksi());
                     ps.executeUpdate();
                 }
                 try (PreparedStatement hapus = conn.prepareStatement(
@@ -132,12 +132,12 @@ public class TransaksiDAO {
     private void isiHeader(PreparedStatement ps, Transaksi transaksi) throws SQLException {
         ps.setString(1, transaksi.getIdTransaksi());
         isiRelasi(ps, transaksi, 2);
-        ps.setFloat(5, transaksi.getSubtotalTransaksi());
-        ps.setFloat(6, transaksi.getTotalTransaksi());
-        ps.setFloat(7, transaksi.getUangKembali());
-        ps.setString(8, kosong(transaksi.getKodePromo()));
-        ps.setFloat(9, transaksi.getTotalDiskon());
-        isiTanggal(ps, 10, transaksi.getTanggalTransaksi());
+        ps.setFloat(6, transaksi.getSubtotalTransaksi());
+        ps.setFloat(7, transaksi.getTotalTransaksi());
+        ps.setFloat(8, transaksi.getUangKembali());
+        ps.setString(9, kosong(transaksi.getKodePromo()));
+        ps.setFloat(10, transaksi.getTotalDiskon());
+        isiTanggal(ps, 11, transaksi.getTanggalTransaksi());
     }
 
     private void isiRelasi(PreparedStatement ps, Transaksi transaksi, int mulai) throws SQLException {
@@ -155,6 +155,11 @@ public class TransaksiDAO {
             ps.setNull(mulai + 2, Types.VARCHAR);
         } else {
             ps.setString(mulai + 2, transaksi.getPembayaran().getKodePembayaran());
+        }
+        if (transaksi.getPembayaran() == null || transaksi.getPembayaran().getMetodePembayaran() == null) {
+            ps.setNull(mulai + 3, Types.VARCHAR);
+        } else {
+            ps.setString(mulai + 3, transaksi.getPembayaran().getMetodePembayaran());
         }
     }
 
@@ -242,10 +247,13 @@ public class TransaksiDAO {
             pelanggan.setPasswordPelanggan(rs.getString("password_pelanggan"));
         }
         String kodeBayar = rs.getString("kode_pembayaran");
+        String metodeBayar = rs.getString("metode_pembayaran");
         Pembayaran pembayaran = null;
-        if (kodeBayar != null) {
-            pembayaran = new Pembayaran(rs.getString("metode_pembayaran"));
-            pembayaran.setKodePembayaran(kodeBayar);
+        if (kodeBayar != null || (metodeBayar != null && !metodeBayar.isBlank())) {
+            pembayaran = new Pembayaran(metodeBayar);
+            if (kodeBayar != null) {
+                pembayaran.setKodePembayaran(kodeBayar);
+            }
         }
         Date tanggal = rs.getDate("tanggal_transaksi");
         Transaksi transaksi = new Transaksi(

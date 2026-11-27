@@ -57,12 +57,40 @@ public class PembayaranDAO {
         }
     }
 
-    public void delete(String kode) throws SQLException {
-        String sql = "DELETE FROM pembayaran WHERE kode_pembayaran = ?";
-        try (Connection conn = PostgreSQLConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, kode);
-            ps.executeUpdate();
+    public boolean delete(String kode) throws SQLException {
+        String salinSql = "UPDATE transaksi SET metode_pembayaran = "
+                + "(SELECT metode_pembayaran FROM pembayaran WHERE kode_pembayaran = ?) "
+                + "WHERE kode_pembayaran = ?";
+        String lepasSql = "UPDATE transaksi SET kode_pembayaran = NULL WHERE kode_pembayaran = ?";
+        String hapusSql = "DELETE FROM pembayaran WHERE kode_pembayaran = ?";
+        try (Connection conn = PostgreSQLConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                try (PreparedStatement salin = conn.prepareStatement(salinSql)) {
+                    salin.setString(1, kode);
+                    salin.setString(2, kode);
+                    salin.executeUpdate();
+                }
+                try (PreparedStatement lepas = conn.prepareStatement(lepasSql)) {
+                    lepas.setString(1, kode);
+                    lepas.executeUpdate();
+                }
+                try (PreparedStatement hapus = conn.prepareStatement(hapusSql)) {
+                    hapus.setString(1, kode);
+                    hapus.executeUpdate();
+                }
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                if ("23503".equals(e.getSQLState())) {
+                    throw new SQLException(
+                            "Metode pembayaran masih dipakai di transaksi, tidak bisa dihapus.",
+                            "23503",
+                            e);
+                }
+                throw e;
+            }
         }
     }
 

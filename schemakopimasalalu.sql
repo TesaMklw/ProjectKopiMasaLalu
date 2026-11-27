@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict Mc5EQXZI71fTbtyPmVqqPwckJ05AGNBgAPZqPGhW9MVThMFJyrXoMWctsjSfFQ7
+\restrict MLUY6OOQJd3Hqog0ib2o6fllaEvG34srrTYFU1nmMez9NwMreI6L7HtAhdYlSAi
 
 -- Dumped from database version 18.6
 -- Dumped by pg_dump version 18.6
 
--- Started on 2026-11-22 00:41:58
+-- Started on 2026-11-27 10:30:35
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -212,7 +212,8 @@ CREATE TABLE public.transaksi (
     uang_kembali numeric(12,2) DEFAULT 0 NOT NULL,
     total_diskon numeric(12,2) DEFAULT 0 NOT NULL,
     kode_promo character varying(20),
-    tanggal_transaksi date
+    tanggal_transaksi date,
+    metode_pembayaran character varying(50)
 );
 
 
@@ -257,10 +258,6 @@ COPY public.bukan_kopi (id_produk, jenis_rasa) FROM stdin;
 12	Coklat
 13	Brown Sugar
 14	Leci
-28	Matcha
-29	Coklat
-30	Brown Sugar
-31	Leci
 \.
 
 
@@ -271,6 +268,17 @@ COPY public.bukan_kopi (id_produk, jenis_rasa) FROM stdin;
 --
 
 COPY public.detail_transaksi (id_detail, id_transaksi, id_produk, nama_produk, harga_produk, jumlah_produk, tipe, catatan_produk, ukuran, info_tambahan) FROM stdin;
+1	TRX261124045618234	15	Cheesecake Slice	15000.00	1	MakananPenutup		-	Cheesecake
+2	TRX261124045618234	4	Cappuccino	23000.00	1	Kopi		Medium	Arabika + Susu
+3	TRX261124053333757	15	Cheesecake Slice	15000.00	1	MakananPenutup		-	Cheesecake
+4	TRX261124053432869	17	Croissant Coklat	15300.00	1	MakananPenutup		-	Coklat
+5	TRX261124053432869	10	Caramel Latte	24300.00	1	Kopi		Large	Arabika + Caramel + Susu
+6	TRX261124053621334	16	Roti Abon Ayam	10400.00	1	MakananPenutup		-	Abon Ayam
+7	TRX261124053621334	4	Cappuccino	11500.00	1	Kopi		Medium	Arabika + Susu
+8	TRX261124125120197	9	Caramel Macchiato	14000.00	1	Kopi		Large	Arabika + Caramel + Susu Foam
+9	TRX261124125120197	17	Croissant Coklat	13600.00	1	MakananPenutup		-	Coklat
+10	TRX261124131347189	15	Cheesecake Slice	12000.00	1	MakananPenutup		-	Cheesecake
+11	TRX261124131347189	9	Caramel Macchiato	14000.00	1	Kopi		Large	Arabika + Caramel + Susu Foam
 \.
 
 
@@ -286,6 +294,7 @@ G003	Season City Mall (Tambora)	Season City Mall, Lantai GF, Jl. Prof. Dr. Latum
 G004	Mall Taman Anggrek	Mall Taman Anggrek, Lantai LG, Jl. Letjen S. Parman Kav. 21, Tanjung Duren Selatan, Jakarta Barat	$2a$10$9v4geSBp22b.pTjDcJ254OIWJ6zMJsTYWNF4ti2GKUkJX4XnRbBge
 G005	Central Park Mall	Central Park Mall, Lantai LG, Jl. Letjen S. Parman No.28, Tanjung Duren Selatan, Jakarta Barat	$2a$10$9v4geSBp22b.pTjDcJ254OIWJ6zMJsTYWNF4ti2GKUkJX4XnRbBge
 G001	Kopi Masa Lalu Tanjung Duren	Kelurahan Tanjung Duren Utara: Jl. Tanjung Duren Raya No. 2, RT 010/RW 02, Tanjung Duren Utara, Grogol Petamburan, Jakarta Barat 11470.	$2a$10$9v4geSBp22b.pTjDcJ254OIWJ6zMJsTYWNF4ti2GKUkJX4XnRbBge
+G006	Kopi Masa Lalu Manado	Kawasan Mega Mas	$2a$10$9Jlozn8Am3paLgVvfksOzemBnSF/Z8Q0nwyR6ewsObwAWlBhXzArm
 \.
 
 
@@ -297,7 +306,6 @@ G001	Kopi Masa Lalu Tanjung Duren	Kelurahan Tanjung Duren Utara: Jl. Tanjung Dur
 
 COPY public.kopi (id_produk, jenis_kopi) FROM stdin;
 1	Arabika + Gula Aren
-2	Arabika + Gula Aren
 3	Arabika
 4	Arabika + Susu
 5	Arabika + Coklat
@@ -306,16 +314,7 @@ COPY public.kopi (id_produk, jenis_kopi) FROM stdin;
 8	Arabika + Caramel + Susu Foam
 9	Arabika + Caramel + Susu Foam
 10	Arabika + Caramel + Susu
-18	Arabika + Gula Aren
-19	Arabika + Gula Aren
-20	Arabika
-21	Arabika + Susu
-22	Arabika + Coklat
-23	Arabika + Susu Foam
-24	Arabika + Caramel + Susu
-25	Arabika + Caramel + Susu Foam
-26	Arabika + Caramel + Susu Foam
-27	Arabika + Caramel + Susu
+36	Latte
 \.
 
 
@@ -329,9 +328,6 @@ COPY public.makanan_penutup (id_produk, variasi_makanan_penutup) FROM stdin;
 15	Cheesecake
 16	Abon Ayam
 17	Coklat
-32	Cheesecake
-33	Abon Ayam
-34	Coklat
 \.
 
 
@@ -343,7 +339,6 @@ COPY public.makanan_penutup (id_produk, variasi_makanan_penutup) FROM stdin;
 
 COPY public.minuman (id_produk) FROM stdin;
 1
-2
 3
 4
 5
@@ -356,20 +351,7 @@ COPY public.minuman (id_produk) FROM stdin;
 12
 13
 14
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
+36
 \.
 
 
@@ -385,6 +367,8 @@ COPY public.pelanggan (id_pelanggan, nama_pelanggan, no_hp, password_pelanggan) 
 3	Riza	085266066497	$2a$10$NgkqTcidhMK0L5aGzIg1nOE82U/MCrEzsTmj/AN5BQChzh5wfztmm
 4	Tesalonika	085216641663	$2a$10$0UWevqqwRiw9KqIT7RzAkOhxiP6m53E/25oqnoL0ZHy2OBVr3t1wi
 5	Miracle	082164555543	$2a$10$772RWoEzDfMwMWFyc.zfv.shIhXqfMAwZTblBg0KZm58TH64Zkxai
+14	Kelompok12	08123456789	$2a$10$3wTvudK/emzTZUz28gwEOen1IwEQzZMMH.cgp3p.tAqgk5o8008um
+15	Rizabaik	089765442678	$2a$10$0KM7JJmXpG4Qy6Dx4cIZv.nzt3ot9kA17FKb3hTcuA8HWwZlqeQkW
 \.
 
 
@@ -397,11 +381,12 @@ COPY public.pelanggan (id_pelanggan, nama_pelanggan, no_hp, password_pelanggan) 
 COPY public.pembayaran (kode_pembayaran, metode_pembayaran) FROM stdin;
 CASH	Cash
 QRIS	QRIS
-GPY	GoPay
-OVO	OVO
 DANA	DANA
 BCA	Debit BCA
 BRI	Debit BRI
+GPY	GoPay
+OVO	OVO
+BNI	Debit BNI
 \.
 
 
@@ -416,9 +401,6 @@ COPY public.produk (id_produk, nama_produk, harga_produk) FROM stdin;
 16	Roti Abon Ayam	13000.00
 17	Croissant Coklat	17000.00
 1	Kopi Kenangan Mantan	18000.00
-32	Cheesecake Slice	15000.00
-33	Roti Abon Ayam	13000.00
-34	Croissant Coklat	17000.00
 3	Kopi Hitam	20000.00
 4	Cappuccino	23000.00
 5	Mochaccino	25000.00
@@ -430,22 +412,8 @@ COPY public.produk (id_produk, nama_produk, harga_produk) FROM stdin;
 12	Chocolate	22000.00
 13	Susu Boba Gula Aren	19000.00
 14	Teh Leci	18000.00
-2	Kopi Kenangan Mantan	22000.00
 9	Caramel Macchiato	28000.00
-18	Kopi Kenangan Mantan	18000.00
-19	Kopi Kenangan Mantan	22000.00
-20	Kopi Hitam	20000.00
-21	Cappuccino	23000.00
-22	Mochaccino	25000.00
-23	Macchiato	24000.00
-24	Creamy Caramel Latte	26000.00
-25	Caramel Macchiato	25000.00
-26	Caramel Macchiato	28000.00
-27	Caramel Latte	27000.00
-28	Matcha Latte	22000.00
-29	Chocolate	22000.00
-30	Susu Boba Gula Aren	19000.00
-31	Teh Leci	18000.00
+36	Butterscot Aren Latte	20000.00
 \.
 
 
@@ -455,7 +423,13 @@ COPY public.produk (id_produk, nama_produk, harga_produk) FROM stdin;
 -- Data for Name: transaksi; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.transaksi (id_transaksi, kode_gerai, id_pelanggan, kode_pembayaran, subtotal_transaksi, total_transaksi, uang_kembali, total_diskon, kode_promo, tanggal_transaksi) FROM stdin;
+COPY public.transaksi (id_transaksi, kode_gerai, id_pelanggan, kode_pembayaran, subtotal_transaksi, total_transaksi, uang_kembali, total_diskon, kode_promo, tanggal_transaksi, metode_pembayaran) FROM stdin;
+TRX261124045618234	G001	1	QRIS	38000.00	38000.00	12000.00	0.00		2026-11-24	QRIS
+TRX261124053333757	G001	\N	BRI	15000.00	15000.00	35000.00	0.00		2026-11-24	Debit BRI
+TRX261124053432869	G001	\N	QRIS	44000.00	39600.00	10400.00	4400.00	HEMAT10	2026-11-24	QRIS
+TRX261124053621334	G001	\N	DANA	36000.00	21900.00	28100.00	14100.00	HEMAT50	2026-11-24	DANA
+TRX261124125120197	G005	2	CASH	45000.00	27600.00	0.00	17400.00	HEMAT50	2026-11-24	Cash
+TRX261124131347189	G005	15	\N	43000.00	26000.00	24000.00	17000.00	HEMAT50	2026-11-24	OVO
 \.
 
 
@@ -467,7 +441,6 @@ COPY public.transaksi (id_transaksi, kode_gerai, id_pelanggan, kode_pembayaran, 
 
 COPY public.ukuran_minuman (id_produk, ukuran, harga) FROM stdin;
 1	Medium	18000.00
-2	Large	22000.00
 3	Medium	20000.00
 4	Medium	23000.00
 5	Large	25000.00
@@ -480,22 +453,11 @@ COPY public.ukuran_minuman (id_produk, ukuran, harga) FROM stdin;
 12	Medium	22000.00
 13	Medium	19000.00
 14	Medium	18000.00
-18	Medium	18000.00
-19	Large	22000.00
-20	Medium	20000.00
-21	Medium	23000.00
-22	Large	25000.00
-23	Medium	24000.00
-24	Large	26000.00
-25	Medium	25000.00
-26	Large	28000.00
-27	Large	27000.00
-28	Medium	22000.00
-29	Medium	22000.00
-30	Medium	19000.00
-31	Medium	18000.00
 1	Large	22000.00
 8	Large	28000.00
+36	Small	20000.00
+36	Medium	25000.00
+36	Large	30000.00
 \.
 
 
@@ -505,7 +467,7 @@ COPY public.ukuran_minuman (id_produk, ukuran, harga) FROM stdin;
 -- Name: detail_transaksi_id_detail_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.detail_transaksi_id_detail_seq', 1, false);
+SELECT pg_catalog.setval('public.detail_transaksi_id_detail_seq', 11, true);
 
 
 --
@@ -514,7 +476,7 @@ SELECT pg_catalog.setval('public.detail_transaksi_id_detail_seq', 1, false);
 -- Name: pelanggan_id_pelanggan_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.pelanggan_id_pelanggan_seq', 13, true);
+SELECT pg_catalog.setval('public.pelanggan_id_pelanggan_seq', 15, true);
 
 
 --
@@ -523,7 +485,7 @@ SELECT pg_catalog.setval('public.pelanggan_id_pelanggan_seq', 13, true);
 -- Name: produk_id_produk_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.produk_id_produk_seq', 34, true);
+SELECT pg_catalog.setval('public.produk_id_produk_seq', 36, true);
 
 
 --
@@ -724,11 +686,11 @@ ALTER TABLE ONLY public.ukuran_minuman
     ADD CONSTRAINT ukuran_minuman_id_produk_fkey FOREIGN KEY (id_produk) REFERENCES public.minuman(id_produk) ON DELETE CASCADE;
 
 
--- Completed on 2026-11-22 00:41:58
+-- Completed on 2026-11-27 10:30:35
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Mc5EQXZI71fTbtyPmVqqPwckJ05AGNBgAPZqPGhW9MVThMFJyrXoMWctsjSfFQ7
+\unrestrict MLUY6OOQJd3Hqog0ib2o6fllaEvG34srrTYFU1nmMez9NwMreI6L7HtAhdYlSAi
 

@@ -826,6 +826,11 @@ public class TransaksiTableController implements Cetak {
                 return;
             }
         }
+        // Metode sudah dihapus: jangan masukkan ke daftar pilihan, tapi tetap tampilkan nama snapshot.
+        String nama = pembayaran.getMetodePembayaran();
+        if (nama != null && !nama.isBlank()) {
+            cmbBayar.setValue(pembayaran);
+        }
     }
 
     // Salin produk sesuai jenisnya supaya harga diskon di keranjang tidak mengubah objek katalog

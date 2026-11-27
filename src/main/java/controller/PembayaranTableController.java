@@ -87,10 +87,17 @@ public class PembayaranTableController {
             return;
         }
         try {
-            dao.delete(kodeDipilih);
+            if (!dao.delete(kodeDipilih)) {
+                Pesan.gagal("Metode pembayaran masih dipakai di transaksi, tidak bisa dihapus.");
+                return;
+            }
             bersih();
             muat();
         } catch (SQLException e) {
+            if ("23503".equals(e.getSQLState())) {
+                Pesan.gagal("Metode pembayaran masih dipakai di transaksi, tidak bisa dihapus.");
+                return;
+            }
             Pesan.gagalSql(e);
         }
     }
